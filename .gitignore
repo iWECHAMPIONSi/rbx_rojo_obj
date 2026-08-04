@@ -3,3 +3,4 @@
 !*.lua
 !README.md
 !.gitignore
+!lua/
