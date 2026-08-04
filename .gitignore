@@ -1,0 +1,5 @@
+*.*
+!rbx-rojo-obj.*
+!*.lua
+!README.md
+!.gitignore
