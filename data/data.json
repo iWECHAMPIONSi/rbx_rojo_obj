@@ -3579,138 +3579,6 @@
             "Instance"
         ]
     },
-    "AudioSearchParams": {
-        "properties": {
-            "Album": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "string"
-                }
-            },
-            "Artist": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "string"
-                }
-            },
-            "AudioSubType": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Enum",
-                    "Name": "AudioSubType"
-                }
-            },
-            "MaxDuration": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "int"
-                }
-            },
-            "MinDuration": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "int"
-                }
-            },
-            "SearchKeyword": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "string"
-                }
-            },
-            "Tag": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "string"
-                }
-            },
-            "Title": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "string"
-                }
-            },
-            "Archivable": {
-                "Category": "Behavior",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "bool"
-                }
-            },
-            "Capabilities": {
-                "Category": "Permissions",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "DataType",
-                    "Name": "SecurityCapabilities"
-                }
-            },
-            "Name": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "string"
-                }
-            },
-            "Parent": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "Tags": [
-                    "NotReplicated"
-                ],
-                "ValueType": {
-                    "Category": "Class",
-                    "Name": "Instance"
-                }
-            },
-            "Sandboxed": {
-                "Category": "Permissions",
-                "MemberType": "Property",
-                "Tags": [
-                    "NotReplicated"
-                ],
-                "ValueType": {
-                    "Category": "Primitive",
-                    "Name": "bool"
-                }
-            },
-            "UniqueId": {
-                "Category": "Data",
-                "MemberType": "Property",
-                "Tags": [
-                    "NotReplicated"
-                ],
-                "ValueType": {
-                    "Category": "DataType",
-                    "Name": "UniqueId"
-                }
-            }
-        },
-        "tags": [
-            "NotReplicated"
-        ],
-        "superclass": "Instance",
-        "nested_classes": [
-            "Instance"
-        ]
-    },
     "AudioSpeechToText": {
         "properties": {
             "Enabled": {
@@ -4182,8 +4050,8 @@
         "tags": [],
         "superclass": "BaseRemoteEvent",
         "nested_classes": [
-            "BaseRemoteEvent",
-            "Instance"
+            "Instance",
+            "BaseRemoteEvent"
         ]
     },
     "UnreliableRemoteEvent": {
@@ -4249,8 +4117,8 @@
         "tags": [],
         "superclass": "BaseRemoteEvent",
         "nested_classes": [
-            "BaseRemoteEvent",
-            "Instance"
+            "Instance",
+            "BaseRemoteEvent"
         ]
     },
     "Beam": {
@@ -4967,9 +4835,9 @@
         "tags": [],
         "superclass": "Clothing",
         "nested_classes": [
-            "Clothing",
+            "CharacterAppearance",
             "Instance",
-            "CharacterAppearance"
+            "Clothing"
         ]
     },
     "Shirt": {
@@ -5059,9 +4927,9 @@
         "tags": [],
         "superclass": "Clothing",
         "nested_classes": [
-            "Clothing",
+            "CharacterAppearance",
             "Instance",
-            "CharacterAppearance"
+            "Clothing"
         ]
     },
     "ShirtGraphic": {
@@ -8143,9 +8011,9 @@
         "tags": [],
         "superclass": "SlidingBallConstraint",
         "nested_classes": [
-            "SlidingBallConstraint",
             "Constraint",
-            "Instance"
+            "Instance",
+            "SlidingBallConstraint"
         ]
     },
     "PrismaticConstraint": {
@@ -8355,9 +8223,9 @@
         "tags": [],
         "superclass": "SlidingBallConstraint",
         "nested_classes": [
-            "SlidingBallConstraint",
             "Constraint",
-            "Instance"
+            "Instance",
+            "SlidingBallConstraint"
         ]
     },
     "SpringConstraint": {
@@ -9174,8 +9042,8 @@
         "tags": [],
         "superclass": "Controller",
         "nested_classes": [
-            "Controller",
-            "Instance"
+            "Instance",
+            "Controller"
         ]
     },
     "SkateboardController": {
@@ -9241,8 +9109,8 @@
         "tags": [],
         "superclass": "Controller",
         "nested_classes": [
-            "Controller",
-            "Instance"
+            "Instance",
+            "Controller"
         ]
     },
     "VehicleController": {
@@ -9308,8 +9176,8 @@
         "tags": [],
         "superclass": "Controller",
         "nested_classes": [
-            "Controller",
-            "Instance"
+            "Instance",
+            "Controller"
         ]
     },
     "AirController": {
@@ -12107,8 +11975,8 @@
         "tags": [],
         "superclass": "FaceInstance",
         "nested_classes": [
-            "FaceInstance",
-            "Instance"
+            "Instance",
+            "FaceInstance"
         ]
     },
     "Texture": {
@@ -12348,9 +12216,9 @@
         "tags": [],
         "superclass": "Decal",
         "nested_classes": [
-            "FaceInstance",
+            "Decal",
             "Instance",
-            "Decal"
+            "FaceInstance"
         ]
     },
     "Fire": {
@@ -13083,9 +12951,9 @@
         "superclass": "GuiObject",
         "nested_classes": [
             "GuiBase",
-            "GuiBase2d",
             "GuiObject",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "Frame": {
@@ -13416,9 +13284,9 @@
         "superclass": "GuiObject",
         "nested_classes": [
             "GuiBase",
-            "GuiBase2d",
             "GuiObject",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "ImageButton": {
@@ -13911,8 +13779,8 @@
             "GuiBase",
             "GuiButton",
             "GuiObject",
-            "GuiBase2d",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "TextButton": {
@@ -14421,8 +14289,8 @@
             "GuiBase",
             "GuiButton",
             "GuiObject",
-            "GuiBase2d",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "ImageLabel": {
@@ -14832,11 +14700,11 @@
         "tags": [],
         "superclass": "GuiLabel",
         "nested_classes": [
-            "GuiLabel",
             "GuiBase",
             "GuiObject",
-            "GuiBase2d",
-            "Instance"
+            "Instance",
+            "GuiLabel",
+            "GuiBase2d"
         ]
     },
     "TextLabel": {
@@ -15294,11 +15162,11 @@
         "tags": [],
         "superclass": "GuiLabel",
         "nested_classes": [
-            "GuiLabel",
             "GuiBase",
             "GuiObject",
-            "GuiBase2d",
-            "Instance"
+            "Instance",
+            "GuiLabel",
+            "GuiBase2d"
         ]
     },
     "InputActionLabel": {
@@ -15701,9 +15569,9 @@
         "superclass": "GuiObject",
         "nested_classes": [
             "GuiBase",
-            "GuiBase2d",
             "GuiObject",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "RelativeGui": {
@@ -16028,9 +15896,9 @@
         "superclass": "GuiObject",
         "nested_classes": [
             "GuiBase",
-            "GuiBase2d",
             "GuiObject",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "ScrollingFrame": {
@@ -16497,9 +16365,9 @@
         "superclass": "GuiObject",
         "nested_classes": [
             "GuiBase",
-            "GuiBase2d",
             "GuiObject",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "TextBox": {
@@ -17022,9 +16890,9 @@
         "superclass": "GuiObject",
         "nested_classes": [
             "GuiBase",
-            "GuiBase2d",
             "GuiObject",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "VideoFrame": {
@@ -17425,9 +17293,9 @@
         "superclass": "GuiObject",
         "nested_classes": [
             "GuiBase",
-            "GuiBase2d",
             "GuiObject",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "ViewportFrame": {
@@ -17801,9 +17669,9 @@
         "superclass": "GuiObject",
         "nested_classes": [
             "GuiBase",
-            "GuiBase2d",
             "GuiObject",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "BillboardGui": {
@@ -18074,8 +17942,8 @@
         "nested_classes": [
             "GuiBase",
             "LayerCollector",
-            "GuiBase2d",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "ScreenGui": {
@@ -18266,8 +18134,8 @@
         "nested_classes": [
             "GuiBase",
             "LayerCollector",
-            "GuiBase2d",
-            "Instance"
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "AdGui": {
@@ -18469,11 +18337,11 @@
         "tags": [],
         "superclass": "SurfaceGuiBase",
         "nested_classes": [
-            "SurfaceGuiBase",
             "GuiBase",
             "LayerCollector",
-            "GuiBase2d",
-            "Instance"
+            "SurfaceGuiBase",
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "SurfaceGui": {
@@ -18723,11 +18591,11 @@
         "tags": [],
         "superclass": "SurfaceGuiBase",
         "nested_classes": [
-            "SurfaceGuiBase",
             "GuiBase",
             "LayerCollector",
-            "GuiBase2d",
-            "Instance"
+            "SurfaceGuiBase",
+            "Instance",
+            "GuiBase2d"
         ]
     },
     "SelectionBox": {
@@ -18851,8 +18719,8 @@
         "nested_classes": [
             "GuiBase",
             "InstanceAdornment",
-            "GuiBase3d",
-            "Instance"
+            "Instance",
+            "GuiBase3d"
         ]
     },
     "BoxHandleAdornment": {
@@ -19007,9 +18875,9 @@
         "superclass": "HandleAdornment",
         "nested_classes": [
             "GuiBase",
-            "HandleAdornment",
-            "GuiBase3d",
             "PVAdornment",
+            "GuiBase3d",
+            "HandleAdornment",
             "Instance"
         ]
     },
@@ -19181,9 +19049,9 @@
         "superclass": "HandleAdornment",
         "nested_classes": [
             "GuiBase",
-            "HandleAdornment",
-            "GuiBase3d",
             "PVAdornment",
+            "GuiBase3d",
+            "HandleAdornment",
             "Instance"
         ]
     },
@@ -19363,9 +19231,9 @@
         "superclass": "HandleAdornment",
         "nested_classes": [
             "GuiBase",
-            "HandleAdornment",
-            "GuiBase3d",
             "PVAdornment",
+            "GuiBase3d",
+            "HandleAdornment",
             "Instance"
         ]
     },
@@ -19529,9 +19397,9 @@
         "superclass": "HandleAdornment",
         "nested_classes": [
             "GuiBase",
-            "HandleAdornment",
-            "GuiBase3d",
             "PVAdornment",
+            "GuiBase3d",
+            "HandleAdornment",
             "Instance"
         ]
     },
@@ -19687,9 +19555,9 @@
         "superclass": "HandleAdornment",
         "nested_classes": [
             "GuiBase",
-            "HandleAdornment",
-            "GuiBase3d",
             "PVAdornment",
+            "GuiBase3d",
+            "HandleAdornment",
             "Instance"
         ]
     },
@@ -19861,9 +19729,9 @@
         "superclass": "HandleAdornment",
         "nested_classes": [
             "GuiBase",
-            "HandleAdornment",
-            "GuiBase3d",
             "PVAdornment",
+            "GuiBase3d",
+            "HandleAdornment",
             "Instance"
         ]
     },
@@ -20019,9 +19887,9 @@
         "superclass": "HandleAdornment",
         "nested_classes": [
             "GuiBase",
-            "HandleAdornment",
-            "GuiBase3d",
             "PVAdornment",
+            "GuiBase3d",
+            "HandleAdornment",
             "Instance"
         ]
     },
@@ -20177,9 +20045,9 @@
         "superclass": "HandleAdornment",
         "nested_classes": [
             "GuiBase",
-            "HandleAdornment",
-            "GuiBase3d",
             "PVAdornment",
+            "GuiBase3d",
+            "HandleAdornment",
             "Instance"
         ]
     },
@@ -20295,9 +20163,9 @@
         "superclass": "PVAdornment",
         "nested_classes": [
             "GuiBase",
-            "GuiBase3d",
+            "PVAdornment",
             "Instance",
-            "PVAdornment"
+            "GuiBase3d"
         ]
     },
     "ArcHandles": {
@@ -20404,10 +20272,10 @@
         "superclass": "HandlesBase",
         "nested_classes": [
             "GuiBase",
-            "HandlesBase",
             "GuiBase3d",
+            "Instance",
             "PartAdornment",
-            "Instance"
+            "HandlesBase"
         ]
     },
     "Handles": {
@@ -20522,10 +20390,10 @@
         "superclass": "HandlesBase",
         "nested_classes": [
             "GuiBase",
-            "HandlesBase",
             "GuiBase3d",
+            "Instance",
             "PartAdornment",
-            "Instance"
+            "HandlesBase"
         ]
     },
     "SurfaceSelection": {
@@ -20632,8 +20500,8 @@
         "superclass": "PartAdornment",
         "nested_classes": [
             "GuiBase",
-            "GuiBase3d",
             "Instance",
+            "GuiBase3d",
             "PartAdornment"
         ]
     },
@@ -23913,8 +23781,8 @@
         "tags": [],
         "superclass": "Light",
         "nested_classes": [
-            "Instance",
-            "Light"
+            "Light",
+            "Instance"
         ]
     },
     "SpotLight": {
@@ -24036,8 +23904,8 @@
         "tags": [],
         "superclass": "Light",
         "nested_classes": [
-            "Instance",
-            "Light"
+            "Light",
+            "Instance"
         ]
     },
     "SurfaceLight": {
@@ -24159,8 +24027,8 @@
         "tags": [],
         "superclass": "Light",
         "nested_classes": [
-            "Instance",
-            "Light"
+            "Light",
+            "Instance"
         ]
     },
     "LocalizationTable": {
@@ -24335,8 +24203,8 @@
         "tags": [],
         "superclass": "BaseScript",
         "nested_classes": [
-            "LuaSourceContainer",
             "BaseScript",
+            "LuaSourceContainer",
             "Instance"
         ]
     },
@@ -24438,10 +24306,10 @@
         "tags": [],
         "superclass": "Script",
         "nested_classes": [
-            "LuaSourceContainer",
-            "Script",
             "BaseScript",
-            "Instance"
+            "LuaSourceContainer",
+            "Instance",
+            "Script"
         ]
     },
     "ModuleScript": {
@@ -26064,11 +25932,11 @@
         "tags": [],
         "superclass": "Part",
         "nested_classes": [
-            "PVInstance",
             "FormFactorPart",
-            "Part",
+            "PVInstance",
+            "Instance",
             "BasePart",
-            "Instance"
+            "Part"
         ]
     },
     "SpawnLocation": {
@@ -26473,11 +26341,11 @@
         "tags": [],
         "superclass": "Part",
         "nested_classes": [
-            "PVInstance",
             "FormFactorPart",
-            "Part",
+            "PVInstance",
+            "Instance",
             "BasePart",
-            "Instance"
+            "Part"
         ]
     },
     "WedgePart": {
@@ -28301,9 +28169,9 @@
         "superclass": "BackpackItem",
         "nested_classes": [
             "PVInstance",
-            "Model",
             "BackpackItem",
-            "Instance"
+            "Instance",
+            "Model"
         ]
     },
     "ProceduralModel": {
@@ -28603,10 +28471,10 @@
         "tags": [],
         "superclass": "WorldRoot",
         "nested_classes": [
-            "WorldRoot",
             "PVInstance",
+            "Instance",
             "Model",
-            "Instance"
+            "WorldRoot"
         ]
     },
     "ParticleEmitter": {
@@ -29246,8 +29114,8 @@
         "tags": [],
         "superclass": "PoseBase",
         "nested_classes": [
-            "PoseBase",
-            "Instance"
+            "Instance",
+            "PoseBase"
         ]
     },
     "Pose": {
@@ -29345,8 +29213,8 @@
         "tags": [],
         "superclass": "PoseBase",
         "nested_classes": [
-            "PoseBase",
-            "Instance"
+            "Instance",
+            "PoseBase"
         ]
     },
     "BloomEffect": {
@@ -29444,8 +29312,8 @@
         "tags": [],
         "superclass": "PostEffect",
         "nested_classes": [
-            "PostEffect",
-            "Instance"
+            "Instance",
+            "PostEffect"
         ]
     },
     "BlurEffect": {
@@ -29527,8 +29395,8 @@
         "tags": [],
         "superclass": "PostEffect",
         "nested_classes": [
-            "PostEffect",
-            "Instance"
+            "Instance",
+            "PostEffect"
         ]
     },
     "ColorCorrectionEffect": {
@@ -29634,8 +29502,8 @@
         "tags": [],
         "superclass": "PostEffect",
         "nested_classes": [
-            "PostEffect",
-            "Instance"
+            "Instance",
+            "PostEffect"
         ]
     },
     "ColorGradingEffect": {
@@ -29717,8 +29585,8 @@
         "tags": [],
         "superclass": "PostEffect",
         "nested_classes": [
-            "PostEffect",
-            "Instance"
+            "Instance",
+            "PostEffect"
         ]
     },
     "DepthOfFieldEffect": {
@@ -29824,8 +29692,8 @@
         "tags": [],
         "superclass": "PostEffect",
         "nested_classes": [
-            "PostEffect",
-            "Instance"
+            "Instance",
+            "PostEffect"
         ]
     },
     "SunRaysEffect": {
@@ -29915,8 +29783,8 @@
         "tags": [],
         "superclass": "PostEffect",
         "nested_classes": [
-            "PostEffect",
-            "Instance"
+            "Instance",
+            "PostEffect"
         ]
     },
     "ProximityPrompt": {
@@ -30709,8 +30577,8 @@
         "superclass": "ControllerSensor",
         "nested_classes": [
             "SensorBase",
-            "Instance",
-            "ControllerSensor"
+            "ControllerSensor",
+            "Instance"
         ]
     },
     "FluidForceSensor": {
@@ -33729,8 +33597,8 @@
         "tags": [],
         "superclass": "TextChatMessageProperties",
         "nested_classes": [
-            "TextChatMessageProperties",
-            "Instance"
+            "Instance",
+            "TextChatMessageProperties"
         ]
     },
     "TextGenerator": {
@@ -34120,10 +33988,10 @@
         "tags": [],
         "superclass": "UIConstraint",
         "nested_classes": [
-            "UIBase",
             "UIConstraint",
+            "UIComponent",
             "Instance",
-            "UIComponent"
+            "UIBase"
         ]
     },
     "UISizeConstraint": {
@@ -34205,10 +34073,10 @@
         "tags": [],
         "superclass": "UIConstraint",
         "nested_classes": [
-            "UIBase",
             "UIConstraint",
+            "UIComponent",
             "Instance",
-            "UIComponent"
+            "UIBase"
         ]
     },
     "UITextSizeConstraint": {
@@ -34290,10 +34158,10 @@
         "tags": [],
         "superclass": "UIConstraint",
         "nested_classes": [
-            "UIBase",
             "UIConstraint",
+            "UIComponent",
             "Instance",
-            "UIComponent"
+            "UIBase"
         ]
     },
     "UICorner": {
@@ -34402,9 +34270,9 @@
         "tags": [],
         "superclass": "UIComponent",
         "nested_classes": [
-            "Instance",
+            "UIComponent",
             "UIBase",
-            "UIComponent"
+            "Instance"
         ]
     },
     "UIDragDetector": {
@@ -34646,9 +34514,9 @@
         "tags": [],
         "superclass": "UIComponent",
         "nested_classes": [
-            "Instance",
+            "UIComponent",
             "UIBase",
-            "UIComponent"
+            "Instance"
         ]
     },
     "UIFlexItem": {
@@ -34746,9 +34614,9 @@
         "tags": [],
         "superclass": "UIComponent",
         "nested_classes": [
-            "Instance",
+            "UIComponent",
             "UIBase",
-            "UIComponent"
+            "Instance"
         ]
     },
     "UIGradient": {
@@ -34887,9 +34755,9 @@
         "tags": [],
         "superclass": "UIComponent",
         "nested_classes": [
-            "Instance",
+            "UIComponent",
             "UIBase",
-            "UIComponent"
+            "Instance"
         ]
     },
     "UIGridLayout": {
@@ -35019,11 +34887,11 @@
         "tags": [],
         "superclass": "UIGridStyleLayout",
         "nested_classes": [
-            "UILayout",
             "UIBase",
+            "UIComponent",
             "UIGridStyleLayout",
             "Instance",
-            "UIComponent"
+            "UILayout"
         ]
     },
     "UIListLayout": {
@@ -35161,11 +35029,11 @@
         "tags": [],
         "superclass": "UIGridStyleLayout",
         "nested_classes": [
-            "UILayout",
             "UIBase",
+            "UIComponent",
             "UIGridStyleLayout",
             "Instance",
-            "UIComponent"
+            "UILayout"
         ]
     },
     "UIPageLayout": {
@@ -35335,11 +35203,11 @@
         "tags": [],
         "superclass": "UIGridStyleLayout",
         "nested_classes": [
-            "UILayout",
             "UIBase",
+            "UIComponent",
             "UIGridStyleLayout",
             "Instance",
-            "UIComponent"
+            "UILayout"
         ]
     },
     "UITableLayout": {
@@ -35469,11 +35337,11 @@
         "tags": [],
         "superclass": "UIGridStyleLayout",
         "nested_classes": [
-            "UILayout",
             "UIBase",
+            "UIComponent",
             "UIGridStyleLayout",
             "Instance",
-            "UIComponent"
+            "UILayout"
         ]
     },
     "UIPadding": {
@@ -35571,9 +35439,9 @@
         "tags": [],
         "superclass": "UIComponent",
         "nested_classes": [
-            "Instance",
+            "UIComponent",
             "UIBase",
-            "UIComponent"
+            "Instance"
         ]
     },
     "UIScale": {
@@ -35647,9 +35515,9 @@
         "tags": [],
         "superclass": "UIComponent",
         "nested_classes": [
-            "Instance",
+            "UIComponent",
             "UIBase",
-            "UIComponent"
+            "Instance"
         ]
     },
     "UIShadow": {
@@ -35779,9 +35647,9 @@
         "tags": [],
         "superclass": "UIComponent",
         "nested_classes": [
-            "Instance",
+            "UIComponent",
             "UIBase",
-            "UIComponent"
+            "Instance"
         ]
     },
     "UIStroke": {
@@ -35927,9 +35795,9 @@
         "tags": [],
         "superclass": "UIComponent",
         "nested_classes": [
-            "Instance",
+            "UIComponent",
             "UIBase",
-            "UIComponent"
+            "Instance"
         ]
     },
     "BoolValue": {

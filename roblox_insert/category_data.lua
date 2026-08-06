@@ -55,7 +55,9 @@ return {
 		Classes = {
 			"Accessory",
 			"ControllerManager",
+			"ControllerPartSensor",
 			"ForceField",
+			"GroundController",
 			"Humanoid",
 			"BuoyancySensor",
 		},
@@ -124,6 +126,7 @@ return {
 		},
 		Classes = {
 			"Team",
+			"VehicleSeat",
 		},
 	},
 	{
@@ -342,7 +345,7 @@ return {
 		Classes = {},
 	},
 	{
-		Category = "Text Chat",
+		Category = "Text Chat Properties",
 		Superclasses = {
 			"TextChatMessageProperties",
 		},

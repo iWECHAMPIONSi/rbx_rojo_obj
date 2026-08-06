@@ -1,1 +1,1 @@
-print("success")
+require("rbx_rojo_obj.roblox_insert")
