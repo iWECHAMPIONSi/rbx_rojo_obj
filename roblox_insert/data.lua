@@ -1,6 +1,6 @@
 local t = {}
 
-local category_keys = require("rbx_rojo_obj.roblox_insert.category_data")
+local category_keys = require("rbx_rojo_obj.rbx_insert.category_data")
 
 local function get_plugin_root()
 	local source = debug.getinfo(1, "S").source:gsub("^@", "")
@@ -12,6 +12,8 @@ local function get_plugin_root()
 	return assert(vim.fs.dirname(lua_directory), "Unable to locate the plugin root directory")
 end
 
+---@param path string
+---@return string?, string?
 local function read_file(path)
 	local file, open_error = io.open(path, "rb")
 
@@ -36,6 +38,7 @@ local function read_file(path)
 	return contents, nil
 end
 
+---@return table?, string?
 function t.load()
 	path = vim.fs.joinpath(get_plugin_root(), "rbx_rojo_obj", "data", "data.json")
 
@@ -59,19 +62,21 @@ end
 
 local raw, err = t.load()
 
-t.raw = raw
+t.raw = {}
 t.err = err
 
 if not raw then
 	return t
 end
 
+t.raw.classes, t.raw.enums = raw.Classes, raw.Enums
+
 local iter_table = {}
 
 local tempkeys = {}
 local permkeys = {}
 
-for name, _ in pairs(raw) do
+for name, _ in pairs(raw.classes) do
 	tempkeys[name] = true
 end
 
@@ -88,7 +93,7 @@ for _, category in ipairs(category_keys) do
 	super = category.Superclasses
 	for _, class in ipairs(super) do
 		for name, _ in pairs(tempkeys) do
-			for _, superclass in ipairs(raw[name].nested_classes) do
+			for _, superclass in ipairs(raw.classes[name].nested_classes) do
 				if superclass == class then
 					table.insert(iter_table[cat], name)
 					table.insert(to_remove, name)
