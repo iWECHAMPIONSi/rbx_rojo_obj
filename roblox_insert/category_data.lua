@@ -239,11 +239,11 @@ return {
 		Category = "Uncategorized",
 		Superclasses = {
 			"Folder",
+			"Camera",
 		},
 		Classes = {
 			"AccessoryDescription",
 			"BodyPartDescription",
-			"Camera",
 			"Configuration",
 			"HapticEffect",
 			"HumanoidDescription",

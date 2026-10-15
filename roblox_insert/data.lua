@@ -1,6 +1,6 @@
 local t = {}
 
-local category_keys = require("rbx_rojo_obj.rbx_insert.category_data")
+local category_keys = require("roblox_insert.category_data")
 
 local function get_plugin_root()
 	local source = debug.getinfo(1, "S").source:gsub("^@", "")
@@ -69,14 +69,14 @@ if not raw then
 	return t
 end
 
-t.raw.classes, t.raw.enums = raw.Classes, raw.Enums
+t.raw.Classes, t.raw.Enums = raw.Classes, raw.Enums
 
 local iter_table = {}
 
 local tempkeys = {}
 local permkeys = {}
 
-for name, _ in pairs(raw.classes) do
+for name, _ in pairs(raw.Classes) do
 	tempkeys[name] = true
 end
 
@@ -93,7 +93,7 @@ for _, category in ipairs(category_keys) do
 	super = category.Superclasses
 	for _, class in ipairs(super) do
 		for name, _ in pairs(tempkeys) do
-			for _, superclass in ipairs(raw.classes[name].nested_classes) do
+			for _, superclass in ipairs(raw.Classes[name].NestedClasses) do
 				if superclass == class then
 					table.insert(iter_table[cat], name)
 					table.insert(to_remove, name)
