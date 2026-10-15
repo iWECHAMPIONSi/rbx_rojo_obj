@@ -1,1 +1,1 @@
-require("rbx_rojo_obj.rbx_insert")
+require("rbx_rojo_obj.roblox_insert")

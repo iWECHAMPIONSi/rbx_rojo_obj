@@ -1,5 +1,5 @@
-local t = require("rbx_rojo_obj.rbx_insert.data")
-require("rbx_rojo_obj.rbx_insert.writer")
+local t = require("rbx_rojo_obj.roblox_insert.data")
+require("rbx_rojo_obj.roblox_insert.writer")
 
 local file, err = io.open("output.txt", "w")
 if not file then
