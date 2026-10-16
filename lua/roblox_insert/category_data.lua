@@ -1,5 +1,10 @@
 return {
 	{
+		Category = "Favorites",
+		Superclasses = {},
+		Classes = {},
+	},
+	{
 		Category = "3D Interfaces",
 		Superclasses = {
 			"ClickDetector",
@@ -121,10 +126,11 @@ return {
 	{
 		Category = "Interaction",
 		Superclasses = {
-			"Part",
 			"BackpackItem",
 		},
 		Classes = {
+			"Seat",
+			"SpawnLocation",
 			"Team",
 			"VehicleSeat",
 		},
