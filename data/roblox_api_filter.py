@@ -99,6 +99,8 @@ def add_members(name: str, members_list):
                 if "Hidden" in d["Tags"]:
                     add_removed_item(removed_items["Classes"], d["Name"], "Hidden")
                     continue
+            if d["Name"] in ("Capabilities", "Parent", "UniqueId"):
+                continue
         if "Tags" in d.keys():
             if "Deprecated" in d["Tags"]:
                 add_removed_item(removed_items["Classes"], d["Name"], "Deprecated")
@@ -145,6 +147,8 @@ def loop_nest(d, spaces: int):
     if isinstance(d, dict):
         if "MemberType" in d.keys():
             if d["MemberType"] != "Property":
+                return
+            if d["Name"] in ("Capabilities", "Parent", "UniqueId"):
                 return
             if "Tags" in d.keys():
                 if "ReadOnly" in d["Tags"]:
