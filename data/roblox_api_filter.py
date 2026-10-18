@@ -84,6 +84,9 @@ removed_items = {
     "Enums": {},
 }
 # Item: Reason (tags)
+#
+
+blacklisted_value_types = ["Path2DControlPoint"]
 
 
 def add_members(name: str, members_list):
@@ -101,6 +104,11 @@ def add_members(name: str, members_list):
                     continue
             if d["Name"] in ("Capabilities", "Parent", "UniqueId"):
                 continue
+            if d["ValueType"]["Category"] == "Class":
+                continue
+            if d["ValueType"]["Name"] in blacklisted_value_types:
+                continue
+
         if "Tags" in d.keys():
             if "Deprecated" in d["Tags"]:
                 add_removed_item(removed_items["Classes"], d["Name"], "Deprecated")
@@ -427,6 +435,15 @@ for c, i in superclass_structure.items():
     for o in i:
         print(f"    {o}")
 
+value_types = []
+
+for i in dict_list["Classes"].values():
+    for p in i["Properties"].values():
+        if p["ValueType"]["Category"] != "Enum":
+            value_types.append(p["ValueType"]["Name"])
+value_types = list(set(value_types))
+value_types.sort()
+print(value_types)
 
 with open(script_dir + "/" + "data.json", "w") as file:
     json.dump(dict_list, file, indent=4)

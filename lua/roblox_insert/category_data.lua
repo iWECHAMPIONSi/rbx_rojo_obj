@@ -60,9 +60,7 @@ return {
 		Classes = {
 			"Accessory",
 			"ControllerManager",
-			"ControllerPartSensor",
 			"ForceField",
-			"GroundController",
 			"Humanoid",
 			"BuoyancySensor",
 		},
@@ -213,7 +211,6 @@ return {
 			"AudioPitchShifter",
 			"AudioPlayer",
 			"AudioReverb",
-			"AudioSearchParams",
 			"AudioSpeechToText",
 			"AudioTextToSpeech",
 			"AudioTremolo",

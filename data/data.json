@@ -20,15 +20,6 @@
                         "Name": "int64"
                     }
                 },
-                "Instance": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "IsLayered": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -1380,15 +1371,6 @@
                         "Name": "bool"
                     }
                 },
-                "Player": {
-                    "Category": "Recording",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Player"
-                    }
-                },
                 "Volume": {
                     "Category": "State",
                     "MemberType": "Property",
@@ -1436,15 +1418,6 @@
         },
         "AudioDeviceOutput": {
             "Properties": {
-                "Player": {
-                    "Category": "State",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Player"
-                    }
-                },
                 "Archivable": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -1701,15 +1674,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "SimulationMode"
-                    }
-                },
-                "PositionInstance": {
-                    "Category": "Emission",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "PositionType": {
@@ -2288,15 +2252,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "SimulationMode"
-                    }
-                },
-                "PositionInstance": {
-                    "Category": "Listening",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "PositionType": {
@@ -3104,24 +3059,6 @@
         },
         "Beam": {
             "Properties": {
-                "Attachment0": {
-                    "Category": "Shape",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Shape",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Brightness": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -3432,15 +3369,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "string"
-                    }
-                },
-                "Instance": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Archivable": {
@@ -4049,15 +3977,6 @@
                         "Name": "DragDetectorPermissionPolicy"
                     }
                 },
-                "ReferenceInstance": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "ResponseStyle": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -4484,24 +4403,6 @@
                         "Name": "Vector3"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -4667,24 +4568,6 @@
                         "Name": "bool"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -4785,24 +4668,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "ActuatorRelativeTo"
-                    }
-                },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
                     }
                 },
                 "Color": {
@@ -4943,24 +4808,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -5097,24 +4944,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "float"
-                    }
-                },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
                     }
                 },
                 "Color": {
@@ -5300,24 +5129,6 @@
                         "Name": "float"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -5427,24 +5238,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
                     }
                 },
                 "Color": {
@@ -5639,24 +5432,6 @@
                         "Name": "VelocityConstraintMode"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -5723,24 +5498,6 @@
         },
         "PlaneConstraint": {
             "Properties": {
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -5807,24 +5564,6 @@
         },
         "RigidConstraint": {
             "Properties": {
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -5934,24 +5673,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "float"
-                    }
-                },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
                     }
                 },
                 "Color": {
@@ -6090,24 +5811,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "float"
-                    }
-                },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
                     }
                 },
                 "Color": {
@@ -6419,24 +6122,6 @@
                         "Name": "float"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -6621,24 +6306,6 @@
                         "Name": "float"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -6796,24 +6463,6 @@
                         "Name": "float"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -6896,24 +6545,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "Vector3"
-                    }
-                },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
                     }
                 },
                 "Color": {
@@ -7054,24 +6685,6 @@
                         "Name": "float"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -7174,24 +6787,6 @@
                         "Name": "float"
                     }
                 },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Color": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -7283,24 +6878,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "ActuatorRelativeTo"
-                    }
-                },
-                "Attachment0": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Attachments",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
                     }
                 },
                 "Color": {
@@ -7957,15 +7534,6 @@
         },
         "ControllerManager": {
             "Properties": {
-                "ActiveController": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "ControllerBase"
-                    }
-                },
                 "BaseMoveSpeed": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -7984,15 +7552,6 @@
                         "Name": "float"
                     }
                 },
-                "ClimbSensor": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "ControllerSensor"
-                    }
-                },
                 "FacingDirection": {
                     "Category": "Input",
                     "MemberType": "Property",
@@ -8002,15 +7561,6 @@
                         "Name": "Vector3"
                     }
                 },
-                "GroundSensor": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "ControllerSensor"
-                    }
-                },
                 "MovingDirection": {
                     "Category": "Input",
                     "MemberType": "Property",
@@ -8018,15 +7568,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "Vector3"
-                    }
-                },
-                "RootPart": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "UpDirection": {
@@ -8456,15 +7997,6 @@
         },
         "DigitsRigDescription": {
             "Properties": {
-                "Index1": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Index1TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8474,15 +8006,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Index2": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Index2TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8490,15 +8013,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "Index3": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Index3TposeAdjustment": {
@@ -8528,15 +8042,6 @@
                         "Name": "float"
                     }
                 },
-                "Middle1": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Middle1TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8546,15 +8051,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Middle2": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Middle2TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8562,15 +8058,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "Middle3": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Middle3TposeAdjustment": {
@@ -8600,15 +8087,6 @@
                         "Name": "float"
                     }
                 },
-                "Pinky1": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Pinky1TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8618,15 +8096,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Pinky2": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Pinky2TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8634,15 +8103,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "Pinky3": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Pinky3TposeAdjustment": {
@@ -8672,15 +8132,6 @@
                         "Name": "float"
                     }
                 },
-                "Ring1": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Ring1TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8690,15 +8141,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Ring2": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Ring2TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8706,15 +8148,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "Ring3": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Ring3TposeAdjustment": {
@@ -8753,15 +8186,6 @@
                         "Name": "DigitsRigDescriptionSide"
                     }
                 },
-                "Thumb1": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Thumb1TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8771,15 +8195,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Thumb2": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Thumb2TposeAdjustment": {
                     "Category": "Tpose",
                     "MemberType": "Property",
@@ -8787,15 +8202,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "Thumb3": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Thumb3TposeAdjustment": {
@@ -10642,42 +10048,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -10703,15 +10073,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -10766,15 +10127,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -10982,42 +10334,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -11043,15 +10359,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -11106,15 +10413,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -11358,15 +10656,6 @@
                         "Name": "bool"
                     }
                 },
-                "HoverHapticEffect": {
-                    "Category": "Haptic",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "HapticEffect"
-                    }
-                },
                 "Modal": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -11374,15 +10663,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "PressHapticEffect": {
-                    "Category": "Haptic",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "HapticEffect"
                     }
                 },
                 "Selected": {
@@ -11513,42 +10793,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -11574,15 +10818,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -11637,15 +10872,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -11897,15 +11123,6 @@
                         "Name": "bool"
                     }
                 },
-                "HoverHapticEffect": {
-                    "Category": "Haptic",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "HapticEffect"
-                    }
-                },
                 "Modal": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -11913,15 +11130,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "PressHapticEffect": {
-                    "Category": "Haptic",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "HapticEffect"
                     }
                 },
                 "Selected": {
@@ -12052,42 +11260,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -12113,15 +11285,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -12176,15 +11339,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -12494,42 +11648,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -12555,15 +11673,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -12618,15 +11727,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -12979,42 +12079,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -13040,15 +12104,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -13103,15 +12158,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -13226,15 +12272,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "float"
-                    }
-                },
-                "InputAction": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "InputAction"
                     }
                 },
                 "TextColor3": {
@@ -13401,42 +12438,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -13462,15 +12463,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -13525,15 +12517,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -13732,42 +12715,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -13793,15 +12740,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -13856,15 +12794,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -14227,42 +13156,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -14288,15 +13181,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -14351,15 +13235,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -14783,42 +13658,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -14844,15 +13683,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -14907,15 +13737,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -15199,42 +14020,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -15260,15 +14045,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -15323,15 +14099,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -15427,17 +14194,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "Color3"
-                    }
-                },
-                "CurrentCamera": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [
-                        "NotReplicated"
-                    ],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Camera"
                     }
                 },
                 "ImageColor3": {
@@ -15586,42 +14342,6 @@
                         "Name": "int"
                     }
                 },
-                "NextSelectionDown": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionLeft": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionRight": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
-                "NextSelectionUp": {
-                    "Category": "Selection",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
-                    }
-                },
                 "Position": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -15647,15 +14367,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "SelectionImageObject": {
-                    "Category": "Appearance",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "SelectionOrder": {
@@ -15710,15 +14421,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -15816,15 +14518,6 @@
                         "Name": "bool"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "AlwaysOnTop": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -15899,15 +14592,6 @@
                         "Name": "float"
                     }
                 },
-                "PlayerToHideFrom": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Size": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -15978,15 +14662,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -16158,15 +14833,6 @@
                         "Name": "bool"
                     }
                 },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
-                    }
-                },
                 "SelectionBehaviorDown": {
                     "Category": "Selection",
                     "MemberType": "Property",
@@ -16298,15 +14964,6 @@
                         "Name": "bool"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Face": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -16350,15 +15007,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -16547,15 +15195,6 @@
                         "Name": "bool"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Face": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -16599,15 +15238,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
                     }
                 },
                 "SelectionBehaviorDown": {
@@ -16722,15 +15352,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "float"
-                    }
-                },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Color3": {
@@ -16862,15 +15483,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "int"
-                    }
-                },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
                     }
                 },
                 "Color3": {
@@ -17021,15 +15633,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "int"
-                    }
-                },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
                     }
                 },
                 "Color3": {
@@ -17191,15 +15794,6 @@
                         "Name": "int"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
-                    }
-                },
                 "Color3": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -17341,15 +15935,6 @@
                         "Name": "int"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
-                    }
-                },
                 "Color3": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -17480,15 +16065,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "int"
-                    }
-                },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
                     }
                 },
                 "Color3": {
@@ -17641,15 +16217,6 @@
                         "Name": "int"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
-                    }
-                },
                 "Color3": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -17780,15 +16347,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "int"
-                    }
-                },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
                     }
                 },
                 "Color3": {
@@ -17923,15 +16481,6 @@
                         "Name": "int"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
-                    }
-                },
                 "Color3": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -18019,15 +16568,6 @@
                         "Name": "float"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "PVInstance"
-                    }
-                },
                 "Color3": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -18103,15 +16643,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "Axes"
-                    }
-                },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "Color3": {
@@ -18201,15 +16732,6 @@
                         "Name": "HandlesStyle"
                     }
                 },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
                 "Color3": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -18286,15 +16808,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "NormalId"
-                    }
-                },
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "Color3": {
@@ -18392,17 +16905,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "int"
-                    }
-                },
-                "SelectedControlPointData": {
-                    "Category": "Control Points",
-                    "MemberType": "Property",
-                    "Tags": [
-                        "NotReplicated"
-                    ],
-                    "ValueType": {
-                        "Category": "DataType",
-                        "Name": "Path2DControlPoint"
                     }
                 },
                 "Thickness": {
@@ -18554,15 +17056,6 @@
         },
         "Highlight": {
             "Properties": {
-                "Adornee": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "DepthMode": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -18891,15 +17384,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "float"
-                    }
-                },
-                "WalkToPart": {
-                    "Category": "Control",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "WalkToPoint": {
@@ -19399,15 +17883,6 @@
         },
         "HumanoidRigDescription": {
             "Properties": {
-                "Chest": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "ChestRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -19442,15 +17917,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "HeadBase": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "HeadBaseRangeMax": {
@@ -19489,15 +17955,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "LeftAnkle": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "LeftAnkleRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -19532,15 +17989,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "LeftClavicle": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "LeftClavicleRangeMax": {
@@ -19579,15 +18027,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "LeftElbow": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "LeftElbowRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -19622,15 +18061,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "LeftHip": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "LeftHipRangeMax": {
@@ -19669,15 +18099,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "LeftKnee": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "LeftKneeRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -19712,15 +18133,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "LeftShoulder": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "LeftShoulderRangeMax": {
@@ -19759,15 +18171,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "LeftToeBase": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "LeftToeBaseRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -19804,15 +18207,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "LeftWrist": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "LeftWristRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -19847,15 +18241,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "Neck": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "NeckRangeMax": {
@@ -19903,15 +18288,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "RightAnkle": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "RightAnkleRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -19946,15 +18322,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "RightClavicle": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "RightClavicleRangeMax": {
@@ -19993,15 +18360,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "RightElbow": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "RightElbowRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -20036,15 +18394,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "RightHip": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "RightHipRangeMax": {
@@ -20083,15 +18432,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "RightKnee": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "RightKneeRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -20126,15 +18466,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "RightShoulder": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "RightShoulderRangeMax": {
@@ -20173,15 +18504,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "RightToeBase": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "RightToeBaseRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -20216,15 +18538,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "RightWrist": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "RightWristRangeMax": {
@@ -20263,15 +18576,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Root": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "RootRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -20308,15 +18612,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Spine": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "SpineRangeMax": {
                     "Category": "Range",
                     "MemberType": "Property",
@@ -20351,15 +18646,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "Waist": {
-                    "Category": "Mapping",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "WaistRangeMax": {
@@ -20436,15 +18722,6 @@
         },
         "IKControl": {
             "Properties": {
-                "ChainRoot": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Enabled": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -20452,15 +18729,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "EndEffector": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "EndEffectorOffset": {
@@ -20481,15 +18749,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "Pole": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Priority": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -20506,15 +18765,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "float"
-                    }
-                },
-                "Target": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Type": {
@@ -20800,24 +19050,6 @@
                         "Name": "InputBindingType"
                     }
                 },
-                "UIButton": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiButton"
-                    }
-                },
-                "UIModifier": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiButton"
-                    }
-                },
                 "Up": {
                     "Category": "Composite Directions",
                     "MemberType": "Property",
@@ -21004,24 +19236,6 @@
                         "Name": "bool"
                     }
                 },
-                "Part0": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
-                "Part1": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
                 "Archivable": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -21118,24 +19332,6 @@
                         "Name": "bool"
                     }
                 },
-                "Part0": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
-                "Part1": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
                 "Archivable": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -21201,24 +19397,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "Part0": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
-                "Part1": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "Archivable": {
@@ -21904,15 +20082,6 @@
                         "Name": "int64"
                     }
                 },
-                "Instance": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "MakeupType": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -22198,24 +20367,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "bool"
-                    }
-                },
-                "Part0": {
-                    "Category": "Parts",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
-                "Part1": {
-                    "Category": "Parts",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "Archivable": {
@@ -24905,15 +23056,6 @@
                         "Name": "CFrame"
                     }
                 },
-                "CameraSubject": {
-                    "Category": "Camera",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "CameraType": {
                     "Category": "Camera",
                     "MemberType": "Property",
@@ -25108,15 +23250,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "CFrame"
-                    }
-                },
-                "CameraSubject": {
-                    "Category": "Camera",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "CameraType": {
@@ -25322,15 +23455,6 @@
                         "Name": "ModelStreamingMode"
                     }
                 },
-                "PrimaryPart": {
-                    "Category": "Pivot",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
                 "Scale": {
                     "Category": "Pivot",
                     "MemberType": "Property",
@@ -25434,15 +23558,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "ModelStreamingMode"
-                    }
-                },
-                "PrimaryPart": {
-                    "Category": "Pivot",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "Scale": {
@@ -25622,15 +23737,6 @@
                         "Name": "ModelStreamingMode"
                     }
                 },
-                "PrimaryPart": {
-                    "Category": "Pivot",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
                 "Scale": {
                     "Category": "Pivot",
                     "MemberType": "Property",
@@ -25719,15 +23825,6 @@
         },
         "ProceduralModel": {
             "Properties": {
-                "Generator": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "ModuleScript"
-                    }
-                },
                 "Size": {
                     "Category": "Transform",
                     "MemberType": "Property",
@@ -25753,15 +23850,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "ModelStreamingMode"
-                    }
-                },
-                "PrimaryPart": {
-                    "Category": "Pivot",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "Scale": {
@@ -25876,15 +23964,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "ModelStreamingMode"
-                    }
-                },
-                "PrimaryPart": {
-                    "Category": "Pivot",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "Scale": {
@@ -26346,24 +24425,6 @@
         },
         "PathfindingLink": {
             "Properties": {
-                "Attachment0": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "IsBidirectional": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -27157,15 +25218,6 @@
                         "Name": "bool"
                     }
                 },
-                "RootLocalizationTable": {
-                    "Category": "Localization",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "LocalizationTable"
-                    }
-                },
                 "Style": {
                     "Category": "Data",
                     "MemberType": "Property",
@@ -27619,15 +25671,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "Material"
-                    }
-                },
-                "SensedPart": {
-                    "Category": "Output",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
                     }
                 },
                 "SensorMode": {
@@ -28164,15 +26207,6 @@
                         "Name": "RollOffMode"
                     }
                 },
-                "SoundGroup": {
-                    "Category": "Routing",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "SoundGroup"
-                    }
-                },
                 "SoundId": {
                     "Category": "Asset",
                     "MemberType": "Property",
@@ -28358,15 +26392,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "float"
-                    }
-                },
-                "SideChain": {
-                    "Category": "State",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "Threshold": {
@@ -29269,15 +27294,6 @@
                         "Name": "int"
                     }
                 },
-                "StyleSheet": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "StyleSheet"
-                    }
-                },
                 "Archivable": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -29316,15 +27332,6 @@
         },
         "StyleLink": {
             "Properties": {
-                "StyleSheet": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "StyleSheet"
-                    }
-                },
                 "Archivable": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -30196,24 +28203,6 @@
         },
         "Trail": {
             "Properties": {
-                "Attachment0": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
-                "Attachment1": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Attachment"
-                    }
-                },
                 "Brightness": {
                     "Category": "Appearance",
                     "MemberType": "Property",
@@ -30687,15 +28676,6 @@
                         "Name": "UIDragDetectorBoundingBehavior"
                     }
                 },
-                "BoundingUI": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiBase2d"
-                    }
-                },
                 "CursorIcon": {
                     "Category": "Image",
                     "MemberType": "Property",
@@ -30811,15 +28791,6 @@
                     "ValueType": {
                         "Category": "DataType",
                         "Name": "UDim2"
-                    }
-                },
-                "ReferenceUIInstance": {
-                    "Category": "Behavior",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "GuiObject"
                     }
                 },
                 "ResponseStyle": {
@@ -32284,15 +30255,6 @@
         },
         "ObjectValue": {
             "Properties": {
-                "Value": {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "Archivable": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -32563,28 +30525,6 @@
                         "Name": "bool"
                     }
                 },
-                "Part0": {
-                    "Category": "Parts",
-                    "MemberType": "Property",
-                    "Tags": [
-                        "NotReplicated"
-                    ],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
-                "Part1": {
-                    "Category": "Parts",
-                    "MemberType": "Property",
-                    "Tags": [
-                        "NotReplicated"
-                    ],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "BasePart"
-                    }
-                },
                 "Archivable": {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -32623,15 +30563,6 @@
         },
         "Wire": {
             "Properties": {
-                "SourceInstance": {
-                    "Category": "Connections",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
-                    }
-                },
                 "SourceName": {
                     "Category": "Connections",
                     "MemberType": "Property",
@@ -32639,15 +30570,6 @@
                     "ValueType": {
                         "Category": "Primitive",
                         "Name": "string"
-                    }
-                },
-                "TargetInstance": {
-                    "Category": "Connections",
-                    "MemberType": "Property",
-                    "Tags": [],
-                    "ValueType": {
-                        "Category": "Class",
-                        "Name": "Instance"
                     }
                 },
                 "TargetName": {
