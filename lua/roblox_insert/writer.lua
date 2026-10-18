@@ -17,29 +17,6 @@ local complex_types = {
 	},
 }
 
----@param str string
----@return table
-local function split(str)
-	local ret = {}
-	for word in string.gmatch(str, ".") do
-		table.insert(ret, word)
-	end
-	return ret
-end
-
----@param enum string
----@param name string
----@return number?
-local function check_enum(enum, name)
-	local str = split(name)
-	if #str == 0 then
-		return nil
-	end
-	return enum_data[str[#str]]
-end
-
----@param class string
----@return string?
 local function find_closest_class(class)
 	local closest_match = nil
 	local closest_score = 5
@@ -54,15 +31,10 @@ local function find_closest_class(class)
 	return closest_match
 end
 
----@param param table
----@return table?, string?
-local function convert_complex_type(param) end
-
 ---@param class string
 ---@param params {string: any}?
 ---@return table?, string?
 local function create_file_data(class, params)
-	params = params or {}
 	local class_table = data.raw.Classes[class]
 	if not class_table then
 		local estimate = find_closest_class(class)
@@ -78,7 +50,7 @@ local function create_file_data(class, params)
 	end
 	local file = {}
 	file.ClassName = class
-	file.Properties = vim.empty_dict()
+	file.Properties = params or vim.empty_dict()
 	return file
 end
 

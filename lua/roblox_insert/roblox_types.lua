@@ -3,6 +3,95 @@ local data = require("roblox_insert.data")
 local brick_colors = data.colors
 local enums = data.raw.Enums
 
+local function handle_nil(t)
+	if t == "nil" then
+		return true
+	end
+	return false
+end
+
+local function clamp(v, min, max, default)
+	return math.max(min, math.min(max, tonumber(v) or default or min))
+end
+
+local function verify_enum(enum, field)
+	return enums[enum][field] ~= nil, enums[enum][field]
+end
+
+local function verify_color_3(t)
+	local return_val = {}
+	if t.Hex then
+		if type(t.Hex) == "string" then
+			if string.match(t.Hex, "^%x%x%x%x%x%x$") then
+				return_val = {
+					math.min(tonumber(string.sub(t.Hex, 1, 2), 16), 255) / 255.0,
+					math.min(tonumber(string.sub(t.Hex, 3, 4), 16), 255) / 255.0,
+					math.min(tonumber(string.sub(t.Hex, 5, 6), 16), 255) / 255.0,
+				}
+				return true, return_val
+			end
+		end
+	end
+	local indexes = 0
+	for k, i in pairs(t) do
+		indexes = indexes + 1
+		if tonumber(i) == nil and k ~= "Hex" then
+			return false, nil
+		end
+		return_val[k] = tonumber(i)
+	end
+	if indexes == 3 and return_val.Hex == nil or indexes == 4 then
+		return_val = {
+			clamp(return_val.R, 0, 255) / 255.0,
+			clamp(return_val.G, 0, 255) / 255.0,
+			clamp(return_val.B, 0, 255) / 255.0,
+		}
+		return true, return_val
+	end
+	return false
+end
+
+local function verify_vector_3(t)
+	local return_val = {}
+	local indexes = 0
+	for k, i in pairs(t) do
+		indexes = indexes + 1
+		if tonumber(i) == nil then
+			return false, nil
+		end
+		return_val[k] = tonumber(i)
+	end
+	if indexes == 3 then
+		return_val = {
+			return_val.X,
+			return_val.Y,
+			return_val.Z,
+		}
+		return true, return_val
+	end
+	return false, nil
+end
+
+local function verify_vector_2(t)
+	local return_val = {}
+	local indexes = 0
+	for k, i in pairs(t) do
+		indexes = indexes + 1
+		if tonumber(i) == nil then
+			return false, nil
+		end
+		return_val[k] = tonumber(i)
+	end
+	if indexes == 2 then
+		return_val = {
+			return_val.X,
+			return_val.Y,
+		}
+		return true, return_val
+	end
+	return false, nil
+end
+
 roblox_types.Axes = {
 	lua_type = "table",
 	fields = {
@@ -44,7 +133,12 @@ roblox_types.BrickColor = {
 		"Color",
 	},
 	verification = function(t)
-		t = tonumber(t) or t
+		local number = tonumber(t)
+
+		if number then
+			return brick_colors[number] ~= nil, number
+		end
+
 		return brick_colors[t] ~= nil, brick_colors[t]
 	end,
 }
@@ -79,13 +173,18 @@ roblox_types.CFrame = {
 			if return_val.X ~= nil and return_val.Y ~= nil and return_val.Z ~= nil then
 				return_val = {
 					position = { return_val.X, return_val.Y, return_val.Z },
+					orientation = {
+						{ 0.0, 0.0, 0.0 },
+						{ 0.0, 0.0, 0.0 },
+						{ 0.0, 0.0, 0.0 },
+					},
 				}
 				return true, return_val
 			end
 			return false, nil
 		elseif indexes == 12 then
 			return_val = {
-				positon = { return_val.X, return_val.Y, return_val.Z },
+				position = { return_val.X, return_val.Y, return_val.Z },
 				orientation = {
 					{ return_val.R00, return_val.R01, return_val.R02 },
 					{ return_val.R10, return_val.R11, return_val.R12 },
@@ -97,41 +196,6 @@ roblox_types.CFrame = {
 		return false
 	end,
 }
-
-local function verify_color_3(t)
-	local return_val = {}
-	if t.Hex then
-		if type(t.Hex) == "string" then
-			if string.len(t.Hex) == 6 then
-				return_val = {
-					math.min(tonumber(string.sub(t.Hex, 1, 2), 16), 255) / 255.0,
-					math.min(tonumber(string.sub(t.Hex, 3, 4), 16), 255) / 255.0,
-					math.min(tonumber(string.sub(t.Hex, 5, 6), 16), 255) / 255.0,
-				}
-				return true, return_val
-			end
-		end
-		return false, nil
-	end
-	local indexes = 0
-	for k, i in pairs(t) do
-		indexes = indexes + 1
-		if tonumber(i) == nil then
-			return false, nil
-		end
-		return_val[k] = tonumber(i)
-	end
-	if indexes == 3 and return_val.Hex == nil or indexes == 4 then
-		return_val = {
-			math.max(0, math.min(return_val.X, 255)) / 255.0,
-			math.max(0, math.min(return_val.Y, 255)) / 255.0,
-			math.max(0, math.min(return_val.Z, 255)) / 255.0,
-		}
-		return true, return_val
-	end
-	return false
-end
-
 roblox_types.Color3 = {
 	lua_type = "table",
 	fields = {
@@ -160,12 +224,14 @@ roblox_types.ColorSequence = {
 			local valid, k = verify_color_3({ R = keypoint.R, G = keypoint.G, B = keypoint.B, Hex = keypoint.Hex })
 			if valid then
 				table.insert(return_val, {
-					time = math.max(0, math.min(tonumber(keypoint.time) or 0.0, 1.0)),
+					time = clamp(keypoint.time, 0.0, 1.0),
 					color = k,
 				})
+			else
+				return false, nil
 			end
 		end
-		return #return_val >= 2, return_val
+		return #return_val >= 2, { keypoints = return_val }
 	end,
 }
 
@@ -197,6 +263,19 @@ roblox_types.ContentId = {
 	end,
 }
 
+roblox_types.Enum = {
+	lua_type = "enum",
+	fields = {
+		"",
+	},
+	verification = function(enum, field)
+		if handle_nil(field) then
+			return true, nil
+		end
+		return verify_enum(enum, field)
+	end,
+}
+
 roblox_types.Faces = {
 	lua_type = "table",
 	fields = {
@@ -219,16 +298,12 @@ roblox_types.Faces = {
 	end,
 }
 
-local function verify_enum(enum, field)
-	return enums[enum][field] ~= nil, enums[enum][field]
-end
-
 roblox_types.Font = {
-	lua_type = "string",
+	lua_type = "table",
 	fields = {
 		"family",
 		"weight",
-		"sytle",
+		"style",
 	},
 	verification = function(t)
 		local family = t.family
@@ -281,7 +356,7 @@ roblox_types.NumberRange = {
 }
 
 roblox_types.NumberSequence = {
-	lua_type = "nested_table",
+	lua_type = "nested table",
 	fields = {
 		"time",
 		"value",
@@ -292,16 +367,105 @@ roblox_types.NumberSequence = {
 		for _, keypoint in ipairs(t) do
 			local value = tonumber(keypoint.value)
 			if value ~= nil then
-				local time = math.max(0, math.min(tonumber(keypoint.time) or 0.0, 1.0))
+				local time = clamp(keypoint.time, 0.0, 1.0)
 				local envelope = tonumber(keypoint.envelope) or 0.0
 				table.insert(return_val, {
 					time = time,
 					value = value,
 					envelope = envelope,
 				})
+			else
+				return false, nil
 			end
 		end
-		return #return_val >= 2, return_val
+		return #return_val >= 2, { keypoints = return_val }
+	end,
+}
+
+roblox_types.PhysicalProperties = {
+	lua_type = "table",
+	fields = {
+		"density",
+		"friction",
+		"elasticity",
+		"frictionWeight",
+		"elasticityWeight",
+		"acousticAbsorption",
+	},
+	verification = function(t)
+		if next(t) == nil then
+			return true, "Default"
+		end
+		local return_val = {}
+		return_val.density = clamp(t.density, 0.0001, 100.0, 0.5)
+		return_val.friction = clamp(t.friction, 0.0, 2.0, 1.0)
+		return_val.elasticity = clamp(t.elasticity, 0.0, 1.0, 0.0)
+		return_val.frictionWeight = clamp(t.frictionWeight, 0.0, 100.0, 50.0)
+		return_val.elasticityWeight = clamp(t.elasticityWeight, 0.0, 100.0, 25.0)
+		return_val.acousticAbsorption = clamp(t.acousticAbsorption, 0.0, 1.0, 1.0)
+		return true, return_val
+	end,
+}
+
+roblox_types.ProtectedString = {
+	lua_type = "string",
+	fields = {
+		"",
+	},
+	verification = function(t)
+		if type(t) == "string" then
+			return string.len(t) > 0, t
+		end
+		return false, nil
+	end,
+}
+
+roblox_types.Ray = {
+	lua_type = "table",
+	fields = {
+		"originX",
+		"originY",
+		"originZ",
+		"directionX",
+		"directionY",
+		"directionZ",
+	},
+	verification = function(t)
+		local return_val = {}
+		local verify
+		verify, return_val.origin = verify_vector_3({ X = t.originX, Y = t.originY, Z = t.originZ })
+		if not verify then
+			return false, nil
+		end
+		verify, return_val.direction = verify_vector_3({ X = t.directionX, Y = t.directionY, Z = t.directionZ })
+		if not verify then
+			return false, nil
+		end
+		return true, return_val
+	end,
+}
+
+roblox_types.Rect = {
+	lua_type = "table",
+	fields = {
+		"X0",
+		"Y0",
+		"X1",
+		"Y1",
+	},
+	verification = function(t)
+		local verify
+		local corner0
+		verify, corner0 = verify_vector_2({ X = t.X0, Y = t.Y0 })
+		if not verify then
+			return false, nil
+		end
+		local corner1
+		verify, corner1 = verify_vector_2({ X = t.X1, Y = t.Y1 })
+		if not verify then
+			return false, nil
+		end
+		return true, { corner0, corner1 }
 	end,
 }
 
@@ -362,23 +526,7 @@ roblox_types.Vector2 = {
 		"Y",
 	},
 	verification = function(t)
-		local return_val = {}
-		local indexes = 0
-		for k, i in pairs(t) do
-			indexes = indexes + 1
-			if tonumber(i) == nil then
-				return false, nil
-			end
-			return_val[k] = tonumber(i)
-		end
-		if indexes == 2 then
-			return_val = {
-				return_val.X,
-				return_val.Y,
-			}
-			return true, return_val
-		end
-		return false
+		return verify_vector_2(t)
 	end,
 }
 
@@ -390,29 +538,19 @@ roblox_types.Vector3 = {
 		"Z",
 	},
 	verification = function(t)
-		local return_val = {}
-		local indexes = 0
-		for k, i in pairs(t) do
-			indexes = indexes + 1
-			if tonumber(i) == nil then
-				return false, nil
-			end
-			return_val[k] = tonumber(i)
-		end
-		if indexes == 3 then
-			return_val = {
-				return_val.X,
-				return_val.Y,
-				return_val.Z,
-			}
-			return true, return_val
-		end
-		return false
+		return verify_vector_3(t)
 	end,
 }
 roblox_types.bool = {
 	lua_type = "bool",
+	fields = {
+		"",
+	},
 	verification = function(t)
+		vim.print(type(t))
+		if handle_nil(t) then
+			return true, nil
+		end
 		if t == "true" or t == "false" then
 			if t == "true" then
 				return true, true
@@ -440,6 +578,9 @@ roblox_types.float = {
 		"",
 	},
 	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
 		return tonumber(t) ~= nil, tonumber(t)
 	end,
 }
@@ -450,6 +591,9 @@ roblox_types.int = {
 		"",
 	},
 	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
 		local i = tonumber(t)
 		if i == nil then
 			return false
@@ -464,6 +608,9 @@ roblox_types.int64 = {
 		"",
 	},
 	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
 		local i = tonumber(t)
 		if i == nil then
 			return false
@@ -478,8 +625,11 @@ roblox_types.string = {
 		"",
 	},
 	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
 		if type(t) == "string" then
-			return string.len(t) > 0, t
+			return true, t
 		end
 		return false, nil
 	end,

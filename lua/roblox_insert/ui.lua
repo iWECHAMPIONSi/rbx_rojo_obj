@@ -1,215 +1,21 @@
 local m = {}
 local data = require("roblox_insert.data")
+local writer = require("roblox_insert.writer")
 
+local roblox_types = require("roblox_insert.roblox_types")
+
+local current_class = nil
+
+local function handle_nil(t)
+	if t == "nil" then
+		return nil
+	end
+	return t
+end
 local vim = vim
 
 local class_list_ref = {}
-
-local roblox_types = {
-	name = {
-		lua_type = "string",
-		fields = {
-			"",
-		},
-		verification = function(t)
-			if type(t) == "string" then
-				return string.len(t) > 0, t
-			end
-			return false, nil
-		end,
-	},
-	bool = {
-		lua_type = "bool",
-		verification = function(t)
-			if t == "true" or t == "false" then
-				if t == "true" then
-					return true, true
-				else
-					return true, false
-				end
-			end
-			return false, nil
-		end,
-	},
-	int = {
-		lua_type = "number",
-		fields = {
-			"",
-		},
-		verification = function(t)
-			local i = tonumber(t)
-			if i == nil then
-				return false
-			end
-			return math.floor(i) == i, i
-		end,
-	},
-	int64 = {
-		lua_type = "number",
-		fields = {
-			"",
-		},
-		verification = function(t)
-			local i = tonumber(t)
-			if i == nil then
-				return false
-			end
-			return math.floor(i) == i, i
-		end,
-	},
-	float = {
-		lua_type = "number",
-		fields = {
-			"",
-		},
-		verification = function(t)
-			return tonumber(t) ~= nil, tonumber(t)
-		end,
-	},
-	string = {
-		lua_type = "string",
-		fields = {
-			"",
-		},
-		verification = function(t)
-			if type(t) == "string" then
-				return string.len(t) > 0, t
-			end
-			return false, nil
-		end,
-	},
-	Vector2 = {
-		lua_type = "table",
-		fields = {
-			"X",
-			"Y",
-		},
-		verification = function(t)
-			local return_val = {}
-			local indexes = 0
-			for k, i in pairs(t) do
-				indexes = indexes + 1
-				if tonumber(i) == nil then
-					return false, nil
-				end
-				return_val[k] = tonumber(i)
-			end
-			if indexes == 2 then
-				return true, return_val
-			end
-			return false
-		end,
-	},
-	Vector3 = {
-		lua_type = "table",
-		fields = {
-			"X",
-			"Y",
-			"Z",
-		},
-		verification = function(t)
-			local return_val = {}
-			local indexes = 0
-			for k, i in pairs(t) do
-				indexes = indexes + 1
-				if tonumber(i) == nil then
-					return false, nil
-				end
-				return_val[k] = tonumber(i)
-			end
-			if indexes == 3 then
-				return true, return_val
-			end
-			return false
-		end,
-	},
-	Color3 = {
-		lua_type = "table",
-		fields = {
-			"Hex",
-			"R",
-			"G",
-			"B",
-		},
-		verification = function(t)
-			local return_val = {}
-			if t.Hex then
-				if type(t.Hex) == "string" then
-					if string.len(t.Hex) == 6 then
-						return_val = {
-							R = tonumber(string.sub(t.Hex, 1, 2), 16),
-							G = tonumber(string.sub(t.Hex, 3, 4), 16),
-							B = tonumber(string.sub(t.Hex, 5, 6), 16),
-						}
-						return true, return_val
-					end
-				end
-				return false, nil
-			end
-			local indexes = 0
-			for k, i in pairs(t) do
-				indexes = indexes + 1
-				if tonumber(i) == nil then
-					return false, nil
-				end
-				return_val[k] = tonumber(i)
-			end
-			if indexes == 3 then
-				return true, return_val
-			end
-			return false
-		end,
-	},
-	UDim2 = {
-		lua_type = "table",
-		fields = {
-			"X",
-			"Y",
-			"Width",
-			"Height",
-		},
-		verification = function(t)
-			local return_val = {}
-			local indexes = 0
-			for k, i in pairs(t) do
-				indexes = indexes + 1
-				if tonumber(i) == nil then
-					return false, nil
-				end
-				return_val[k] = tonumber(i)
-			end
-			if indexes == 4 then
-				return true, return_val
-			end
-			return false
-		end,
-	},
-
-	CFrame = {
-		lua_type = "table",
-		fields = {
-			"X",
-			"Y",
-			"Z",
-		},
-		verification = function(t)
-			local return_val = {}
-			local indexes = 0
-			for k, i in pairs(t) do
-				indexes = indexes + 1
-				if tonumber(i) == nil then
-					return false, nil
-				end
-				return_val[k] = tonumber(i)
-			end
-			if indexes == 3 then
-				return true, return_val
-			end
-			return false
-		end,
-	},
-}
-
+local properties_list_ref = {}
 local expanded_categories = {
 	["Favorites"] = true,
 	["3D Interfaces"] = true,
@@ -245,36 +51,264 @@ local expanded_categories = {
 	["Text Chat Properties"] = true,
 }
 
-local function query_path() end
+local function create_input(field, t, initial_value, on_submit)
+	local buf = vim.api.nvim_create_buf(false, true)
+	vim.bo[buf].buftype = "prompt"
+	vim.fn.prompt_setprompt(buf, field .. ": ")
+	local width = 40
+	local win = vim.api.nvim_open_win(buf, true, {
+		relative = "editor",
+		width = width,
+		height = 1,
+		row = math.floor(vim.o.lines / 2),
+		col = math.floor((vim.o.columns - width) / 2),
+		border = "rounded",
+		style = "minimal",
+		title = "Input",
+		footer = t,
+	})
 
-local function disp_class(buf, class)
-	vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+	vim.fn.prompt_setcallback(buf, function(value)
+		vim.schedule(function()
+			if value == "" then
+				value = nil
+			end
+			on_submit(value)
+			if vim.api.nvim_win_is_valid(win) then
+				vim.api.nvim_win_close(win, true)
+			end
+		end)
+	end)
+
+	vim.keymap.set("n", "Q", function()
+		vim.api.nvim_win_close(win, true)
+	end, { buffer = buf })
+
+	vim.cmd("startinsert")
+	if initial_value ~= nil then
+		vim.schedule(function()
+			if not vim.api.nvim_win_is_valid(win) then
+				return
+			end
+
+			local prompt = vim.fn.prompt_getprompt(buf)
+			local value = tostring(initial_value)
+
+			vim.api.nvim_buf_set_text(buf, 0, #prompt, 0, #prompt, { value })
+
+			vim.api.nvim_win_set_cursor(win, {
+				1,
+				#prompt + #value,
+			})
+		end)
+	end
+	return buf, win
+end
+
+local function create_window(args)
+	local buf = vim.api.nvim_create_buf(false, true)
+	args.buf = buf
+
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, args.contents or {})
+
+	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+
+	local win = vim.api.nvim_open_win(buf, args.focus, {
+		relative = "editor",
+		width = args.width,
+		height = args.height,
+		col = args.col,
+		row = args.row,
+		style = "minimal",
+		border = args.border or "rounded",
+		title = args.title,
+		title_pos = args.title_pos,
+		footer = args.footer,
+		footer_pos = args.footer_pos,
+	})
+
+	args.win = win
+
+	return buf, win
+end
+
+m.create_window = create_window
+
+local function disp_property(t, properties_table, name, dimensions, when_done, enumeration)
+	local value_type = roblox_types[t]
+	if value_type.lua_type == "enum" then
+		create_input(name, t, properties_table[name] and properties_table[name].value or nil, function(value)
+			local success, val = value_type.verification(enumeration, value)
+			if success then
+				if val == nil then
+					properties_table[name] = nil
+				else
+					properties_table[name] = {
+						json = {
+							Enum = val,
+						},
+						value = value,
+					}
+				end
+			end
+			when_done()
+		end)
+		return
+	end
+
+	if value_type.lua_type ~= "table" and value_type.lua_type ~= "nested_table" then
+		create_input(
+			value_type.fields[1],
+			t,
+			properties_table[name] and properties_table[name].value or nil,
+			function(value)
+				vim.print(type(value))
+				local success, val = value_type.verification(value)
+				if success then
+					if val == nil then
+						properties_table[name] = nil
+					else
+						properties_table[name] = {
+							json = {
+								[t] = val,
+							},
+							value = value,
+						}
+					end
+				end
+				when_done()
+			end
+		)
+		return
+	end
+
+	if value_type.lua_type == "table" then
+		local field_ref = {}
+		local str = {}
+		local value_ref = {}
+		local props = properties_table
+		dimensions.title = t
+		dimensions.focus = true
+		local buf, win = create_window(dimensions)
+		if props[name] then
+			value_ref = vim.deepcopy(props[name].value)
+			for i, field in ipairs(value_type.fields) do
+				table.insert(str, field .. ": " .. (props[name].value[field] or ""))
+				table.insert(field_ref, function()
+					create_input(field, t, value_ref[field], function(value)
+						value_ref[field] = value or value_ref[field]
+						value_ref[field] = handle_nil(value_ref[field])
+						str[i] = field .. ": " .. (value_ref[field] or "")
+						vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+						vim.api.nvim_buf_set_lines(buf, i - 1, i, false, { str[i] })
+						vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+					end)
+				end)
+			end
+		else
+			for i, field in ipairs(value_type.fields) do
+				table.insert(str, field .. ":")
+				table.insert(field_ref, function()
+					create_input(field, t, value_ref[field], function(value)
+						value_ref[field] = value or value_ref[field]
+						value_ref[field] = handle_nil(value_ref[field])
+						str[i] = field .. ": " .. (value_ref[field] or "")
+						vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+						vim.api.nvim_buf_set_lines(buf, i - 1, i, false, { str[i] })
+						vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+					end)
+				end)
+			end
+		end
+		vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, str)
+		vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+		vim.keymap.set("n", "<CR>", function()
+			local line = vim.api.nvim_win_get_cursor(win)[1]
+			field_ref[line]()
+		end, { buffer = buf })
+
+		vim.keymap.set("n", "Q", function()
+			vim.api.nvim_win_close(win, true)
+			when_done()
+		end, { buffer = buf })
+
+		vim.keymap.set("n", "<C-e>", function()
+			local valid, value = value_type.verification(value_ref)
+			if valid then
+				properties_table[name] = {
+					json = {
+						[t] = value,
+					},
+					value = vim.deepcopy(value_ref),
+				}
+			elseif properties_table[name] and not properties_table[name].json or not properties_table[name] then
+				properties_table[name] = {
+					value = vim.deepcopy(value_ref),
+				}
+			end
+			when_done(true)
+		end, { buffer = buf })
+	end
+end
+
+local function disp_class(buf, class, inside_buf)
 	local class_def = data.raw.Classes[class]
 	if not class_def then
 		error("unreachble state reached! Class: " .. class)
 	end
-	if not class_def.Str then
-		local str = {
-			class,
-			"",
-			"Properties:",
+
+	local saved_object_properties = data.saved_object_configs[class]
+	local index = saved_object_properties.index or 1
+	local saved_property_tables = saved_object_properties.property_tables
+	local saved_properties = saved_property_tables[index] or { name = "", properties = {} }
+	local properties = saved_properties.properties
+	vim.print(properties)
+
+	if inside_buf then
+		properties_list_ref = {
+			{ t = "name", name = class },
+			{ t = "config", name = class },
+			{ t = "name", name = class },
 		}
-		for _, p in ipairs(class_def.PropertyKeys) do
-			local lstr = "  " .. p .. ": "
-			if class_def.Properties[p].ValueType.Category == "Enum" then
-				lstr = lstr .. "Enum."
-			end
-			lstr = lstr .. class_def.Properties[p].ValueType.Name
-			if #class_def.Properties[p].Tags > 0 then
-				local tag_str = " [Tags: " .. table.concat(class_def.Properties[p].Tags, ", ") .. "]"
-				lstr = lstr .. tag_str
-			end
-			table.insert(str, lstr)
-		end
-		data.raw.Classes[class].Str = str
 	end
+
+	local str = {
+		class,
+		"Current Config: " .. saved_properties.name,
+		"Properties:",
+	}
+
+	for _, p in ipairs(class_def.PropertyKeys) do
+		local pre = properties[p] and properties[p].json and " *" or "  "
+		local lstr = pre .. p .. ": "
+		local ref_table
+		if class_def.Properties[p].ValueType.Category == "Enum" then
+			lstr = lstr .. "Enum."
+			if inside_buf then
+				ref_table = { t = "Enum", enum = class_def.Properties[p].ValueType.Name, name = p }
+			end
+		else
+			if inside_buf then
+				ref_table = { t = class_def.Properties[p].ValueType.Name, name = p }
+			end
+		end
+		lstr = lstr .. class_def.Properties[p].ValueType.Name
+		if #class_def.Properties[p].Tags > 0 then
+			local tag_str = " [Tags: " .. table.concat(class_def.Properties[p].Tags, ", ") .. "]"
+			lstr = lstr .. tag_str
+		end
+		table.insert(str, lstr)
+		if inside_buf then
+			ref_table.props = saved_properties.properties
+			ref_table.tags = class_def.Properties[p].Tags
+			table.insert(properties_list_ref, ref_table)
+		end
+	end
+
 	vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, data.raw.Classes[class].Str)
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, str)
 	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 end
 
@@ -317,8 +351,6 @@ local function disp_class_list(buf, init)
 
 	return str
 end
-
-local function user_input(query, t) end
 
 m.user_input = user_input
 
@@ -391,12 +423,6 @@ local function generate_dimensions()
 	local row = math.floor((vim.o.lines - height - 2) / 2)
 	local col = math.floor((vim.o.columns - width - 2) / 2)
 	return {
-		user_input = {
-			width = width,
-			height = 1,
-			col = col,
-			row = vim.o.lines - 2 / 2,
-		},
 		path_bar = {
 			title = "Path",
 			title_pos = "left",
@@ -416,6 +442,7 @@ local function generate_dimensions()
 			},
 			contents = { "/src/shared/" },
 		},
+
 		search_bar = {
 			footer = "Search",
 			footer_pos = "left",
@@ -434,13 +461,13 @@ local function generate_dimensions()
 				{ "│", "FloatBorder" },
 			},
 		},
-		class_list = {
-			title = "Classes",
-			title_pos = "center",
+
+		class_edit_box = {
 			width = math.ceil(width / 2) - 1,
 			height = height - 6,
 			col = col,
 			row = row + 2,
+			focus = true,
 			border = {
 				{ "├", "FloatBorder" },
 				{ "─", "FloatBorder" },
@@ -451,12 +478,25 @@ local function generate_dimensions()
 				{ "├", "FloatBorder" },
 				{ "│", "FloatBorder" },
 			},
-			contents = {
-				"GUI/",
-				"  TextButton",
-				"  Frame",
-				"Constraints/",
-				"  WeldConstraint",
+		},
+
+		class_list = {
+			title = "Classes",
+			title_pos = "center",
+			width = math.ceil(width / 2) - 1,
+			height = height - 6,
+			col = col,
+			row = row + 2,
+			focus = true,
+			border = {
+				{ "├", "FloatBorder" },
+				{ "─", "FloatBorder" },
+				{ "┬", "FloatBorder" },
+				{ "│", "FloatBorder" },
+				{ "┴", "FloatBorder" },
+				{ "─", "FloatBorder" },
+				{ "├", "FloatBorder" },
+				{ "│", "FloatBorder" },
 			},
 			keybinds = function(buf, win, d_buf, d_win, p_win, s_win)
 				vim.keymap.set("n", "Q", function()
@@ -472,6 +512,7 @@ local function generate_dimensions()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					if class_list_ref[line].t == "class" then
 						vim.api.nvim_set_current_win(d_win)
+						disp_class(d_buf, class_list_ref[line].name, true)
 					else
 						modify_class_list(buf, class_list_ref[line].name, line)
 					end
@@ -508,6 +549,7 @@ local function generate_dimensions()
 				end, { buffer = buf })
 			end,
 		},
+
 		class_display = {
 			title = "Class",
 			title_pos = "center",
@@ -525,42 +567,46 @@ local function generate_dimensions()
 				{ "─", "FloatBorder" },
 				{ "", "FloatBorder" },
 			},
+			keybinds = function(buf, win, path, class_edit_box, l_win, s_win, p_win)
+				vim.keymap.set("n", "Q", function()
+					vim.api.nvim_win_close(win, true)
+					vim.api.nvim_win_close(l_win, true)
+					vim.api.nvim_win_close(s_win, true)
+					vim.api.nvim_win_close(p_win, true)
+				end, { buffer = buf })
+				vim.keymap.set("n", "<CR>", function()
+					local line = vim.api.nvim_win_get_cursor(win)[1]
+					local prop = properties_list_ref[line]
+					if prop.t ~= "name" and prop.t ~= "config" then
+						local function when_done(stay)
+							local pre = prop.props[prop.name] and prop.props[prop.name].json and " *" or "  "
+							local lstr = pre .. prop.name .. ": "
+							if prop.t == "Enum" then
+								lstr = lstr .. "Enum."
+							end
+							lstr = lstr .. prop.t
+							if #prop.tags > 0 then
+								local tag_str = " [Tags: " .. table.concat(prop.tags, ", ") .. "]"
+
+								lstr = lstr .. tag_str
+							end
+							vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+							vim.api.nvim_buf_set_lines(buf, line - 1, line, false, { lstr })
+							vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+							if not stay then
+								vim.api.nvim_set_current_win(win)
+							end
+						end
+						disp_property(prop.t, prop.props, prop.name, class_edit_box, when_done, prop.enum)
+					end
+				end, { buffer = buf })
+				vim.keymap.set("n", "<C-e>", function() end, { buffer = buf })
+			end,
 		},
 	}
 end
 
 m.generate_dimensions = generate_dimensions
-
-local function create_window(args)
-	local buf = vim.api.nvim_create_buf(false, true)
-	args.buf = buf
-
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, args.contents or {})
-
-	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
-	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-
-	local win = vim.api.nvim_open_win(buf, false, {
-		relative = "editor",
-		width = args.width,
-		height = args.height,
-		col = args.col,
-		row = args.row,
-		style = "minimal",
-		border = args.border or "rounded",
-		title = args.title,
-		title_pos = args.title_pos,
-		footer = args.footer,
-		footer_pos = args.footer_pos,
-	})
-
-	args.win = win
-
-	return buf, win
-end
-
-m.create_window = create_window
-
 local function window()
 	local buf = vim.api.nvim_create_buf(false, true)
 

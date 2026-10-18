@@ -697,4 +697,14 @@ end
 
 t.colors = colors
 
+t.saved_object_configs = {}
+
+for k, _ in pairs(t.browsable_classes) do
+	t.saved_object_configs[k] = { property_tables = {} }
+end
+
+for k, _ in pairs(t.non_browsable_classes) do
+	t.saved_object_configs[k] = { property_tables = {} }
+end
+
 return t
