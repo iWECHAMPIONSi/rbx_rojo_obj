@@ -284,7 +284,12 @@ local function generate_dimensions()
 								)
 								return
 							end
-							path = string.sub(path, string.find(path, src_name, 1, true) or 1)
+							local selected_path = path
+							local visual_path = string.sub(path, string.find(path, src_name, 1, true) or 1)
+
+							vim.schedule(function()
+								gen_func(value, selected_path, visual_path)
+							end)
 						end
 					end, "Name of new file")
 				end, { buffer = buf })

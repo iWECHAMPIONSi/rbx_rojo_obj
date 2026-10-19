@@ -66,7 +66,7 @@ local function create_window(args)
 		vim.fn.prompt_setprompt(buf, "")
 	end
 
-	local win = vim.api.nvim_open_win(buf, args.focus, {
+	local win = vim.api.nvim_open_win(buf, args.focus == true, {
 		relative = "editor",
 		width = args.width,
 		height = args.height,

@@ -21,6 +21,15 @@ with open(script_dir + "/" + "full_api.json") as file:
     contents = file.read()
     full_api = decoder.decode(contents)
 
+type_ref_dict = {
+    "double": "Float64",
+    "int": "Int32",
+    "int64": "Int64",
+    "float": "Float32",
+    "bool": "Bool",
+    "string": "String",
+}
+
 # full_api = full_api["Classes"]
 lines: list[str] = []
 
@@ -108,6 +117,8 @@ def add_members(name: str, members_list):
                 continue
             if d["ValueType"]["Name"] in blacklisted_value_types:
                 continue
+            if d["ValueType"]["Name"] in type_ref_dict.keys():
+                d["ValueType"]["Name"] = type_ref_dict[d["ValueType"]["Name"]]
 
         if "Tags" in d.keys():
             if "Deprecated" in d["Tags"]:

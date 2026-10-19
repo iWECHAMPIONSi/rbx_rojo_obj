@@ -38,9 +38,9 @@ local function create_file_data(class, params, script)
 	end
 	local file = {}
 	if not script then
-		file.ClassName = class
+		file.className = class
 	end
-	file.Properties = next(params) and params or vim.empty_dict()
+	file.properties = next(params) and params or vim.empty_dict()
 	return file
 end
 

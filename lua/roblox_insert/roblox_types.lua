@@ -237,6 +237,26 @@ roblox_types.BinaryString = {
 	end,
 }
 
+roblox_types.Bool = {
+	lua_type = "bool",
+	fields = {
+		"",
+	},
+	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
+		if t == "true" or t == "false" then
+			if t == "true" then
+				return true, true
+			else
+				return true, false
+			end
+		end
+		return false, nil
+	end,
+}
+
 roblox_types.BrickColor = {
 	lua_type = "string|number",
 	fields = {
@@ -424,6 +444,29 @@ roblox_types.Faces = {
 	end,
 }
 
+roblox_types.Float32 = {
+	lua_type = "number",
+	fields = {
+		"",
+	},
+	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
+		return tonumber(t) ~= nil, tonumber(t)
+	end,
+}
+
+roblox_types.Float64 = {
+	lua_type = "number",
+	fields = {
+		"",
+	},
+	verification = function(t)
+		return tonumber(t) ~= nil, tonumber(t)
+	end,
+}
+
 roblox_types.Font = {
 	lua_type = "table",
 	fields = {
@@ -468,6 +511,40 @@ roblox_types.Font = {
 			return true, return_val, tmp
 		end
 		return false, nil
+	end,
+}
+
+roblox_types.Int32 = {
+	lua_type = "number",
+	fields = {
+		"",
+	},
+	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
+		local i = tonumber(t)
+		if i == nil then
+			return false
+		end
+		return math.floor(i) == i, i
+	end,
+}
+
+roblox_types.Int64 = {
+	lua_type = "number",
+	fields = {
+		"",
+	},
+	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
+		local i = tonumber(t)
+		if i == nil then
+			return false
+		end
+		return math.floor(i) == i, i
 	end,
 }
 
@@ -611,6 +688,21 @@ roblox_types.Rect = {
 	end,
 }
 
+roblox_types.String = {
+	lua_type = "string",
+	fields = {
+		"",
+	},
+	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
+		if type(t) == "string" then
+			return true, t
+		end
+		return false, nil
+	end,
+}
 roblox_types.UDim = {
 	lua_type = "table",
 	fields = {
@@ -681,100 +773,6 @@ roblox_types.Vector3 = {
 	},
 	verification = function(t)
 		return verify_vector_3(t)
-	end,
-}
-
-roblox_types.bool = {
-	lua_type = "bool",
-	fields = {
-		"",
-	},
-	verification = function(t)
-		-- vim.print(type(t))
-		if handle_nil(t) then
-			return true, nil
-		end
-		if t == "true" or t == "false" then
-			if t == "true" then
-				return true, true
-			else
-				return true, false
-			end
-		end
-		return false, nil
-	end,
-}
-
-roblox_types.double = {
-	lua_type = "number",
-	fields = {
-		"",
-	},
-	verification = function(t)
-		return tonumber(t) ~= nil, tonumber(t)
-	end,
-}
-
-roblox_types.float = {
-	lua_type = "number",
-	fields = {
-		"",
-	},
-	verification = function(t)
-		if handle_nil(t) then
-			return true, nil
-		end
-		return tonumber(t) ~= nil, tonumber(t)
-	end,
-}
-
-roblox_types.int = {
-	lua_type = "number",
-	fields = {
-		"",
-	},
-	verification = function(t)
-		if handle_nil(t) then
-			return true, nil
-		end
-		local i = tonumber(t)
-		if i == nil then
-			return false
-		end
-		return math.floor(i) == i, i
-	end,
-}
-
-roblox_types.int64 = {
-	lua_type = "number",
-	fields = {
-		"",
-	},
-	verification = function(t)
-		if handle_nil(t) then
-			return true, nil
-		end
-		local i = tonumber(t)
-		if i == nil then
-			return false
-		end
-		return math.floor(i) == i, i
-	end,
-}
-
-roblox_types.string = {
-	lua_type = "string",
-	fields = {
-		"",
-	},
-	verification = function(t)
-		if handle_nil(t) then
-			return true, nil
-		end
-		if type(t) == "string" then
-			return true, t
-		end
-		return false, nil
 	end,
 }
 
