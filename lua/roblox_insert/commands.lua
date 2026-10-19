@@ -1,5 +1,5 @@
 local writer = require("roblox_insert.writer")
-local ui = require("roblox_insert.ui")
+local browser = require("roblox_insert.browser")
 local dir = require("roblox_insert.dir_select")
 
 local vim = vim
@@ -30,22 +30,22 @@ local function open_browser()
 		return
 	end
 	local function foo(name, path, visual_path)
-		local ui_args = ui.generate_dimensions(name, path, visual_path)
+		local ui_args = browser.generate_dimensions(name, path, visual_path)
 		if not ui_args then
 			return
 		end
 
 		vim.cmd.stopinsert()
 
-		ui.create_window(ui_args.search_bar)
-		ui.create_window(ui_args.path_bar)
-		ui.create_window(ui_args.class_list)
-		ui.create_window(ui_args.class_display)
+		browser.create_window(ui_args.search_bar)
+		browser.create_window(ui_args.path_bar)
+		browser.create_window(ui_args.class_list)
+		browser.create_window(ui_args.class_display)
 
 		vim.api.nvim_win_close(args.path_bar.win, true)
 		vim.api.nvim_win_close(args.directory.win, true)
 
-		ui.disp_class_list(ui_args.class_list.buf, true)
+		browser.disp_class_list(ui_args.class_list.buf, true)
 		ui_args.class_list.keybinds(
 			ui_args.class_list.buf,
 			ui_args.class_list.win,
