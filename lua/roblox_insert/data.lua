@@ -156,9 +156,10 @@ end
 t.categories = iter_table
 t.catkeys = permkeys
 
-for _, class in ipairs(t.favorites) do
+for class, _ in pairs(t.favorites) do
 	table.insert(t.categories["Favorites"], class)
 end
+table.sort(t.categories["Favorites"])
 
 table.sort(t.categories)
 
