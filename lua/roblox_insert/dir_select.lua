@@ -175,7 +175,6 @@ local function generate_dimensions()
 				render_new_dir(buf, p_buf, path)
 				local display_all = false
 				vim.keymap.set("n", "<CR>", function()
-					display_all = false
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					local selection = dir_ref[line]
 
