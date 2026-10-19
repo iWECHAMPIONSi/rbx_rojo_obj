@@ -55,7 +55,7 @@ end
 
 ---@return table?, string?
 function t.load(filename)
-	path = vim.fs.joinpath(get_plugin_root(), "data", filename .. ".json")
+	local path = vim.fs.joinpath(get_plugin_root(), "data", filename .. ".json")
 
 	local contents, read_error = read_file(path, filename)
 
@@ -76,14 +76,15 @@ function t.load(filename)
 	return decoded, nil
 end
 
-local raw, err = t.load("data")
+local raw, raw_err = t.load("data")
 
-local favorites, err = t.load("favorites")
+local favorites, favorites_err = t.load("favorites")
 
 t.favorites = favorites or {}
+t.favorites_err = favorites_err
 
 t.raw = {}
-t.err = err
+t.err = raw_err
 
 if not raw then
 	return t
@@ -159,7 +160,6 @@ t.catkeys = permkeys
 for class, _ in pairs(t.favorites) do
 	table.insert(t.categories["Favorites"], class)
 end
-table.sort(t.categories["Favorites"])
 
 table.sort(t.categories)
 
@@ -459,22 +459,17 @@ local function toggle_favorite(class)
 				break
 			end
 		end
+		save_data("favorites", t.favorites)
 		return
 	end
 	t.favorites[class] = true
 
 	table.insert(t.categories["Favorites"], class)
 	table.sort(t.categories["Favorites"])
+	save_data("favorites", t.favorites)
 end
 
 t.toggle_favorite = toggle_favorite
-
--- Hooking the save functionality to Neovim exiting
-vim.api.nvim_create_autocmd("VimLeavePre", {
-	callback = function()
-		save_data("favorites", t.favorites)
-	end,
-})
 
 local entries = {
 	{ "White", 1 },

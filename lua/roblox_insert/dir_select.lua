@@ -1,6 +1,6 @@
 local vim = vim
 
-local src_name = "src"
+local src_name = nil
 local root_dir = nil
 
 local directory_contents = {}
@@ -19,11 +19,52 @@ local dir_ref_start = {
 
 local m = {}
 
+local function check_name_collision(path, name)
+	if string.match(name, "%s") then
+		vim.notify("Directory names cannot contain spaces", vim.log.levels.ERROR)
+		return false
+	end
+	local is_windows = vim.fn.has("win32") == 1
+	local illegal_pattern
+
+	if is_windows then
+		illegal_pattern = '[\\/:*?"<>|]'
+	else
+		illegal_pattern = "[/]"
+	end
+
+	if string.match(name, illegal_pattern) then
+		vim.notify("Directory name contains invalid characters", vim.log.levels.ERROR)
+		return false
+	end
+	local full_path = vim.fs.joinpath(path, name)
+	if
+		vim.uv.fs_stat(full_path)
+		or vim.uv.fs_stat(full_path .. ".luau")
+		or vim.uv.fs_stat(full_path .. ".model.json")
+		or vim.uv.fs_stat(full_path .. ".meta.json")
+		or vim.uv.fs_stat(full_path .. ".project.json")
+		or vim.uv.fs_stat(full_path .. ".rbxmx")
+		or vim.uv.fs_stat(full_path .. ".rbxm")
+		or vim.uv.fs_stat(full_path .. ".csv")
+		or vim.uv.fs_stat(full_path .. ".txt")
+		or vim.uv.fs_stat(full_path .. ".toml")
+		or vim.uv.fs_stat(full_path .. ".server.luau")
+		or vim.uv.fs_stat(full_path .. ".client.luau")
+	then
+		vim.notify('A file or directory with the name "' .. name .. '" already exists', vim.log.levels.ERROR)
+		return false
+	end
+	return true
+end
+
+m.check_name_collision = check_name_collision
+
 local function create_input(field, t, initial_value, on_submit, title)
 	local buf = vim.api.nvim_create_buf(false, true)
 	vim.bo[buf].buftype = "prompt"
 	vim.fn.prompt_setprompt(buf, field .. ": ")
-	local width = 40
+	local width = math.max(string.len(t or "") + 2, string.len(title or "") + 2, 40)
 	local win = vim.api.nvim_open_win(buf, true, {
 		relative = "editor",
 		width = width,
@@ -107,7 +148,8 @@ local function render_new_dir(buf, path_buf, path, all)
 	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
 	if path_buf then
-		path = string.sub(path, string.find(path, src_name, 1, true) or 1)
+		local _, end_index = string.find(path, root_dir or "", 1, true)
+		path = string.sub(path, end_index or 1)
 		vim.api.nvim_set_option_value("modifiable", true, { buf = path_buf })
 		vim.api.nvim_buf_set_lines(path_buf, 0, -1, false, { path })
 		vim.api.nvim_set_option_value("modifiable", false, { buf = path_buf })
@@ -169,11 +211,11 @@ local function generate_dimensions()
 				{ "╰", "FloatBorder" },
 				{ "│", "FloatBorder" },
 			},
-			keybinds = function(buf, win, p_buf, p_win, gen_func)
+			keybinds = function(buf, win, p_buf, p_win, gen_func, name, focus_win)
 				local path = vim.fs.joinpath(root_dir, src_name)
 				vim.api.nvim_set_current_win(win)
 				render_new_dir(buf, p_buf, path)
-				local display_all = false
+				local display_all = true
 				vim.keymap.set("n", "<CR>", function()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					local selection = dir_ref[line]
@@ -182,115 +224,52 @@ local function generate_dimensions()
 						return
 					elseif selection.t == "src" then
 						path = vim.fs.joinpath(root_dir, src_name)
-						render_new_dir(buf, p_buf, path)
+						render_new_dir(buf, p_buf, path, display_all)
 					elseif selection.t == "parent" then
 						if vim.fs.dirname(path) == root_dir then
 							return
 						end
 						path = vim.fs.dirname(path)
-						render_new_dir(buf, p_buf, path)
+						render_new_dir(buf, p_buf, path, display_all)
 					else
 						path = vim.fs.joinpath(path, selection.name)
-						render_new_dir(buf, p_buf, path)
+						render_new_dir(buf, p_buf, path, display_all)
 					end
 				end, { buffer = buf })
 
 				vim.keymap.set("n", "d", function()
 					create_input("/", nil, nil, function(value)
 						if value then
-							if string.match(value, "%s") then
-								vim.notify("Directory names cannot contain spaces", vim.log.levels.ERROR)
-								return
-							end
-							local is_windows = vim.fn.has("win32") == 1
-							local illegal_pattern
-
-							if is_windows then
-								illegal_pattern = '[\\/:*?"<>|]'
-							else
-								illegal_pattern = "[/]"
-							end
-
-							if string.match(value, illegal_pattern) then
-								vim.notify("Directory name contains invalid characters", vim.log.levels.ERROR)
-								return
-							end
-							local full_path = vim.fs.joinpath(path, value)
-							if
-								vim.uv.fs_stat(full_path)
-								or vim.uv.fs_stat(full_path .. ".luau")
-								or vim.uv.fs_stat(full_path .. ".model.json")
-								or vim.uv.fs_stat(full_path .. ".meta.json")
-								or vim.uv.fs_stat(full_path .. ".project.json")
-								or vim.uv.fs_stat(full_path .. ".rbxmx")
-								or vim.uv.fs_stat(full_path .. ".rbxm")
-								or vim.uv.fs_stat(full_path .. ".csv")
-								or vim.uv.fs_stat(full_path .. ".txt")
-								or vim.uv.fs_stat(full_path .. ".toml")
-								or vim.uv.fs_stat(full_path .. ".server.luau")
-								or vim.uv.fs_stat(full_path .. ".client.luau")
-							then
-								vim.notify(
-									'A file or directory with the name "' .. value .. '" already exists',
-									vim.log.levels.ERROR
-								)
+							if not check_name_collision(path, value) then
 								return
 							end
 							vim.fn.mkdir(vim.fs.joinpath(path, value), "p")
-							render_new_dir(buf, nil, path)
+							render_new_dir(buf, nil, path, display_all)
 						end
 					end, "Name of new directory")
 				end, { buffer = buf })
 
 				vim.keymap.set("n", "%", function()
-					create_input("name", nil, nil, function(value)
-						if value then
-							if string.match(value, "%s") then
-								vim.notify("File names cannot contain spaces", vim.log.levels.ERROR)
-								return
-							end
-							local is_windows = vim.fn.has("win32") == 1
-							local illegal_pattern
-
-							if is_windows then
-								illegal_pattern = '[\\/:*?"<>|]'
-							else
-								illegal_pattern = "[/]"
-							end
-
-							if string.match(value, illegal_pattern) then
-								vim.notify("File name contains invalid characters", vim.log.levels.ERROR)
-								return
-							end
-							local full_path = vim.fs.joinpath(path, value)
-							if
-								vim.uv.fs_stat(full_path)
-								or vim.uv.fs_stat(full_path .. ".luau")
-								or vim.uv.fs_stat(full_path .. ".meta.json")
-								or vim.uv.fs_stat(full_path .. ".model.json")
-								or vim.uv.fs_stat(full_path .. ".project.json")
-								or vim.uv.fs_stat(full_path .. ".rbxmx")
-								or vim.uv.fs_stat(full_path .. ".rbxm")
-								or vim.uv.fs_stat(full_path .. ".csv")
-								or vim.uv.fs_stat(full_path .. ".txt")
-								or vim.uv.fs_stat(full_path .. ".toml")
-								or vim.uv.fs_stat(full_path .. ".server.luau")
-								or vim.uv.fs_stat(full_path .. ".client.luau")
-							then
-								vim.notify(
-									'A file or directory with the name "' .. value .. '" already exists',
-									vim.log.levels.ERROR
-								)
-								return
-							end
-							local selected_path = path
-							local visual_path = string.sub(path, string.find(path, src_name, 1, true) or 1)
-
-							vim.schedule(function()
-								gen_func(value, selected_path, visual_path)
-							end)
+					local function check_name(value)
+						if not check_name_collision(path, value) then
+							return
 						end
-					end, "Name of new file")
+						local selected_path = path
+						local visual_path = string.sub(path, string.find(path, src_name, 1, true) or 1)
+
+						vim.schedule(function()
+							gen_func(value, selected_path, visual_path)
+						end)
+					end
+					if not name or not check_name_collision(path, name) then
+						create_input("Name", nil, nil, function(value)
+							if value then
+								check_name(value)
+							end
+						end, "Name of new file")
+					else
+						check_name(name)
+					end
 				end, { buffer = buf })
 
 				vim.keymap.set("n", "D", function()
@@ -299,23 +278,28 @@ local function generate_dimensions()
 						return
 					end
 					local selection = dir_ref[line]
-
-					create_input(
-						"/",
-						"Type in the exact name of the directory to delete it, case sensitive",
-						nil,
-						function(value)
-							if value == selection.name then
-								vim.fn.delete(vim.fs.joinpath(path, selection.name), "rf")
-							end
-						end,
-						'Are you sure you want to recursively delete the directory "' .. selection.name .. '"?'
-					)
+					if selection.t == "dir" then
+						create_input(
+							"/",
+							"Type in the exact name of the directory to delete it, case sensitive",
+							nil,
+							function(value)
+								if value == selection.name then
+									vim.fn.delete(vim.fs.joinpath(path, selection.name), "rf")
+								end
+							end,
+							'Are you sure you want to recursively delete the directory "' .. selection.name .. '"?'
+						)
+					end
+					render_new_dir(buf, p_buf, path, display_all)
 				end, { buffer = buf })
 
 				vim.keymap.set("n", "Q", function()
 					vim.api.nvim_win_close(win, true)
 					vim.api.nvim_win_close(p_win, true)
+					if focus_win then
+						vim.api.nvim_set_current_win(focus_win)
+					end
 				end, { buffer = buf })
 
 				vim.keymap.set("n", "H", function()
@@ -336,11 +320,14 @@ local function resolve_source_directory(on_resolved)
 		return stat ~= nil and stat.type == "directory"
 	end
 
-	local project_root = vim.fs.root(0, "default.project.json")
+	local project_root = root_dir
+	if not root_dir then
+		project_root = vim.fs.root(0, "default.project.json")
 
-	if not project_root then
-		vim.notify("Unable to find directory containing default.project.json", vim.log.levels.ERROR)
-		return
+		if not project_root then
+			vim.notify("Unable to find directory containing default.project.json", vim.log.levels.ERROR)
+			return
+		end
 	end
 
 	local function finish(source_name)
@@ -357,10 +344,11 @@ local function resolve_source_directory(on_resolved)
 		end)
 	end
 
-	local src_dir = vim.fs.joinpath(project_root, "src")
+	local src_dir = vim.fs.joinpath(project_root, src_name or "src")
 
 	if is_directory(src_dir) then
-		finish("src")
+		src_name = src_name or "src"
+		finish(src_name)
 		return
 	end
 

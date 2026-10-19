@@ -1,5 +1,6 @@
 local data = require("roblox_insert.data")
 local helpers = require("roblox_insert.helpers")
+local dir_select = require("roblox_insert.dir_select")
 
 local vim = vim
 
@@ -22,7 +23,7 @@ end
 ---@param class string
 ---@param params {string: any}
 ---@return table?, string?
-local function create_file_data(class, params, script)
+local function create_file_data(class, params, meta)
 	local class_table = data.raw.Classes[class]
 	if not class_table then
 		local estimate = find_closest_class(class)
@@ -37,10 +38,12 @@ local function create_file_data(class, params, script)
 		return nil
 	end
 	local file = {}
-	if not script then
-		file.className = class
+	if not meta then
+		file.ClassName = class
+		file.Properties = next(params) and params or vim.empty_dict()
+	else
+		file.properties = next(params) and params or vim.empty_dict()
 	end
-	file.properties = next(params) and params or vim.empty_dict()
 	return file
 end
 
@@ -61,22 +64,7 @@ local function create_file(file_name, class, params, dir, script)
 		indent = "    ",
 	})
 	local path
-	local full_path = vim.fs.joinpath(dir, file_name)
-	if
-		vim.uv.fs_stat(full_path)
-		or vim.uv.fs_stat(full_path .. ".luau")
-		or vim.uv.fs_stat(full_path .. ".model.json")
-		or vim.uv.fs_stat(full_path .. ".meta.json")
-		or vim.uv.fs_stat(full_path .. ".project.json")
-		or vim.uv.fs_stat(full_path .. ".rbxmx")
-		or vim.uv.fs_stat(full_path .. ".rbxm")
-		or vim.uv.fs_stat(full_path .. ".csv")
-		or vim.uv.fs_stat(full_path .. ".txt")
-		or vim.uv.fs_stat(full_path .. ".toml")
-		or vim.uv.fs_stat(full_path .. ".server.luau")
-		or vim.uv.fs_stat(full_path .. ".client.luau")
-	then
-		vim.notify('A file or directory with the name "' .. file_name .. '" already exists', vim.log.levels.ERROR)
+	if not dir_select.check_name_collision(path, file_name) then
 		return
 	end
 	if not script then
@@ -98,6 +86,7 @@ local function create_file(file_name, class, params, dir, script)
 		end
 		if result ~= 0 then
 			vim.notify("Failed to write file: " .. script_name, vim.log.levels.ERROR)
+			return
 		end
 		if not next(params) then
 			return

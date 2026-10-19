@@ -8,6 +8,7 @@ local create_input = dir_select.create_input
 local roblox_types = require("roblox_insert.roblox_types")
 
 local current_class = nil
+local search = false
 
 local function handle_nil(t)
 	if t == "nil" then
@@ -543,9 +544,11 @@ local function generate_dimensions(name, path, visual_path)
 					callback = function()
 						local query = vim.fn.prompt_getinput(buf)
 						if string.len(query) == 0 or query == "" then
+							search = false
 							disp_class_list(l_buf, true)
 							return
 						end
+						search = true
 						local str = {}
 						local refs = {}
 						local matches = {}
@@ -628,17 +631,64 @@ local function generate_dimensions(name, path, visual_path)
 				{ "├", "FloatBorder" },
 				{ "│", "FloatBorder" },
 			},
-			keybinds = function(buf, win, d_buf, d_win, p_win, s_win)
+			keybinds = function(buf, win, d_buf, d_win, p_buf, p_win, s_win)
+				vim.keymap.set("n", "d", function()
+					local args = dir_select.generate_dimensions()
+					if not args then
+						return
+					end
+					dir_select.resolve_source_directory(function()
+						dir_select.make_dir_windows(args.path_bar)
+						dir_select.make_dir_windows(args.directory)
+						local function change_path(_, new_path, new_v_path)
+							path = new_path
+							vim.api.nvim_set_option_value("modifiable", true, { buf = p_buf })
+							vim.api.nvim_buf_set_lines(p_buf, 0, -1, false, { new_v_path })
+							vim.api.nvim_set_option_value("modifiable", false, { buf = p_buf })
+							vim.api.nvim_win_close(args.path_bar.win, true)
+							vim.api.nvim_win_close(args.directory.win, true)
+							vim.api.nvim_set_current_win(win)
+						end
+
+						args.directory.keybinds(
+							args.directory.buf,
+							args.directory.win,
+							args.path_bar.buf,
+							args.path_bar.win,
+							change_path,
+							name,
+							win
+						)
+					end)
+				end, { buffer = buf })
+
+				vim.keymap.set("n", "R", function()
+					create_input("Name", "Leave bank to cancel, name cannot already exist", nil, function(value)
+						if not value then
+							return
+						end
+						if not dir_select.check_name_collision(path, value) then
+							return
+						end
+						name = value
+						vim.api.nvim_win_set_config(p_win, {
+							title = 'Directory for "' .. value .. '"',
+						})
+					end, "Change name")
+				end, { buffer = buf })
+
 				vim.keymap.set("n", "Q", function()
 					vim.api.nvim_win_close(win, true)
 					vim.api.nvim_win_close(d_win, true)
 					vim.api.nvim_win_close(s_win, true)
 					vim.api.nvim_win_close(p_win, true)
 				end, { buffer = buf })
+
 				vim.keymap.set("n", "/", function()
 					vim.api.nvim_set_current_win(s_win)
 					vim.cmd.startinsert()
 				end, { buffer = buf })
+
 				vim.keymap.set("n", "<CR>", function()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					if class_list_ref[line].t == "class" then
@@ -649,6 +699,7 @@ local function generate_dimensions(name, path, visual_path)
 						modify_class_list(buf, class_list_ref[line].name, line)
 					end
 				end, { buffer = buf, noremap = true })
+
 				vim.api.nvim_create_autocmd("CursorMoved", {
 					buffer = buf,
 					callback = function()
@@ -665,21 +716,33 @@ local function generate_dimensions(name, path, visual_path)
 						end
 					end,
 				})
+
 				vim.keymap.set("n", "F", function()
-					local line = vim.api.nvim_win_get_cursor(win)[1]
-					if class_list_ref[line].t == "class" then
-						data.toggle_favorite(class_list_ref[line].name)
-						if class_list_ref[1].t == "category" then
-							modify_class_list(buf, "Favorites", 1, true, class_list_ref[line].name)
+					local line = vim.api.nvim_win_get_cursor(win)
+					if class_list_ref[line[1]].t == "class" then
+						data.toggle_favorite(class_list_ref[line[1]].name)
+						if not search then
+							if data.favorites[class_list_ref[line[1]].name] then
+								vim.api.nvim_win_set_cursor(win, { line[1] + 1, line[2] })
+							else
+								vim.api.nvim_win_set_cursor(win, { line[1] - 1, line[2] })
+							end
+							disp_class_list(buf, true)
+						else
+							local pre = "  "
+							if data.favorites[class_list_ref[line[1]].name] then
+								pre = "* "
+							end
+							vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+							vim.api.nvim_buf_set_lines(
+								buf,
+								line[1] - 1,
+								line[1],
+								false,
+								{ pre .. class_list_ref[line[1]].name }
+							)
+							vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 						end
-						line = vim.api.nvim_win_get_cursor(win)[1]
-						local pre = "  "
-						if data.favorites[class_list_ref[line].name] then
-							pre = "* "
-						end
-						vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-						vim.api.nvim_buf_set_lines(buf, line - 1, line, false, { pre .. class_list_ref[line].name })
-						vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 					end
 				end, { buffer = buf })
 			end,
@@ -702,13 +765,59 @@ local function generate_dimensions(name, path, visual_path)
 				{ "─", "FloatBorder" },
 				{ "", "FloatBorder" },
 			},
-			keybinds = function(buf, win, class_edit_box, l_win, s_win, p_win)
+			keybinds = function(buf, win, class_edit_box, l_win, s_win, p_buf, p_win)
+				vim.keymap.set("n", "d", function()
+					local args = dir_select.generate_dimensions()
+					if not args then
+						return
+					end
+					dir_select.resolve_source_directory(function()
+						dir_select.make_dir_windows(args.path_bar)
+						dir_select.make_dir_windows(args.directory)
+						local function change_path(_, new_path, new_v_path)
+							path = new_path
+							vim.api.nvim_set_option_value("modifiable", true, { buf = p_buf })
+							vim.api.nvim_buf_set_lines(p_buf, 0, -1, false, { new_v_path })
+							vim.api.nvim_set_option_value("modifiable", false, { buf = p_buf })
+							vim.api.nvim_win_close(args.path_bar.win, true)
+							vim.api.nvim_win_close(args.directory.win, true)
+							vim.api.nvim_set_current_win(win)
+						end
+
+						args.directory.keybinds(
+							args.directory.buf,
+							args.directory.win,
+							args.path_bar.buf,
+							args.path_bar.win,
+							change_path,
+							name,
+							win
+						)
+					end)
+				end, { buffer = buf })
+
+				vim.keymap.set("n", "R", function()
+					create_input("Name", "Leave bank to cancel, name cannot already exist", nil, function(value)
+						if not value then
+							return
+						end
+						if not dir_select.check_name_collision(path, value) then
+							return
+						end
+						name = value
+						vim.api.nvim_win_set_config(p_win, {
+							title = 'Directory for "' .. value .. '"',
+						})
+					end, "Change name")
+				end, { buffer = buf })
+
 				vim.keymap.set("n", "Q", function()
 					vim.api.nvim_win_close(win, true)
 					vim.api.nvim_win_close(l_win, true)
 					vim.api.nvim_win_close(s_win, true)
 					vim.api.nvim_win_close(p_win, true)
 				end, { buffer = buf })
+
 				vim.keymap.set("n", "<CR>", function()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					local prop = properties_list_ref[line]
@@ -813,6 +922,7 @@ local function generate_dimensions(name, path, visual_path)
 						return
 					end
 					index = index + 1
+					saved_object_properties.index = index
 
 					disp_class(buf, current_class, true)
 				end, { buffer = buf })
@@ -837,40 +947,4 @@ local function generate_dimensions(name, path, visual_path)
 end
 
 m.generate_dimensions = generate_dimensions
-local function window()
-	local buf = vim.api.nvim_create_buf(false, true)
-
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, {
-		"Roblox Object Creator",
-		"",
-		"Testing the floating window API.",
-	})
-
-	local width = 160
-	local height = 40
-
-	local col = math.floor((vim.o.columns - width - 2) / 2)
-	local row = math.floor((vim.o.lines - height - 2) / 2)
-
-	local win = vim.api.nvim_open_win(buf, true, {
-		relative = "editor",
-		width = width,
-		height = height,
-		col = col,
-		row = row,
-		style = "minimal",
-		border = "rounded",
-		title = "rbx_rojo_obj",
-		title_pos = "center",
-	})
-
-	vim.keymap.set("n", "q", function()
-		vim.api.nvim_win_close(win, true)
-	end, { buffer = buf })
-
-	return buf, win
-end
-
-m.window = window
-
 return m

@@ -51,6 +51,7 @@ local function open_browser()
 			ui_args.class_list.win,
 			ui_args.class_display.buf,
 			ui_args.class_display.win,
+			ui_args.path_bar.buf,
 			ui_args.path_bar.win,
 			ui_args.search_bar.win
 		)
@@ -60,6 +61,7 @@ local function open_browser()
 			ui_args.class_edit_box,
 			ui_args.class_list.win,
 			ui_args.search_bar.win,
+			ui_args.path_bar.buf,
 			ui_args.path_bar.win
 		)
 		ui_args.search_bar.keybinds(
