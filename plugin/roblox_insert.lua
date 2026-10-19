@@ -21,3 +21,9 @@ end, {
 	nargs = "+",
 	desc = "Create a Roblox Object in the current buffer's directory or a directory specified starting from neovim's working directory",
 })
+
+vim.api.nvim_create_user_command("RbxBrowser", function()
+	require("roblox_insert.commands").open_browser()
+end, {
+	desc = "Opend a browser similar to roblox's",
+})

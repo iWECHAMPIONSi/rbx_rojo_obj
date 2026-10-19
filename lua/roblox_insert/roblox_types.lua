@@ -3,6 +3,99 @@ local data = require("roblox_insert.data")
 local brick_colors = data.colors
 local enums = data.raw.Enums
 
+local font_families = {
+	["Accanthis ADF Std"] = "AccanthisADFStd",
+	["Amatic SC"] = "AmaticSC",
+	["Arimo"] = "Arimo",
+	["Balthazar"] = "Balthazar",
+	["Bangers"] = "Bangers",
+	["Builder Extended"] = "BuilderExtended",
+	["Builder Mono"] = "BuilderMono",
+	["Builder Sans"] = "BuilderSans",
+	["Comic Neue Angular"] = "ComicNeueAngular",
+	["Creepster"] = "Creepster",
+	["Denk One"] = "DenkOne",
+	["Fondamento"] = "Fondamento",
+	["Fredoka One"] = "FredokaOne",
+	["Grenze Gotisch"] = "GrenzeGotisch",
+	["Guru"] = "Guru",
+	["Highway Gothic"] = "HighwayGothic",
+	["Inconsolata"] = "Inconsolata",
+	["Indie Flower"] = "IndieFlower",
+	["Josefin Sans"] = "JosefinSans",
+	["Jura"] = "Jura",
+	["Kalam"] = "Kalam",
+	["Luckiest Guy"] = "LuckiestGuy",
+	["Merriweather"] = "Merriweather",
+	["Michroma"] = "Michroma",
+	["Montserrat"] = "Montserrat",
+	["Nunito"] = "Nunito",
+	["Oswald"] = "Oswald",
+	["Patrick Hand"] = "PatrickHand",
+	["Permanent Marker"] = "PermanentMarker",
+	["Press Start 2P"] = "PressStart2P",
+	["Roboto"] = "Roboto",
+	["Roboto Condensed"] = "RobotoCondensed",
+	["Roboto Mono"] = "RobotoMono",
+	["Roman Antique"] = "RomanAntique",
+	["Sarpanch"] = "Sarpanch",
+	["Source Sans Pro"] = "SourceSansPro",
+	["Special Elite"] = "SpecialElite",
+	["Titillium Web"] = "TitilliumWeb",
+	["Ubuntu"] = "Ubuntu",
+	["Zekton"] = "Zekton",
+}
+
+-- Legacy Enum.Font names that differ from the family filename.
+local font_aliases = {
+	Antique = "RomanAntique",
+	Arcade = "PressStart2P",
+	Arial = "Arimo",
+	ArialBold = "Arimo",
+	ArimoBold = "Arimo",
+	Bodoni = "AccanthisADFStd",
+	BuilderSansMedium = "BuilderSans",
+	BuilderSansBold = "BuilderSans",
+	BuilderSansExtraBold = "BuilderSans",
+	Cartoon = "ComicNeueAngular",
+	Code = "Inconsolata",
+	Fantasy = "Balthazar",
+	Garamond = "Guru",
+	Highway = "HighwayGothic",
+	Legacy = "LegacyArial",
+	SciFi = "Zekton",
+	SourceSans = "SourceSansPro",
+	SourceSansBold = "SourceSansPro",
+	SourceSansItalic = "SourceSansPro",
+	SourceSansLight = "SourceSansPro",
+	SourceSansSemibold = "SourceSansPro",
+}
+
+local font_lookup = {}
+
+for display_name, filename in pairs(font_families) do
+	font_lookup[display_name] = filename
+	font_lookup[filename] = filename
+end
+
+for alias, filename in pairs(font_aliases) do
+	font_lookup[alias] = filename
+end
+
+local function verify_font(name)
+	if type(name) ~= "string" then
+		return false, nil
+	end
+
+	local filename = font_lookup[name]
+
+	if not filename then
+		return false, nil
+	end
+
+	return true, filename .. ".json"
+end
+
 local function handle_nil(t)
 	if t == "nil" then
 		return true
@@ -28,7 +121,14 @@ local function verify_color_3(t)
 					math.min(tonumber(string.sub(t.Hex, 3, 4), 16), 255) / 255.0,
 					math.min(tonumber(string.sub(t.Hex, 5, 6), 16), 255) / 255.0,
 				}
-				return true, return_val
+				return true,
+					return_val,
+					{
+						Hex = nil,
+						R = tostring(return_val[1] * 255.0),
+						G = tostring(return_val[2] * 255.0),
+						B = tostring(return_val[3] * 255.0),
+					}
 			end
 		end
 	end
@@ -46,7 +146,14 @@ local function verify_color_3(t)
 			clamp(return_val.G, 0, 255) / 255.0,
 			clamp(return_val.B, 0, 255) / 255.0,
 		}
-		return true, return_val
+		return true,
+			return_val,
+			{
+				Hex = nil,
+				R = tostring(return_val[1] * 255.0),
+				G = tostring(return_val[2] * 255.0),
+				B = tostring(return_val[3] * 255.0),
+			}
 	end
 	return false
 end
@@ -69,7 +176,7 @@ local function verify_vector_3(t)
 		}
 		return true, return_val
 	end
-	return false, nil
+	return false, nil, t
 end
 
 local function verify_vector_2(t)
@@ -87,7 +194,7 @@ local function verify_vector_2(t)
 			return_val.X,
 			return_val.Y,
 		}
-		return true, return_val
+		return true, return_val, t
 	end
 	return false, nil
 end
@@ -110,7 +217,7 @@ roblox_types.Axes = {
 		if t.Z == "true" then
 			table.insert(return_val, "Z")
 		end
-		return true, return_val
+		return true, return_val, t
 	end,
 }
 
@@ -120,6 +227,9 @@ roblox_types.BinaryString = {
 		"",
 	},
 	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
 		if type(t) ~= "string" or not string.match(t, "^[%w+/]*=?=?$") then
 			return false, nil
 		end
@@ -133,6 +243,9 @@ roblox_types.BrickColor = {
 		"Color",
 	},
 	verification = function(t)
+		if handle_nil(t) then
+			return true, nil
+		end
 		local number = tonumber(t)
 
 		if number then
@@ -169,31 +282,37 @@ roblox_types.CFrame = {
 			end
 			return_val[k] = tonumber(i)
 		end
-		if indexes == 3 then
+		if indexes >= 3 then
 			if return_val.X ~= nil and return_val.Y ~= nil and return_val.Z ~= nil then
+				local copy = vim.deepcopy(return_val)
 				return_val = {
 					position = { return_val.X, return_val.Y, return_val.Z },
 					orientation = {
-						{ 0.0, 0.0, 0.0 },
-						{ 0.0, 0.0, 0.0 },
-						{ 0.0, 0.0, 0.0 },
+						{ return_val.R00 or 1.0, return_val.R01 or 0.0, return_val.R02 or 0.0 },
+						{ return_val.R10 or 0.0, return_val.R11 or 1.0, return_val.R12 or 0.0 },
+						{ return_val.R20 or 0.0, return_val.R21 or 0.0, return_val.R22 or 1.0 },
 					},
 				}
-				return true, return_val
+				return true,
+					return_val,
+					{
+						X = copy.X,
+						Y = copy.Y,
+						Z = copy.Z,
+						R00 = copy.R00 or 1.0,
+						R01 = copy.R01 or 0.0,
+						R02 = copy.R02 or 0.0,
+						R10 = copy.R10 or 0.0,
+						R11 = copy.R11 or 1.0,
+						R12 = copy.R12 or 0.0,
+						R20 = copy.R20 or 0.0,
+						R21 = copy.R21 or 0.0,
+						R22 = copy.R22 or 1.0,
+					}
 			end
 			return false, nil
-		elseif indexes == 12 then
-			return_val = {
-				position = { return_val.X, return_val.Y, return_val.Z },
-				orientation = {
-					{ return_val.R00, return_val.R01, return_val.R02 },
-					{ return_val.R10, return_val.R11, return_val.R12 },
-					{ return_val.R20, return_val.R21, return_val.R22 },
-				},
-			}
-			return true, return_val
 		end
-		return false
+		return false, nil
 	end,
 }
 roblox_types.Color3 = {
@@ -220,18 +339,25 @@ roblox_types.ColorSequence = {
 	},
 	verification = function(t)
 		local return_val = {}
+		local correct = {}
 		for _, keypoint in ipairs(t) do
-			local valid, k = verify_color_3({ R = keypoint.R, G = keypoint.G, B = keypoint.B, Hex = keypoint.Hex })
+			local valid, k, corrected =
+				verify_color_3({ R = keypoint.R, G = keypoint.G, B = keypoint.B, Hex = keypoint.Hex })
 			if valid then
+				if not corrected then
+					error("unreachable state reached")
+				end
+				local time = clamp(keypoint.time, 0.0, 1.0)
+				table.insert(correct, { time = tostring(time), R = corrected.R, G = corrected.G, B = corrected.B })
 				table.insert(return_val, {
-					time = clamp(keypoint.time, 0.0, 1.0),
+					time = time,
 					color = k,
 				})
 			else
 				return false, nil
 			end
 		end
-		return #return_val >= 2, { keypoints = return_val }
+		return #return_val >= 2, { keypoints = return_val }, correct
 	end,
 }
 
@@ -294,7 +420,7 @@ roblox_types.Faces = {
 				table.insert(return_val, face)
 			end
 		end
-		return true, return_val
+		return true, return_val, t
 	end,
 }
 
@@ -306,19 +432,22 @@ roblox_types.Font = {
 		"style",
 	},
 	verification = function(t)
+		local tmp = vim.deepcopy(t)
 		local family = t.family
 		if family then
 			local return_val = {}
 
 			local valid
-			valid, _ = verify_enum("Font", family)
+			valid, family = verify_font(family)
+			tmp.family = family
 			if valid then
-				return_val.family = "rbxasset://fonts/families/" .. family .. ".json"
+				return_val.family = "rbxasset://fonts/families/" .. family
 			else
 				return false, nil
 			end
 
 			local weight = t.weight or "Regular"
+			tmp.weight = weight
 			valid, _ = verify_enum("FontWeight", weight)
 			if valid then
 				return_val.weight = weight
@@ -327,13 +456,14 @@ roblox_types.Font = {
 			end
 
 			local style = t.style or "Normal"
+			tmp.style = style
 			valid, _ = verify_enum("FontStyle", style)
 			if valid then
 				return_val.style = style
 			else
 				return_val.style = "Normal"
 			end
-			return true, return_val
+			return true, return_val, tmp
 		end
 		return false, nil
 	end,
@@ -351,7 +481,7 @@ roblox_types.NumberRange = {
 		if min == nil or max == nil then
 			return false, nil
 		end
-		return true, { min, max }
+		return true, { min, max }, t
 	end,
 }
 
@@ -363,8 +493,9 @@ roblox_types.NumberSequence = {
 		"envelope",
 	},
 	verification = function(t)
+		local tmp = vim.deepcopy(t)
 		local return_val = {}
-		for _, keypoint in ipairs(t) do
+		for _, keypoint in ipairs(tmp) do
 			local value = tonumber(keypoint.value)
 			if value ~= nil then
 				local time = clamp(keypoint.time, 0.0, 1.0)
@@ -374,11 +505,13 @@ roblox_types.NumberSequence = {
 					value = value,
 					envelope = envelope,
 				})
+				keypoint.envelope = tostring(envelope)
+				keypoint.time = tostring(time)
 			else
 				return false, nil
 			end
 		end
-		return #return_val >= 2, { keypoints = return_val }
+		return #return_val >= 2, { keypoints = return_val }, tmp
 	end,
 }
 
@@ -393,17 +526,24 @@ roblox_types.PhysicalProperties = {
 		"acousticAbsorption",
 	},
 	verification = function(t)
+		local tmp = vim.deepcopy(t)
 		if next(t) == nil then
 			return true, "Default"
 		end
 		local return_val = {}
 		return_val.density = clamp(t.density, 0.0001, 100.0, 0.5)
+		tmp.density = tostring(return_val.density)
 		return_val.friction = clamp(t.friction, 0.0, 2.0, 1.0)
+		tmp.friction = tostring(return_val.friction)
 		return_val.elasticity = clamp(t.elasticity, 0.0, 1.0, 0.0)
+		tmp.elasticity = tostring(return_val.elasticity)
 		return_val.frictionWeight = clamp(t.frictionWeight, 0.0, 100.0, 50.0)
+		tmp.frictionWeight = tostring(return_val.frictionWeight)
 		return_val.elasticityWeight = clamp(t.elasticityWeight, 0.0, 100.0, 25.0)
+		tmp.elasticityWeight = tostring(return_val.elasticityWeight)
 		return_val.acousticAbsorption = clamp(t.acousticAbsorption, 0.0, 1.0, 1.0)
-		return true, return_val
+		tmp.acousticAbsorption = tostring(return_val.acousticAbsorption)
+		return true, return_val, tmp
 	end,
 }
 
@@ -441,7 +581,7 @@ roblox_types.Ray = {
 		if not verify then
 			return false, nil
 		end
-		return true, return_val
+		return true, return_val, t
 	end,
 }
 
@@ -465,7 +605,7 @@ roblox_types.Rect = {
 		if not verify then
 			return false, nil
 		end
-		return true, { corner0, corner1 }
+		return true, { corner0, corner1 }, t
 	end,
 }
 
@@ -487,7 +627,7 @@ roblox_types.UDim = {
 		end
 		if indexes == 2 then
 			return_val = { return_val.Scale, return_val.Offset }
-			return true, return_val
+			return true, return_val, t
 		end
 		return false
 	end,
@@ -513,7 +653,7 @@ roblox_types.UDim2 = {
 		end
 		if indexes == 4 then
 			return_val = { { return_val.xScale, return_val.xOffset }, { return_val.yScale, return_val.yOffset } }
-			return true, return_val
+			return true, return_val, t
 		end
 		return false
 	end,
@@ -541,13 +681,14 @@ roblox_types.Vector3 = {
 		return verify_vector_3(t)
 	end,
 }
+
 roblox_types.bool = {
 	lua_type = "bool",
 	fields = {
 		"",
 	},
 	verification = function(t)
-		vim.print(type(t))
+		-- vim.print(type(t))
 		if handle_nil(t) then
 			return true, nil
 		end

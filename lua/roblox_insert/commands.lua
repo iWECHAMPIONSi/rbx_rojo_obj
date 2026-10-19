@@ -1,4 +1,8 @@
 local writer = require("roblox_insert.writer")
+local ui = require("roblox_insert.ui")
+local dir = require("roblox_insert.dir_select")
+
+local vim = vim
 
 local m = {}
 
@@ -15,9 +19,63 @@ local function create_file(file_name, class, dir)
 		vim.notify("name of the class must be a string", vim.log.levels.ERROR)
 	end
 
-	writer.create_file(file_name, class, nil, dir)
+	writer.create_file(file_name, class, {}, dir)
 end
 
 m.create_file = create_file
+
+local function open_browser()
+	local args = dir.generate_dimensions()
+	if not args then
+		return
+	end
+	local function foo(name, path, visual_path)
+		local ui_args = ui.generate_dimensions(name, path, visual_path)
+		if not ui_args then
+			return
+		end
+
+		vim.cmd.stopinsert()
+
+		ui.create_window(ui_args.search_bar)
+		ui.create_window(ui_args.path_bar)
+		ui.create_window(ui_args.class_list)
+		ui.create_window(ui_args.class_display)
+
+		vim.api.nvim_win_close(args.path_bar.win, true)
+		vim.api.nvim_win_close(args.directory.win, true)
+
+		ui.disp_class_list(ui_args.class_list.buf, true)
+		ui_args.class_list.keybinds(
+			ui_args.class_list.buf,
+			ui_args.class_list.win,
+			ui_args.class_display.buf,
+			ui_args.class_display.win,
+			ui_args.path_bar.win,
+			ui_args.search_bar.win
+		)
+		ui_args.class_display.keybinds(
+			ui_args.class_display.buf,
+			ui_args.class_display.win,
+			ui_args.class_edit_box,
+			ui_args.class_list.win,
+			ui_args.search_bar.win,
+			ui_args.path_bar.win
+		)
+		ui_args.search_bar.keybinds(
+			ui_args.search_bar.buf,
+			ui_args.search_bar.win,
+			ui_args.class_list.buf,
+			ui_args.class_list.win,
+			ui_args.path_bar.win,
+			ui_args.class_display.win
+		)
+	end
+	dir.make_dir_windows(args.path_bar)
+	dir.make_dir_windows(args.directory)
+	args.directory.keybinds(args.directory.buf, args.directory.win, args.path_bar.buf, args.path_bar.win, foo)
+end
+
+m.open_browser = open_browser
 
 return m
