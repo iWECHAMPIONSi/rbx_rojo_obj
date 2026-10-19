@@ -71,9 +71,12 @@ local function open_browser()
 			ui_args.class_display.win
 		)
 	end
-	dir.make_dir_windows(args.path_bar)
-	dir.make_dir_windows(args.directory)
-	args.directory.keybinds(args.directory.buf, args.directory.win, args.path_bar.buf, args.path_bar.win, foo)
+	dir.resolve_source_directory(function()
+		dir.make_dir_windows(args.path_bar)
+		dir.make_dir_windows(args.directory)
+
+		args.directory.keybinds(args.directory.buf, args.directory.win, args.path_bar.buf, args.path_bar.win, foo)
+	end)
 end
 
 m.open_browser = open_browser

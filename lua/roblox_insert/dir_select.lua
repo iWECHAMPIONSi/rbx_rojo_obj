@@ -88,8 +88,8 @@ local function render_new_dir(buf, path_buf, path, all)
 	end
 
 	table.sort(dirs, function(a, b)
-		if not (a.name < b.name) and (a.t == "dir") and (b.t ~= "dir") then
-			return true
+		if (a.t == "dir") ~= (b.t == "dir") then
+			return a.t == "dir"
 		end
 		return a.name < b.name
 	end)
@@ -107,7 +107,7 @@ local function render_new_dir(buf, path_buf, path, all)
 	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
 	if path_buf then
-		path = string.gsub(path, root_dir or "", "") -- should be impossible for root_dir to be nil at this stage
+		path = string.sub(path, string.find(path, src_name, 1, true) or 1)
 		vim.api.nvim_set_option_value("modifiable", true, { buf = path_buf })
 		vim.api.nvim_buf_set_lines(path_buf, 0, -1, false, { path })
 		vim.api.nvim_set_option_value("modifiable", false, { buf = path_buf })
@@ -221,6 +221,7 @@ local function generate_dimensions()
 								vim.uv.fs_stat(full_path)
 								or vim.uv.fs_stat(full_path .. ".luau")
 								or vim.uv.fs_stat(full_path .. ".model.json")
+								or vim.uv.fs_stat(full_path .. ".meta.json")
 								or vim.uv.fs_stat(full_path .. ".project.json")
 								or vim.uv.fs_stat(full_path .. ".rbxmx")
 								or vim.uv.fs_stat(full_path .. ".rbxm")
@@ -266,6 +267,7 @@ local function generate_dimensions()
 							if
 								vim.uv.fs_stat(full_path)
 								or vim.uv.fs_stat(full_path .. ".luau")
+								or vim.uv.fs_stat(full_path .. ".meta.json")
 								or vim.uv.fs_stat(full_path .. ".model.json")
 								or vim.uv.fs_stat(full_path .. ".project.json")
 								or vim.uv.fs_stat(full_path .. ".rbxmx")
@@ -282,9 +284,7 @@ local function generate_dimensions()
 								)
 								return
 							end
-							vim.print(root_dir)
-							vim.print(path)
-							gen_func(value, path, string.gsub(path, root_dir or "", ""))
+							path = string.sub(path, string.find(path, src_name, 1, true) or 1)
 						end
 					end, "Name of new file")
 				end, { buffer = buf })
@@ -316,6 +316,7 @@ local function generate_dimensions()
 
 				vim.keymap.set("n", "H", function()
 					display_all = not display_all
+					render_new_dir(buf, p_buf, path, display_all)
 				end, { buffer = buf })
 			end,
 			current_dir = nil,
@@ -325,45 +326,12 @@ end
 
 m.generate_dimensions = generate_dimensions
 
-local function make_dir_windows(args)
+local function resolve_source_directory(on_resolved)
 	local function is_directory(path)
 		local stat = vim.uv.fs_stat(path)
 		return stat ~= nil and stat.type == "directory"
 	end
 
-	-- Create the directory browser once its starting path is known.
-	local function open_browser(path)
-		root_dir = vim.fs.normalize(path)
-
-		local buf = vim.api.nvim_create_buf(false, true)
-
-		vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
-		vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-
-		local win = vim.api.nvim_open_win(buf, false, {
-			relative = "editor",
-			width = args.width,
-			height = args.height,
-			col = args.col,
-			row = args.row,
-			style = "minimal",
-			border = args.border,
-			title = args.title,
-			title_pos = args.title_pos,
-			footer = args.footer,
-			footer_pos = args.footer_pos,
-		})
-
-		args.buf = buf
-		args.win = win
-		args.root_dir = root_dir
-
-		if args.on_ready then
-			args.on_ready(buf, win)
-		end
-	end
-
-	-- Find the Rojo project.
 	local project_root = vim.fs.root(0, "default.project.json")
 
 	if not project_root then
@@ -371,19 +339,29 @@ local function make_dir_windows(args)
 		return
 	end
 
-	-- Use /src/ automatically if it exists.
+	local function finish(source_name)
+		root_dir = vim.fs.normalize(project_root)
+		src_name = source_name
+
+		-- Keep the directory browser's root entries current.
+		dir_ref_start[1].name = src_name
+		dir_ref[1].name = src_name
+
+		-- Continue after any active input prompt has closed.
+		vim.schedule(function()
+			on_resolved()
+		end)
+	end
+
 	local src_dir = vim.fs.joinpath(project_root, "src")
 
 	if is_directory(src_dir) then
-		src_name = "src"
-		open_browser(project_root)
+		finish("src")
 		return
 	end
 
-	-- Otherwise, ask the user for the source directory.
 	local function ask_for_src()
 		create_input(project_root, "Leave blank to cancel", nil, function(value)
-			-- create_input() converts empty input into nil.
 			if value == nil then
 				return
 			end
@@ -391,24 +369,54 @@ local function make_dir_windows(args)
 			local path = vim.fs.joinpath(project_root, value)
 
 			if is_directory(path) then
-				src_name = value
-				if value[string.len(value)] ~= "/" then
-					value = value .. "/"
-				end
-				-- Continue after the input window closes.
-				vim.schedule(function()
-					open_browser(project_root)
-				end)
+				finish(value)
 			else
 				vim.notify(path .. " is not a valid directory", vim.log.levels.ERROR)
 
-				-- Retry after the current prompt closes.
 				vim.schedule(ask_for_src)
 			end
-		end)
+		end, "Unable to find '/src/' dir, enter source directory")
 	end
 
 	ask_for_src()
+end
+
+m.resolve_source_directory = resolve_source_directory
+
+local function make_dir_windows(args)
+	if not root_dir then
+		vim.notify("Source directory has not been initialized", vim.log.levels.ERROR)
+		return
+	end
+
+	local buf = vim.api.nvim_create_buf(false, true)
+
+	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+
+	local win = vim.api.nvim_open_win(buf, false, {
+		relative = "editor",
+		width = args.width,
+		height = args.height,
+		col = args.col,
+		row = args.row,
+		style = "minimal",
+		border = args.border,
+		title = args.title,
+		title_pos = args.title_pos,
+		footer = args.footer,
+		footer_pos = args.footer_pos,
+	})
+
+	args.buf = buf
+	args.win = win
+	args.root_dir = root_dir
+
+	if args.on_ready then
+		args.on_ready(buf, win)
+	end
+
+	return buf, win
 end
 
 m.make_dir_windows = make_dir_windows

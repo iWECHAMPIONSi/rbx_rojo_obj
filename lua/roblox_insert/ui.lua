@@ -298,6 +298,9 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 			when_done(true)
 			props = properties_table[name]
 			value_ref = props and vim.deepcopy(props.value) or value_ref
+			if not value_ref[index] then
+				index = math.min(#value_ref, 1)
+			end
 			disp_table(
 				nil,
 				value_ref[index],
@@ -328,6 +331,7 @@ local function disp_class(buf, class, inside_buf)
 	if inside_buf then
 		properties_list_ref = {
 			{ t = "name", name = class },
+			{ t = "config", name = class },
 			{ t = "config", name = class },
 			{ t = "name", name = class },
 		}
@@ -638,6 +642,7 @@ local function generate_dimensions(name, path, visual_path)
 				vim.keymap.set("n", "<CR>", function()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					if class_list_ref[line].t == "class" then
+						current_class = class_list_ref[line].name
 						vim.api.nvim_set_current_win(d_win)
 						disp_class(d_buf, class_list_ref[line].name, true)
 					elseif class_list_ref[line].t == "category" then
@@ -664,7 +669,9 @@ local function generate_dimensions(name, path, visual_path)
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					if class_list_ref[line].t == "class" then
 						data.toggle_favorite(class_list_ref[line].name)
-						modify_class_list(buf, "Favorites", 1, true, class_list_ref[line].name)
+						if class_list_ref[1].t == "category" then
+							modify_class_list(buf, "Favorites", 1, true, class_list_ref[line].name)
+						end
 						line = vim.api.nvim_win_get_cursor(win)[1]
 						local pre = "  "
 						if data.favorites[class_list_ref[line].name] then
@@ -735,12 +742,12 @@ local function generate_dimensions(name, path, visual_path)
 					local properties = saved_object_properties.property_tables[index] or { properties = {} }
 					saved_object_properties.property_tables[index] = properties
 					local json_table = {}
-					for property, i in properties do
+					for property, i in pairs(properties.properties) do
 						json_table[property] = i.json
 					end
 					create_input("Input", "Return 'yes' to use current config", "yes", function(value)
 						if value ~= "yes" then
-							properties = vim.deepcopy({ properties = {} })
+							json_table = vim.deepcopy({})
 						end
 						if current_class then
 							writer.create_file(
@@ -755,6 +762,9 @@ local function generate_dimensions(name, path, visual_path)
 				end, { buffer = buf })
 				vim.keymap.set("n", "S", function()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
+					if line <= 4 then
+						return
+					end
 					local prop = properties_list_ref[line]
 					prop.props[prop.name] = nil
 					local pre = "  "
@@ -792,13 +802,14 @@ local function generate_dimensions(name, path, visual_path)
 						return
 					end
 					index = index - 1
+					saved_object_properties.index = index
 
 					disp_class(buf, current_class, true)
 				end, { buffer = buf })
 				vim.keymap.set("n", ">", function()
 					local saved_object_properties = data.saved_object_configs[current_class]
 					local index = saved_object_properties.index
-					if not saved_object_properties[index].name then
+					if not saved_object_properties.property_tables[index].name then
 						return
 					end
 					index = index + 1
@@ -817,7 +828,7 @@ local function generate_dimensions(name, path, visual_path)
 					end, "Are you sure you want to delete the current config?")
 				end, { buffer = buf })
 
-				vim.keymap.set("n", "Esc", function()
+				vim.keymap.set("n", "<Esc>", function()
 					vim.api.nvim_set_current_win(l_win)
 				end, { buffer = buf })
 			end,

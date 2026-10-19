@@ -20,7 +20,7 @@ local function find_closest_class(class)
 end
 
 ---@param class string
----@param params {string: any}?
+---@param params {string: any}
 ---@return table?, string?
 local function create_file_data(class, params, script)
 	local class_table = data.raw.Classes[class]
@@ -40,7 +40,7 @@ local function create_file_data(class, params, script)
 	if not script then
 		file.ClassName = class
 	end
-	file.Properties = params or vim.empty_dict()
+	file.Properties = next(params) and params or vim.empty_dict()
 	return file
 end
 
@@ -61,6 +61,24 @@ local function create_file(file_name, class, params, dir, script)
 		indent = "    ",
 	})
 	local path
+	local full_path = vim.fs.joinpath(dir, file_name)
+	if
+		vim.uv.fs_stat(full_path)
+		or vim.uv.fs_stat(full_path .. ".luau")
+		or vim.uv.fs_stat(full_path .. ".model.json")
+		or vim.uv.fs_stat(full_path .. ".meta.json")
+		or vim.uv.fs_stat(full_path .. ".project.json")
+		or vim.uv.fs_stat(full_path .. ".rbxmx")
+		or vim.uv.fs_stat(full_path .. ".rbxm")
+		or vim.uv.fs_stat(full_path .. ".csv")
+		or vim.uv.fs_stat(full_path .. ".txt")
+		or vim.uv.fs_stat(full_path .. ".toml")
+		or vim.uv.fs_stat(full_path .. ".server.luau")
+		or vim.uv.fs_stat(full_path .. ".client.luau")
+	then
+		vim.notify('A file or directory with the name "' .. file_name .. '" already exists', vim.log.levels.ERROR)
+		return
+	end
 	if not script then
 		path = vim.fs.joinpath(dir, file_name .. ".model.json")
 	else

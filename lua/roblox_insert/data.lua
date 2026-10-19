@@ -471,7 +471,7 @@ t.toggle_favorite = toggle_favorite
 -- Hooking the save functionality to Neovim exiting
 vim.api.nvim_create_autocmd("VimLeavePre", {
 	callback = function()
-		save_data(t.favorites)
+		save_data("favorites", t.favorites)
 	end,
 })
 

@@ -93,7 +93,7 @@ local function verify_font(name)
 		return false, nil
 	end
 
-	return true, filename .. ".json"
+	return true, filename
 end
 
 local function handle_nil(t)
@@ -164,7 +164,7 @@ local function verify_vector_3(t)
 	for k, i in pairs(t) do
 		indexes = indexes + 1
 		if tonumber(i) == nil then
-			return false, nil
+			return false, nil, t
 		end
 		return_val[k] = tonumber(i)
 	end
@@ -174,7 +174,7 @@ local function verify_vector_3(t)
 			return_val.Y,
 			return_val.Z,
 		}
-		return true, return_val
+		return true, return_val, t
 	end
 	return false, nil, t
 end
@@ -439,9 +439,9 @@ roblox_types.Font = {
 
 			local valid
 			valid, family = verify_font(family)
-			tmp.family = family
+			tmp.family = t.family
 			if valid then
-				return_val.family = "rbxasset://fonts/families/" .. family
+				return_val.family = "rbxasset://fonts/families/" .. family .. ".json"
 			else
 				return false, nil
 			end
@@ -453,6 +453,7 @@ roblox_types.Font = {
 				return_val.weight = weight
 			else
 				return_val.weight = "Regular"
+				tmp.weight = "Regular"
 			end
 
 			local style = t.style or "Normal"
@@ -462,6 +463,7 @@ roblox_types.Font = {
 				return_val.style = style
 			else
 				return_val.style = "Normal"
+				tmp.style = "Normal"
 			end
 			return true, return_val, tmp
 		end
