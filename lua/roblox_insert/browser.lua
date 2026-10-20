@@ -18,6 +18,7 @@ local function handle_nil(t)
 	end
 	return t
 end
+
 local vim = vim
 
 local class_list_ref = {}
