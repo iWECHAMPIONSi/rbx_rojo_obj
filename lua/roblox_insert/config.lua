@@ -217,6 +217,7 @@ t.default_keybinds = {
 	},
 
 	actions = {
+		enter_parent_dir = { "-" },
 		duplicate_config = { "P" },
 		toggle_favorite_class = { "F" },
 		start_search = { "/" },
@@ -256,11 +257,15 @@ local function convert_keybind_config(opts, k, d)
 			if not opts.keybinds[action] then
 				opts.keybinds[action] = {}
 				for _, keybind in ipairs(group.keybinds) do
-					opts.keybinds[action][keybind] = true
+					if type(keybind) == "string" then
+						opts.keybinds[action][keybind] = true
+					end
 				end
 			elseif not d then
 				for _, keybind in ipairs(group.keybinds) do
-					opts.keybinds[action][keybind] = true
+					if type(keybind) == "string" then
+						opts.keybinds[action][keybind] = true
+					end
 				end
 			end
 		end
@@ -270,11 +275,15 @@ local function convert_keybind_config(opts, k, d)
 		if not opts.keybinds[action] then
 			opts.keybinds[action] = {}
 			for _, keybind in ipairs(keybinds) do
-				opts.keybinds[action][keybind] = true
+				if type(keybind) == "string" then
+					opts.keybinds[action][keybind] = true
+				end
 			end
 		elseif not d then
 			for _, keybind in ipairs(keybinds) do
-				opts.keybinds[action][keybind] = true
+				if type(keybind) == "string" then
+					opts.keybinds[action][keybind] = true
+				end
 			end
 		end
 	end

@@ -715,12 +715,12 @@ local function generate_dimensions(name, path, visual_path)
 
 				assign_command(buf, "CloseBrowser", config.config.keybinds.close_browser_window, close_browser)
 
-				local function list_start_search()
+				local function start_search()
 					vim.api.nvim_set_current_win(s_win)
 					vim.cmd("startinsert!")
 				end
 
-				assign_command(buf, "StartSearch", config.config.keybinds.start_search, list_start_search)
+				assign_command(buf, "StartSearch", config.config.keybinds.start_search, start_search)
 
 				local function select_class()
 					local line = vim.api.nvim_win_get_cursor(win)[1]

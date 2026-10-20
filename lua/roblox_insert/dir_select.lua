@@ -258,6 +258,16 @@ local function generate_dimensions()
 
 				assign_command(buf, "SelectDir", config.config.keybinds.select_dir, select_dir)
 
+				local function enter_parent_dir()
+					if vim.fs.dirname(path) == root_dir then
+						return
+					end
+					path = vim.fn.dirname(path)
+					render_new_dir(buf, p_buf, path, display_all)
+				end
+
+				assign_command(buf, "EnterParentDir", config.config.keybinds.enter_parent_dir, enter_parent_dir)
+
 				local function create_dir()
 					create_input("/", nil, nil, function(value)
 						if value then

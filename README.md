@@ -10,93 +10,82 @@ for Lazy just do
 },
 ```
 
-## How to Config
+## Quick Start
+* Open a Rojo project containing a `default.project.json` and a `src` directory inside
+* Run `:RbxBrowser`
+* Navigate to the desired destination Directory
+* Press `%` (Or run `:NameFile`) and provide a filename
+* Search or select a Roblox Class or Roblox Script
+* Optionally edit its properties
+* Press `<C-e>` (Or run `:ExportClass`) while in the Class Display to export the file
+* Profit?
+
+## Configuration
 
 The default configuration is this
 
 ```lua
 require('rbx_rojo_obj').setup({
-	custom_keybinds = {
-		groups = {},
-		actions = {},
-	},
+    custom_keybinds = {
+        groups = {},
+        actions = {},
+    },
 
-	keybinds = {},
-	src_name = "src", -- the default name for your project's source directory (my_project/src)
+    keybinds = {},
+    src_name = "src", -- the default name for your project's source directory (my_project/src)
 
-	confirm_delete = true, -- Asks if you want to delete something if enabled
+    confirm_delete = true, -- Asks if you want to delete something if enabled
 
-	files_visible = true, -- If non-directory files are visible be default in the directory browser if enabled
+    files_visible = true, -- If non-directory files are visible be default in the directory browser if enabled
 
-	allow_overwrite = false, -- If it will allow for you to create a file or directory with the same name as one in the current directory if enabled
-	confirm_overwrite = true, -- same as confirm_delete but for overwriting a file if enabled
+    allow_overwrite = false, -- If it will allow for you to create a file or directory with the same name as one in the current directory if enabled
+    confirm_overwrite = true, -- same as confirm_delete but for overwriting a file if enabled and allow_overwrite is enabled
 
-	enable_default_keybinds = true, -- Any unassigned keybinds will default to predefined keybinds if enabled
+    enable_default_keybinds = true, -- Any unassigned keybinds will default to predefined keybinds if enabled
 })
 ```
 
-Or if you want to do it in Lazy then
+Or if you want to do it in Lazy then use the `opts` field instead.  
 
-```lua
-{
-    'iWECHAMPIONSi/rbx_rojo_obj',
-    opts = {
-        custom_keybinds = {
-            groups = {},
-            actions = {},
-        },
-
-        keybinds = {},
-        src_name = "src", -- the default name for your project's source directory (my_project/src)
-
-        confirm_delete = true, -- Asks if you want to delete something if enabled
-
-        files_visible = true, -- If non-directory files are visible be default in the directory browser if enabled
-
-        allow_overwrite = false, -- If it will allow for you to create a file or directory with the same name as one in the current directory if enabled
-        confirm_overwrite = true, -- same as confirm_delete but for overwriting a file if enabled
-
-        enable_default_keybinds = true, -- Any unassigned keybinds will default to predefined keybinds if enabled
-    },
-},
-```
-
-### How to assign keybinds
+### Configuring Keybindings
 
 There are 2 methods:
 ```lua
-keybinds = {
-    export_class = { "<C-e>", "<leader>e" },
-}
-```
-The format is just `<action> = {<keybind1>, <keybind2> ...}`
 
-The second method is usefull for grouping
-
-```lua
 custom_keybinds = {
     groups = {
         my_group = {
-            keybinds = { "Q", "q", },
+            keybinds = { "<C-e>" },
             actions = {
-                "close_browser_window",
-                "close_input",
-                "close_dir_window",
-                "close_property",
+                "export_class",
+                "save_property",
             },
         },
     },
     actions = {
-        start_search = { "/" },
+        export_class = { "E" },
     },
+}
+
+keybinds = {
+    export_class = { "<leader>e", "<C-s>" },
+    toggle_favorite_class = {},
 }
 ```
 
-Both methods will apply equally, so if an action is listed in `actions`, `my_group`, and `keybinds`, it will recieve all of those keybinds.
+```lua
+-- Resulting keybinds, unmetioned keybinds will receive their defaults assuming the configuration is enabled
+export_class = { "<leader>e", "<C-s>", "<C-e>", "E" }
+toggle_favorite_class = {}
+save_property = { "<C-e>" }
 
-If you choose to list an action, regardless of assigning a keybinding to it or not, the default keybindings will not be assigned to that action. It's reccomended to check and make sure that you aren't assigning keybinds that conflict within the same buffer.
+```
 
-I didn't implement keybind conflict checking, there's a table that shows each action and its assosiated buffer(s).
+All custom keybinds are cumulative, so if an action is listed in `actions`, `my_group`, and `keybinds`, it will receive all of those keybinds.
+
+If you choose to list an action, regardless of assigning a keybinding to it or not, the default keybindings will not be assigned to that action. It's recommended to check and make sure that you aren't assigning keybinds that conflict within the same buffer.
+
+I didn't implement keybind conflict checking, there's a table that shows each action and its associated buffer(s).
 
 Buffers:
 There are buffers to be aware of when using commands and keybindings.  
@@ -114,7 +103,7 @@ all actions/commands are in `normal` mode
 | `N/A` | `Global` | Opens the browser |`N/A`| `:RbxBrowser` |
 | select_dir | `Directory Browser` | Enters/selects the highlighted directory | `<CR>` | `:SelectDir` |
 | enter_parent_dir | `Directory Browser` | Enters the parent directory | `-` | `:EnterParentDir` |
-| add_dir | `Directory Browser` | Adds a new directory inside the current directory | `d` | `:CreateDir` |
+| create_dir | `Directory Browser` | Creates a new directory inside the current directory | `d` | `:CreateDir` |
 | delete_dir | `Directory Browser` | Recursively deletes the highlighted directory | `D` | `:DeleteDir` |
 | name_file | `Directory Browser` | Asks for the name of the file before switching to Class browser | `%` | `:NameFile` |
 | close_dir_window | `Directory Browser` | Closes the directory browser | `Q` | `:CloseDirWindow` |
@@ -133,7 +122,7 @@ all actions/commands are in `normal` mode
 | select_property | `Class Display` | Selects highlighted property | `<CR>` | `:SelectProperty` |
 | export_class | `Class Display` | Exports the current class as a file | `<C-e>` | `:ExportClass` |
 | clear_property | `Class Display` | Clears the saved data from the highlighted property | `S` | `:ClearProperty` |
-| save_class_config | `Class Display` | Saves/renames the current class config | `C` | `:SaveConfig` |
+| name_class_config | `Class Display` | Saves/renames the current class config | `C` | `:SaveConfig` |
 | delete_config | `Class Display` | Deletes current class config | `D` | `:DeleteConfig` |
 | prev_config | `Class Display` | Switches to the previous class config | `<` | `:PrevConfig` |
 | next_config | `Class Display` | Switches to the next class config | `>` | `:NextConfig` |
@@ -145,4 +134,40 @@ all actions/commands are in `normal` mode
 | next_keypoint | `Property Editor` | Displays the next keypoint | `>` | `:NextKeypoint` |
 | prev_keypoint | `Property Editor` | Displays the previous keypoint | `<` | `:PrevKeypoint` |
 | search_enter_list | `Search Bar` | Enters into the Class list | `<CR>` | `:EnterList` |
+
+## Important Behaviors
+
+### Input
+Returning nothing (an empty input field) is treated as a no-op.  
+#### Special for Class properties  
+Returning "nil" will be treated as deleting that value. This was made specifically to allow for deleting of a value from properties/property fields  
+
+### Filenames
+When Checking for filename conflicts, it checks against `<filename>` and the supported Rojo filetypes that are synced.  
+As of right now the plugin does not allow to create filenames with spaces or illegal characters for the detected OS.  
+
+### Directory Browser
+So even if `MyScript.client.luau` exists, any attempt create anything with the name `MyScript`, even if it's not a LocalScript, will be flagged as a name conflict.  
+You cannot edit the names of things in the browser (as of now, might be implemented in the future)  
+You cannot go above the `src` directory (the plugin checks if the parent directory is the root directory, if it is then it no-ops)  
+The Directory Browser will attempt to find your `src` directory given the directory Neovim was opened in. There must be a `default.project.json` for the browser to open (so the browser can verify it's in a Roblox project). If it cannot find `src` (or what your `src` directory is named in your config) it will ask you for the name of the `src` directory. This is a temporary value and will not persist between sessions.
+
+### Favoriting a Class
+Every time you favroite a class, your saved classes are saved between Neovim sessions.
+
+### Class Configs
+A class config is simply a list of property values for a class.  
+To save a config for a class, just give it a name. Note that if a config is not named, it's considered temporary and will not persist between neovim sessions.  
+Only one temporary (unnamed) config is allowed per class. There is no limit to the number of configs, but to create a new config, all other configs for that class must be named.  
+When duplicating a config, that config must be named. Duplicated configs by default are not named. If another unnamed config already exists for that config, you will be asked if you want to replace the current unnamed config.  
+When exporting a class, the config does not need to be named.
+
+### Properties   
+Properties go through a verification when you save a property. If that verification passes, you will see a `*` next to that property name, indicating that it will be exported with the class if exporting that class with the configuration. Properties that do not have a `*` will not be exported with the rest of the config.  
+If the verification fails and the property does not have a `*` next to it, the values will still save for later editing. If the property does have a `*` next to it, the values will revert back to their previously verified values. This is to prevent stale property values. Valid properties are properties whos data match the Roblox API's specifications. For more specifics the source file is `roblox_types.lua`.  
+Some properties have default values or clamped values that will automatically be applied if no value is given or that value is outside of the clamped range. Make sure to look at the Roblox API for information regarding clamped values. **Default values may be removed in the future, which will require every value to be explicitly defined.**
+
+### Creating New Configs and Keypoints
+When switching between configs and keypoints, when doing either `:NextConfig` or `:NextKeypoint` on the last config/keypoint respectively, will create a new config/keypoint assuming that the previous config/keypoint has at least one filled property/field. And for configs there also must be no other unnamed configs for that class.
+
 
