@@ -41,8 +41,12 @@ end
 
 local function save_data(filename, data)
 	local code = vim.json.encode(data)
+	local path = vim.fs.joinpath(vim.fn.stdpath("state"), "rbx_rojo_obj")
+	if not vim.uv.fn_stat(path) then
+		vim.fn.mkdir(path, "p")
+	end
 
-	local path = vim.fs.joinpath(vim.fn.stdpath("state"), filename .. ".json")
+	local path = vim.fs.joinpath(path, filename .. ".json")
 
 	local file = io.open(path, "w")
 
@@ -56,7 +60,8 @@ end
 
 ---@return table?, string?
 function t.load(filename, save_path)
-	local path = vim.fs.joinpath(save_path or get_plugin_root(), "data", filename .. ".json")
+	local path =
+		vim.fs.joinpath(save_path or get_plugin_root(), save_path and "rbx_rojo_obj" or "data", filename .. ".json")
 
 	local contents, read_error = read_file(path, filename)
 
