@@ -167,7 +167,7 @@ local function render_new_dir(buf, path_buf, path, all)
 
 	if path_buf then
 		local _, end_index = string.find(path, root_dir or "", 1, true)
-		path = string.sub(path, end_index or 1)
+		path = string.sub(path, (end_index or 1) + 2)
 		vim.api.nvim_set_option_value("modifiable", true, { buf = path_buf })
 		vim.api.nvim_buf_set_lines(path_buf, 0, -1, false, { path })
 		vim.api.nvim_set_option_value("modifiable", false, { buf = path_buf })
@@ -275,7 +275,8 @@ local function generate_dimensions()
 					local function check_name(value)
 						local function on_success()
 							local selected_path = path
-							local visual_path = string.sub(path, string.find(path, src_name or "", 1, true) or 1)
+							local _, end_index = string.find(path, root_dir or "", 1, true)
+							local visual_path = string.sub(selected_path, (end_index or 1) + 2)
 							vim.schedule(function()
 								gen_func(value, selected_path, visual_path)
 							end)
