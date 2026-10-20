@@ -63,41 +63,43 @@ local function create_file(file_name, class, params, dir, script)
 	local json = vim.json.encode(contents, {
 		indent = "    ",
 	})
-	local path
-	if not dir_select.check_name_collision(path, file_name) then
-		return
-	end
-	if not script then
-		path = vim.fs.joinpath(dir, file_name .. ".model.json")
-	else
-		path = vim.fs.joinpath(dir, file_name .. ".meta.json")
-		local result
-		local script_name
-		if class == "LocalScript" then
-			script_name = vim.fs.joinpath(dir, file_name .. ".client.luau")
-			result = vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), script_name)
-		elseif class == "ModuleScript" then
-			script_name = vim.fs.joinpath(dir, file_name .. ".luau")
-			result =
-				vim.fn.writefile(vim.split("local module = {}\n\nreturn module\n", "\n", { plain = true }), script_name)
-		elseif class == "Script" then
-			script_name = vim.fs.joinpath(dir, file_name .. ".server.luau")
-			result = vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), script_name)
+	local function on_success()
+		local path
+		if not script then
+			path = vim.fs.joinpath(dir, file_name .. ".model.json")
+		else
+			path = vim.fs.joinpath(dir, file_name .. ".meta.json")
+			local result
+			local script_name
+			if class == "LocalScript" then
+				script_name = vim.fs.joinpath(dir, file_name .. ".client.luau")
+				result = vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), script_name)
+			elseif class == "ModuleScript" then
+				script_name = vim.fs.joinpath(dir, file_name .. ".luau")
+				result = vim.fn.writefile(
+					vim.split("local module = {}\n\nreturn module\n", "\n", { plain = true }),
+					script_name
+				)
+			elseif class == "Script" then
+				script_name = vim.fs.joinpath(dir, file_name .. ".server.luau")
+				result = vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), script_name)
+			end
+			if result ~= 0 then
+				vim.notify("Failed to write file: " .. script_name, vim.log.levels.ERROR)
+				return
+			end
+			if not next(params) then
+				return
+			end
 		end
+
+		local result = vim.fn.writefile(vim.split(json, "\n", { plain = true }), path)
+
 		if result ~= 0 then
-			vim.notify("Failed to write file: " .. script_name, vim.log.levels.ERROR)
-			return
-		end
-		if not next(params) then
-			return
+			vim.notify("Failed to write file: " .. path, vim.log.levels.ERROR)
 		end
 	end
-
-	local result = vim.fn.writefile(vim.split(json, "\n", { plain = true }), path)
-
-	if result ~= 0 then
-		vim.notify("Failed to write file: " .. path, vim.log.levels.ERROR)
-	end
+	dir_select.check_name_collision(dir, file_name, on_success)
 end
 
 t.create_file = create_file

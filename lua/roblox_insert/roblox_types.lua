@@ -383,7 +383,12 @@ roblox_types.ColorSequence = {
 		table.sort(correct, function(a, b)
 			return tonumber(a.time) < tonumber(b.time)
 		end)
-		return #return_val >= 2, { keypoints = return_val }, correct
+		return #return_val >= 2
+			and #return_val <= 20
+			and return_val[1].time == 0.0
+			and return_val[#return_val].time == 1.0,
+			{ keypoints = return_val },
+			correct
 	end,
 }
 
@@ -567,6 +572,7 @@ roblox_types.NumberRange = {
 			return false, nil
 		end
 		if min > max then
+			min, max = max, min
 			t.min, t.max = t.max, t.min
 		end
 		return true, { min, max }, t
@@ -605,7 +611,12 @@ roblox_types.NumberSequence = {
 		table.sort(tmp, function(a, b)
 			return tonumber(a.time) < tonumber(b.time)
 		end)
-		return #return_val >= 2, { keypoints = return_val }, tmp
+		return #return_val >= 2
+			and #return_val <= 20
+			and return_val[1].time == 0.0
+			and return_val[#return_val].time == 1.0,
+			{ keypoints = return_val },
+			tmp
 	end,
 }
 

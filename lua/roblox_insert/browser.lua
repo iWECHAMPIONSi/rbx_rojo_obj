@@ -4,6 +4,8 @@ local writer = require("roblox_insert.writer")
 local dir_select = require("roblox_insert.dir_select")
 local helpers = require("roblox_insert.helpers")
 local create_input = dir_select.create_input
+local config = require("roblox_insert.config")
+local assign_command = config.assign_command
 
 local roblox_types = require("roblox_insert.roblox_types")
 
@@ -130,10 +132,13 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 		vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
 		vim.api.nvim_buf_set_lines(buf, 0, -1, false, str)
 		vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-		vim.keymap.set("n", "<CR>", function()
+
+		local function select_param_field()
 			local line = vim.api.nvim_win_get_cursor(win)[1]
 			field_ref[line]()
-		end, { buffer = buf })
+		end
+
+		assign_command(buf, "SelectParamField", config.config.keybinds.select_param_field, select_param_field)
 	end
 
 	if value_type.lua_type == "enum" then
@@ -162,7 +167,6 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 			t,
 			properties_table[name] and properties_table[name].value or nil,
 			function(value)
-				-- vim.print(type(value))
 				local success, val = value_type.verification(value)
 				if success then
 					if val == nil then
@@ -194,7 +198,15 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 			value_ref = vim.deepcopy(props.value)
 		end
 		disp_table(props, value_ref, field_ref, buf, win, nil, nil)
-		vim.keymap.set("n", "<C-e>", function()
+
+		local function close_property()
+			vim.api.nvim_win_close(win, true)
+			when_done()
+		end
+
+		assign_command(buf, "CloseProperty", config.config.keybinds.close_property, close_property)
+
+		local function export_property()
 			local valid, value, validated_table = value_type.verification(value_ref)
 			if valid then
 				properties_table[name] = {
@@ -215,11 +227,9 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 			end
 			field_ref = {}
 			disp_table(props, value_ref, field_ref, buf, win)
-		end, { buffer = buf })
-		vim.keymap.set("n", "Q", function()
-			vim.api.nvim_win_close(win, true)
-			when_done()
-		end, { buffer = buf })
+		end
+
+		assign_command(buf, "ExportProperty", config.config.keybinds.export_property, export_property)
 	end
 
 	if value_type.lua_type == "nested table" then
@@ -241,7 +251,7 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 			{ index .. "/" .. #value_ref }
 		)
 
-		vim.keymap.set("n", "<", function()
+		local function prev_keypoint()
 			if index == 1 then
 				return
 			end
@@ -258,9 +268,11 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 				value_ref[index],
 				{ index .. "/" .. #value_ref }
 			)
-		end, { noremap = true, buffer = buf })
+		end
 
-		vim.keymap.set("n", ">", function()
+		assign_command(buf, "PrevKeypoint", config.config.keybinds.prev_keypoint, prev_keypoint)
+
+		local function next_keypoint()
 			if next(value_ref[index]) == nil then
 				return
 			end
@@ -275,14 +287,18 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 				value_ref[index],
 				{ index .. "/" .. #value_ref }
 			)
-		end, { noremap = true, buffer = buf })
+		end
 
-		vim.keymap.set("n", "Q", function()
+		assign_command(buf, "NextKeypoint", config.config.keybinds.next_keypoint, next_keypoint)
+
+		local function close_property()
 			vim.api.nvim_win_close(win, true)
 			when_done()
-		end, { buffer = buf })
+		end
 
-		vim.keymap.set("n", "<C-e>", function()
+		assign_command(buf, "CloseProperty", config.config.keybinds.close_property, close_property)
+
+		local function export_property()
 			local valid, value, validated_table = value_type.verification(value_ref)
 			if valid then
 				properties_table[name] = {
@@ -300,7 +316,7 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 			props = properties_table[name]
 			value_ref = props and vim.deepcopy(props.value) or value_ref
 			if not value_ref[index] then
-				index = math.min(#value_ref, 1)
+				index = math.max(1, math.min(#value_ref, index))
 			end
 			disp_table(
 				nil,
@@ -311,7 +327,9 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 				value_ref[index],
 				{ index .. "/" .. #value_ref }
 			)
-		end, { buffer = buf })
+		end
+
+		assign_command(buf, "ExportProperty", config.config.keybinds.export_property, export_property)
 	end
 end
 
@@ -366,6 +384,7 @@ local function disp_class(buf, class, inside_buf)
 		end
 		table.insert(str, lstr)
 		if inside_buf then
+			ref_table.saved_props = saved_properties
 			ref_table.props = saved_properties.properties
 			ref_table.tags = class_def.Properties[p].Tags
 			table.insert(properties_list_ref, ref_table)
@@ -465,7 +484,7 @@ local function modify_class_list(buf, category, line, favorite, added_class)
 		vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 	elseif not favorite then
 		local len = 0
-		for i, class in ipairs(data.categories[category]) do
+		for _, class in ipairs(data.categories[category]) do
 			if data.browsable_classes[class] then
 				len = len + 1
 				table.remove(class_list_ref, line + 1)
@@ -487,8 +506,6 @@ local function generate_dimensions(name, path, visual_path)
 		vim.notify("Neovim window is too small, please make it larger", vim.log.levels.ERROR)
 		return nil
 	end
-
-	vim.print(visual_path)
 
 	local row = math.floor((vim.o.lines - height - 2) / 2)
 	local col = math.floor((vim.o.columns - width - 2) / 2)
@@ -532,12 +549,14 @@ local function generate_dimensions(name, path, visual_path)
 			},
 			buffer_type = "prompt",
 			keybinds = function(buf, win, l_buf, l_win, p_win, d_win)
-				vim.keymap.set("n", "Q", function()
+				local function close_browser()
 					vim.api.nvim_win_close(win, true)
 					vim.api.nvim_win_close(d_win, true)
 					vim.api.nvim_win_close(l_win, true)
 					vim.api.nvim_win_close(p_win, true)
-				end, { buffer = buf })
+				end
+
+				assign_command(buf, "CloseBrowser", config.config.keybinds.close_browser_window, close_browser)
 
 				vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
 					buffer = buf,
@@ -584,9 +603,12 @@ local function generate_dimensions(name, path, visual_path)
 					end,
 				})
 
-				vim.keymap.set("n", "<CR>", function()
+				local function enter_list()
+					vim.cmd.stopinsert()
 					vim.api.nvim_set_current_win(l_win)
-				end, { buffer = buf })
+				end
+
+				assign_command(buf, "EnterList", config.config.keybinds.search_enter_list, enter_list)
 
 				vim.keymap.set("i", "<CR>", function()
 					vim.cmd.stopinsert()
@@ -632,7 +654,7 @@ local function generate_dimensions(name, path, visual_path)
 				{ "│", "FloatBorder" },
 			},
 			keybinds = function(buf, win, d_buf, d_win, p_buf, p_win, s_win)
-				vim.keymap.set("n", "d", function()
+				local function choose_new_dir()
 					local args = dir_select.generate_dimensions()
 					if not args then
 						return
@@ -660,37 +682,47 @@ local function generate_dimensions(name, path, visual_path)
 							win
 						)
 					end)
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "R", function()
+				assign_command(buf, "SelectDir", config.config.keybinds.choose_new_dir, choose_new_dir)
+
+				local function rename_file()
 					create_input("Name", "Leave bank to cancel, name cannot already exist", nil, function(value)
 						if not value then
 							return
 						end
-						if not dir_select.check_name_collision(path, value) then
-							return
-						end
-						name = value
-						vim.api.nvim_win_set_config(p_win, {
-							title = 'Directory for "' .. value .. '"',
-						})
+						dir_select.check_name_collision(path, value, function()
+							name = value
+							vim.api.nvim_win_set_config(p_win, {
+								title = 'Directory for "' .. value .. '"',
+							})
+						end)
 					end, "Change name")
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "Q", function()
+				assign_command(buf, "RenameFile", config.config.keybinds.rename_file, rename_file)
+
+				local function close_browser()
 					vim.api.nvim_win_close(win, true)
 					vim.api.nvim_win_close(d_win, true)
 					vim.api.nvim_win_close(s_win, true)
 					vim.api.nvim_win_close(p_win, true)
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "/", function()
+				assign_command(buf, "CloseBrowser", config.config.keybinds.close_browser_window, close_browser)
+
+				local function list_start_search()
 					vim.api.nvim_set_current_win(s_win)
 					vim.cmd.startinsert()
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "<CR>", function()
+				assign_command(buf, "StartSearch", config.config.keybinds.start_search, list_start_search)
+
+				local function select_class()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
+					if not class_list_ref[line] then
+						return
+					end
 					if class_list_ref[line].t == "class" then
 						current_class = class_list_ref[line].name
 						vim.api.nvim_set_current_win(d_win)
@@ -698,7 +730,9 @@ local function generate_dimensions(name, path, visual_path)
 					elseif class_list_ref[line].t == "category" then
 						modify_class_list(buf, class_list_ref[line].name, line)
 					end
-				end, { buffer = buf, noremap = true })
+				end
+
+				assign_command(buf, "SelectClass", config.config.keybinds.select_class, select_class)
 
 				vim.api.nvim_create_autocmd("CursorMoved", {
 					buffer = buf,
@@ -717,34 +751,70 @@ local function generate_dimensions(name, path, visual_path)
 					end,
 				})
 
-				vim.keymap.set("n", "F", function()
+				local function toggle_favorite(line)
+					local ref = class_list_ref[line[1]]
+
+					if not ref or ref.t ~= "class" then
+						return
+					end
+
+					local class = ref.name
+
+					data.toggle_favorite(class)
+
+					if not search then
+						disp_class_list(buf, true)
+
+						for i, entry in ipairs(class_list_ref) do
+							if
+								entry.t == "class"
+								and entry.name == class
+								and math.abs(i - vim.api.nvim_win_get_cursor(win)[1]) <= 1
+							then
+								vim.api.nvim_win_set_cursor(win, { i, 0 })
+								break
+							end
+						end
+					else
+						local pre = data.favorites[class] and "* " or "  "
+
+						vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+						vim.api.nvim_buf_set_lines(buf, line[1] - 1, line[1], false, {
+							pre .. class,
+						})
+						vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+					end
+				end
+
+				local function favorite_class()
 					local line = vim.api.nvim_win_get_cursor(win)
 					if class_list_ref[line[1]].t == "class" then
-						data.toggle_favorite(class_list_ref[line[1]].name)
-						if not search then
-							if data.favorites[class_list_ref[line[1]].name] then
-								vim.api.nvim_win_set_cursor(win, { line[1] + 1, line[2] })
-							else
-								vim.api.nvim_win_set_cursor(win, { line[1] - 1, line[2] })
-							end
-							disp_class_list(buf, true)
-						else
-							local pre = "  "
-							if data.favorites[class_list_ref[line[1]].name] then
-								pre = "* "
-							end
-							vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-							vim.api.nvim_buf_set_lines(
-								buf,
-								line[1] - 1,
-								line[1],
-								false,
-								{ pre .. class_list_ref[line[1]].name }
-							)
-							vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+						if data.favorites[class_list_ref[line[1]].name] then
+							return
 						end
+						toggle_favorite(line)
 					end
-				end, { buffer = buf })
+				end
+
+				local function unfavorite_class()
+					local line = vim.api.nvim_win_get_cursor(win)
+					if class_list_ref[line[1]].t == "class" then
+						if not data.favorites[class_list_ref[line[1]].name] then
+							return
+						end
+						toggle_favorite(line)
+					end
+				end
+				local function favorite()
+					local line = vim.api.nvim_win_get_cursor(win)
+					if class_list_ref[line[1]].t == "class" then
+						toggle_favorite(line)
+					end
+				end
+
+				assign_command(buf, "Favorite", config.config.keybinds.favorite_class, favorite_class)
+				assign_command(buf, "Unfavorite", config.config.keybinds.unfavorite_class, unfavorite_class)
+				assign_command(buf, "ToggleFavorite", config.config.keybinds.toggle_favorite_class, favorite)
 			end,
 		},
 
@@ -766,7 +836,7 @@ local function generate_dimensions(name, path, visual_path)
 				{ "", "FloatBorder" },
 			},
 			keybinds = function(buf, win, class_edit_box, l_win, s_win, p_buf, p_win)
-				vim.keymap.set("n", "d", function()
+				local function select_dir()
 					local args = dir_select.generate_dimensions()
 					if not args then
 						return
@@ -794,31 +864,36 @@ local function generate_dimensions(name, path, visual_path)
 							win
 						)
 					end)
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "R", function()
+				assign_command(buf, "SelectDir", config.config.keybinds.select_dir, select_dir)
+
+				local function rename_file()
 					create_input("Name", "Leave bank to cancel, name cannot already exist", nil, function(value)
 						if not value then
 							return
 						end
-						if not dir_select.check_name_collision(path, value) then
-							return
-						end
-						name = value
-						vim.api.nvim_win_set_config(p_win, {
-							title = 'Directory for "' .. value .. '"',
-						})
+						dir_select.check_name_collision(path, value, function()
+							name = value
+							vim.api.nvim_win_set_config(p_win, {
+								title = 'Directory for "' .. value .. '"',
+							})
+						end)
 					end, "Change name")
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "Q", function()
+				assign_command(buf, "RenameFile", config.config.keybinds.rename_file, rename_file)
+
+				local function close_browser()
 					vim.api.nvim_win_close(win, true)
 					vim.api.nvim_win_close(l_win, true)
 					vim.api.nvim_win_close(s_win, true)
 					vim.api.nvim_win_close(p_win, true)
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "<CR>", function()
+				assign_command(buf, "CloseBrowser", config.config.keybinds.close_browser_window, close_browser)
+
+				local function select_param()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					local prop = properties_list_ref[line]
 					if prop.t ~= "name" and prop.t ~= "config" then
@@ -840,11 +915,17 @@ local function generate_dimensions(name, path, visual_path)
 							if not stay then
 								vim.api.nvim_set_current_win(win)
 							end
+							if prop.saved_props.name then
+								data.save_object_configs()
+							end
 						end
 						disp_property(prop.t, prop.props, prop.name, class_edit_box, when_done, prop.enum)
 					end
-				end, { buffer = buf })
-				vim.keymap.set("n", "<C-e>", function()
+				end
+
+				assign_command(buf, "SelectParam", config.config.keybinds.select_param, select_param)
+
+				local function export_class()
 					local saved_object_properties = data.saved_object_configs[current_class]
 					local index = saved_object_properties.index or 1
 					saved_object_properties.index = index
@@ -858,6 +939,10 @@ local function generate_dimensions(name, path, visual_path)
 						if value ~= "yes" then
 							json_table = vim.deepcopy({})
 						end
+						if properties.name then
+							data.save_object_configs()
+						end
+
 						if current_class then
 							writer.create_file(
 								name,
@@ -868,8 +953,11 @@ local function generate_dimensions(name, path, visual_path)
 							)
 						end
 					end, "Do you want to use the current config?")
-				end, { buffer = buf })
-				vim.keymap.set("n", "S", function()
+				end
+
+				assign_command(buf, "ExportClass", config.config.keybinds.export_class, export_class)
+
+				local function clear_param()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					if line <= 4 then
 						return
@@ -890,8 +978,11 @@ local function generate_dimensions(name, path, visual_path)
 					vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
 					vim.api.nvim_buf_set_lines(buf, line - 1, line, false, { lstr })
 					vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-				end, { buffer = buf })
-				vim.keymap.set("n", "C", function()
+				end
+
+				assign_command(buf, "ClearParam", config.config.keybinds.clear_param, clear_param)
+
+				local function name_config()
 					local saved_object_properties = data.saved_object_configs[current_class]
 					local index = saved_object_properties.index
 					local properties = saved_object_properties.property_tables[index] or { properties = {} }
@@ -901,10 +992,49 @@ local function generate_dimensions(name, path, visual_path)
 							return
 						end
 						properties.name = value
+						data.save_object_configs()
 						disp_class(buf, current_class, true)
 					end, "Name of config")
-				end, { buffer = buf })
-				vim.keymap.set("n", "<", function()
+				end
+
+				assign_command(buf, "NameConfig", config.config.keybinds.name_class_config, name_config)
+
+				local function duplicate_config()
+					local saved_object_properties = data.saved_object_configs[current_class]
+					local index = saved_object_properties.index
+					local properties = saved_object_properties.property_tables[index] or { properties = {} }
+					if not properties.name then
+						vim.notify("Cannot duplicate temporary configs", vim.log.levels.ERROR)
+						return
+					end
+
+					local copied = false
+
+					for i, p in ipairs(saved_object_properties.property_tables) do
+						if not p.name then
+							copied = true
+							create_input("Confirm", "Return 'yes' to replace temporary config", "no", function(value)
+								if value == "yes" then
+									saved_object_properties.property_tables[i] = vim.deepcopy(properties)
+									saved_object_properties.property_tables[i].name = nil
+									saved_object_properties.index = i
+									disp_class(buf, current_class, true)
+								end
+							end, "A temporary config already exists (Config " .. i .. ")")
+						end
+					end
+
+					if not copied then
+						table.insert(saved_object_properties.property_tables, vim.deepcopy(properties))
+						saved_object_properties.property_tables[#saved_object_properties.property_tables].name = nil
+						saved_object_properties.index = #saved_object_properties.property_tables
+						disp_class(buf, current_class, true)
+					end
+				end
+
+				assign_command(buf, "DuplicateConfig", config.config.keybinds.duplicate_config, duplicate_config)
+
+				local function prev_config()
 					local saved_object_properties = data.saved_object_configs[current_class]
 					local index = saved_object_properties.index
 					if index == 1 then
@@ -914,8 +1044,11 @@ local function generate_dimensions(name, path, visual_path)
 					saved_object_properties.index = index
 
 					disp_class(buf, current_class, true)
-				end, { buffer = buf })
-				vim.keymap.set("n", ">", function()
+				end
+
+				assign_command(buf, "PrevConfig", config.config.keybinds.prev_config, prev_config)
+
+				local function next_config()
 					local saved_object_properties = data.saved_object_configs[current_class]
 					local index = saved_object_properties.index
 					if not saved_object_properties.property_tables[index].name then
@@ -925,22 +1058,42 @@ local function generate_dimensions(name, path, visual_path)
 					saved_object_properties.index = index
 
 					disp_class(buf, current_class, true)
-				end, { buffer = buf })
-				vim.keymap.set("n", "D", function()
-					create_input("Confirm", "Return 'yes' to delete current config", "no", function(value)
-						if value ~= "yes" then
-							return
-						end
+				end
+
+				assign_command(buf, "NextConfig", config.config.keybinds.next_config, next_config)
+
+				local function delete_config()
+					if config.config.confirm_delete then
+						create_input("Confirm", "Return 'yes' to delete current config", "no", function(value)
+							if value ~= "yes" then
+								return
+							end
+							local saved_object_properties = data.saved_object_configs[current_class]
+							local index = saved_object_properties.index
+							table.remove(saved_object_properties.property_tables, index)
+							index = math.max(1, math.min(#saved_object_properties.property_tables, index))
+							saved_object_properties.index = index
+							data.save_object_configs()
+							disp_class(buf, current_class, true)
+						end, "Are you sure you want to delete the current config?")
+					else
 						local saved_object_properties = data.saved_object_configs[current_class]
 						local index = saved_object_properties.index
 						table.remove(saved_object_properties.property_tables, index)
+						index = math.max(1, math.min(#saved_object_properties.property_tables, index))
+						saved_object_properties.index = index
+						data.save_object_configs()
 						disp_class(buf, current_class, true)
-					end, "Are you sure you want to delete the current config?")
-				end, { buffer = buf })
+					end
+				end
 
-				vim.keymap.set("n", "<Esc>", function()
+				assign_command(buf, "DeleteConfig", config.config.keybinds.delete_config, delete_config)
+
+				local function enter_list()
 					vim.api.nvim_set_current_win(l_win)
-				end, { buffer = buf })
+				end
+
+				assign_command(buf, "EnterList", config.config.keybinds.class_enter_list, enter_list)
 			end,
 		},
 	}

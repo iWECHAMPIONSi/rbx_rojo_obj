@@ -1,4 +1,5 @@
 local t = {}
+local vim = vim
 
 local category_keys = require("roblox_insert.category_data")
 
@@ -693,14 +694,36 @@ end
 
 t.colors = colors
 
-t.saved_object_configs = {}
+local saved_configs, _ = t.load("class_configs")
+
+t.saved_object_configs = saved_configs or {}
 
 for k, _ in pairs(t.browsable_classes) do
-	t.saved_object_configs[k] = { property_tables = {} }
+	t.saved_object_configs[k] = t.saved_object_configs[k] or { property_tables = {} }
 end
 
 for k, _ in pairs(t.non_browsable_classes) do
-	t.saved_object_configs[k] = { property_tables = {} }
+	t.saved_object_configs[k] = t.saved_object_configs[k] or { property_tables = {} }
 end
+
+local function save_object_configs()
+	local tmp = vim.deepcopy(t.saved_object_configs)
+	for k, i in pairs(tmp) do
+		for index, p in ipairs(i.property_tables) do
+			if not p.name then
+				table.remove(i.property_tables, index)
+				break
+			end
+		end
+		if #i.property_tables == 0 then
+			tmp[k] = nil
+		else
+			i.index = nil
+		end
+	end
+	save_data("class_configs", tmp)
+end
+
+t.save_object_configs = save_object_configs
 
 return t

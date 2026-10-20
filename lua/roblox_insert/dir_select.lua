@@ -1,6 +1,8 @@
+local config = require("roblox_insert.config")
+local assign_command = config.assign_command
 local vim = vim
 
-local src_name = nil
+local src_name = config.config.src_name
 local root_dir = nil
 
 local directory_contents = {}
@@ -18,47 +20,6 @@ local dir_ref_start = {
 }
 
 local m = {}
-
-local function check_name_collision(path, name)
-	if string.match(name, "%s") then
-		vim.notify("Directory names cannot contain spaces", vim.log.levels.ERROR)
-		return false
-	end
-	local is_windows = vim.fn.has("win32") == 1
-	local illegal_pattern
-
-	if is_windows then
-		illegal_pattern = '[\\/:*?"<>|]'
-	else
-		illegal_pattern = "[/]"
-	end
-
-	if string.match(name, illegal_pattern) then
-		vim.notify("Directory name contains invalid characters", vim.log.levels.ERROR)
-		return false
-	end
-	local full_path = vim.fs.joinpath(path, name)
-	if
-		vim.uv.fs_stat(full_path)
-		or vim.uv.fs_stat(full_path .. ".luau")
-		or vim.uv.fs_stat(full_path .. ".model.json")
-		or vim.uv.fs_stat(full_path .. ".meta.json")
-		or vim.uv.fs_stat(full_path .. ".project.json")
-		or vim.uv.fs_stat(full_path .. ".rbxmx")
-		or vim.uv.fs_stat(full_path .. ".rbxm")
-		or vim.uv.fs_stat(full_path .. ".csv")
-		or vim.uv.fs_stat(full_path .. ".txt")
-		or vim.uv.fs_stat(full_path .. ".toml")
-		or vim.uv.fs_stat(full_path .. ".server.luau")
-		or vim.uv.fs_stat(full_path .. ".client.luau")
-	then
-		vim.notify('A file or directory with the name "' .. name .. '" already exists', vim.log.levels.ERROR)
-		return false
-	end
-	return true
-end
-
-m.check_name_collision = check_name_collision
 
 local function create_input(field, t, initial_value, on_submit, title)
 	local buf = vim.api.nvim_create_buf(false, true)
@@ -89,9 +50,11 @@ local function create_input(field, t, initial_value, on_submit, title)
 		end)
 	end)
 
-	vim.keymap.set("n", "Q", function()
+	local function close_input()
 		vim.api.nvim_win_close(win, true)
-	end, { buffer = buf })
+	end
+
+	assign_command(buf, "CloseInput", config.config.keybinds.close_input, close_input)
 
 	vim.cmd("startinsert")
 	if initial_value ~= nil then
@@ -115,6 +78,61 @@ local function create_input(field, t, initial_value, on_submit, title)
 end
 
 m.create_input = create_input
+
+local function check_name_collision(path, name, on_success)
+	if string.match(name, "%s") then
+		vim.notify("Directory or file name contains spaces", vim.log.levels.ERROR)
+		return
+	end
+	local is_windows = vim.fn.has("win32") == 1
+	local illegal_pattern
+
+	if is_windows then
+		illegal_pattern = '[\\/:*?"<>|]'
+	else
+		illegal_pattern = "[/]"
+	end
+
+	if string.match(name, illegal_pattern) then
+		vim.notify("Directory or file name contains invalid characters", vim.log.levels.ERROR)
+		return
+	end
+
+	local full_path = vim.fs.joinpath(path, name)
+	if
+		vim.uv.fs_stat(full_path)
+		or vim.uv.fs_stat(full_path .. ".luau")
+		or vim.uv.fs_stat(full_path .. ".model.json")
+		or vim.uv.fs_stat(full_path .. ".meta.json")
+		or vim.uv.fs_stat(full_path .. ".project.json")
+		or vim.uv.fs_stat(full_path .. ".rbxmx")
+		or vim.uv.fs_stat(full_path .. ".rbxm")
+		or vim.uv.fs_stat(full_path .. ".csv")
+		or vim.uv.fs_stat(full_path .. ".txt")
+		or vim.uv.fs_stat(full_path .. ".toml")
+		or vim.uv.fs_stat(full_path .. ".server.luau")
+		or vim.uv.fs_stat(full_path .. ".client.luau")
+	then
+		if config.config.allow_overwrite then
+			if config.config.confirm_overwrite then
+				create_input("Input", "Return 'yes' to overwrite, file or directory", "no", function(value)
+					if value == "yes" then
+						on_success()
+						return
+					end
+				end, "A file or directory with the same name already exists")
+			else
+				on_success()
+			end
+		else
+			vim.notify('A file or directory with the name "' .. name .. '" already exists', vim.log.levels.ERROR)
+		end
+		return
+	end
+	on_success()
+end
+
+m.check_name_collision = check_name_collision
 
 local function render_new_dir(buf, path_buf, path, all)
 	directory_contents = {}
@@ -214,9 +232,10 @@ local function generate_dimensions()
 			keybinds = function(buf, win, p_buf, p_win, gen_func, name, focus_win)
 				local path = vim.fs.joinpath(root_dir, src_name)
 				vim.api.nvim_set_current_win(win)
-				render_new_dir(buf, p_buf, path)
-				local display_all = true
-				vim.keymap.set("n", "<CR>", function()
+				local display_all = config.config.files_visible
+				render_new_dir(buf, p_buf, path, display_all)
+
+				local function select_dir()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					local selection = dir_ref[line]
 
@@ -235,78 +254,129 @@ local function generate_dimensions()
 						path = vim.fs.joinpath(path, selection.name)
 						render_new_dir(buf, p_buf, path, display_all)
 					end
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "d", function()
+				assign_command(buf, "SelectDir", config.config.keybinds.select_dir, select_dir)
+
+				local function create_dir()
 					create_input("/", nil, nil, function(value)
 						if value then
-							if not check_name_collision(path, value) then
-								return
-							end
-							vim.fn.mkdir(vim.fs.joinpath(path, value), "p")
-							render_new_dir(buf, nil, path, display_all)
+							check_name_collision(path, value, function()
+								vim.fn.mkdir(vim.fs.joinpath(path, value), "p")
+								render_new_dir(buf, nil, path, display_all)
+							end)
 						end
 					end, "Name of new directory")
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "%", function()
+				assign_command(buf, "CreateDir", config.config.keybinds.create_dir, create_dir)
+
+				local function name_file()
 					local function check_name(value)
-						if not check_name_collision(path, value) then
-							return
+						local function on_success()
+							local selected_path = path
+							local visual_path = string.sub(path, string.find(path, src_name or "", 1, true) or 1)
+							vim.schedule(function()
+								gen_func(value, selected_path, visual_path)
+							end)
 						end
-						local selected_path = path
-						local visual_path = string.sub(path, string.find(path, src_name, 1, true) or 1)
-
-						vim.schedule(function()
-							gen_func(value, selected_path, visual_path)
-						end)
+						check_name_collision(path, value, on_success)
 					end
-					if not name or not check_name_collision(path, name) then
+					local function on_success()
 						create_input("Name", nil, nil, function(value)
 							if value then
 								check_name(value)
 							end
 						end, "Name of new file")
+					end
+					if not name then
+						on_success()
 					else
 						check_name(name)
 					end
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "D", function()
+				assign_command(buf, "NameFile", config.config.keybinds.name_file, name_file)
+
+				local function delete_dir()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					if line <= 3 then
 						return
 					end
 					local selection = dir_ref[line]
 					if selection.t == "dir" then
-						create_input(
-							"/",
-							"Type in the exact name of the directory to delete it, case sensitive",
-							nil,
-							function(value)
-								if value == selection.name then
-									vim.fn.delete(vim.fs.joinpath(path, selection.name), "rf")
-								end
-							end,
-							'Are you sure you want to recursively delete the directory "' .. selection.name .. '"?'
-						)
+						if config.config.confirm_delete then
+							create_input(
+								"/",
+								"Type in the exact name of the directory to delete it, case sensitive",
+								nil,
+								function(value)
+									if value == selection.name then
+										vim.fn.delete(vim.fs.joinpath(path, selection.name), "rf")
+										render_new_dir(buf, p_buf, path, display_all)
+									end
+								end,
+								'Are you sure you want to recursively delete the directory "' .. selection.name .. '"?'
+							)
+						else
+							vim.fn.delete(vim.fs.joinpath(path, selection.name), "rf")
+							render_new_dir(buf, p_buf, path, display_all)
+						end
 					end
-					render_new_dir(buf, p_buf, path, display_all)
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "Q", function()
+				assign_command(buf, "DeleteDir", config.config.keybinds.delete_dir, delete_dir)
+
+				local function close_dir_window()
 					vim.api.nvim_win_close(win, true)
 					vim.api.nvim_win_close(p_win, true)
 					if focus_win then
 						vim.api.nvim_set_current_win(focus_win)
 					end
-				end, { buffer = buf })
+				end
 
-				vim.keymap.set("n", "H", function()
+				assign_command(buf, "CloseDir", config.config.keybinds.close_dir_window, close_dir_window)
+
+				local function toggle_file_visibility()
 					display_all = not display_all
 					render_new_dir(buf, p_buf, path, display_all)
-				end, { buffer = buf })
+				end
+
+				assign_command(
+					buf,
+					"ToggleFileVisibility",
+					config.config.keybinds.toggle_file_visibility,
+					toggle_file_visibility
+				)
+
+				local function enable_file_visibility()
+					if not display_all then
+						display_all = true
+						render_new_dir(buf, p_buf, path, display_all)
+					end
+				end
+
+				assign_command(
+					buf,
+					"EnableFileVisibility",
+					config.config.keybinds.enable_file_visibility,
+					enable_file_visibility
+				)
+				local function disable_file_visibility()
+					if display_all then
+						display_all = false
+						render_new_dir(buf, p_buf, path, display_all)
+					end
+				end
+
+				assign_command(
+					buf,
+					"DisableFileVisibility",
+					config.config.keybinds.disable_file_visibility,
+					disable_file_visibility
+				)
 			end,
+
 			current_dir = nil,
 		},
 	}
@@ -320,8 +390,18 @@ local function resolve_source_directory(on_resolved)
 		return stat ~= nil and stat.type == "directory"
 	end
 
+	if root_dir then
+		if not string.find(root_dir, vim.fn.get_cwd(), 1, true) then
+			root_dir = nil
+			src_name = config.config.src_name
+			dir_ref = vim.deepcopy(dir_ref_start)
+			directory_contents = {}
+		end
+	end
+
 	local project_root = root_dir
 	if not root_dir then
+		src_name = config.config.src_name
 		project_root = vim.fs.root(0, "default.project.json")
 
 		if not project_root then
@@ -412,4 +492,5 @@ local function make_dir_windows(args)
 end
 
 m.make_dir_windows = make_dir_windows
+
 return m
