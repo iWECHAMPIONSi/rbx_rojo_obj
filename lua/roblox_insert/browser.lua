@@ -134,12 +134,12 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 		vim.api.nvim_buf_set_lines(buf, 0, -1, false, str)
 		vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
-		local function select_param_field()
+		local function select_property_field()
 			local line = vim.api.nvim_win_get_cursor(win)[1]
 			field_ref[line]()
 		end
 
-		assign_command(buf, "SelectPropertyField", config.config.keybinds.select_param_field, select_param_field)
+		assign_command(buf, "SelectPropertyField", config.config.keybinds.select_property_field, select_property_field)
 	end
 
 	if value_type.lua_type == "enum" then
@@ -897,7 +897,7 @@ local function generate_dimensions(name, path, visual_path)
 
 				assign_command(buf, "CloseBrowser", config.config.keybinds.close_browser_window, close_browser)
 
-				local function select_param()
+				local function select_property()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					local prop = properties_list_ref[line]
 					if prop.t ~= "name" and prop.t ~= "config" then
@@ -927,7 +927,7 @@ local function generate_dimensions(name, path, visual_path)
 					end
 				end
 
-				assign_command(buf, "SelectProperty", config.config.keybinds.select_param, select_param)
+				assign_command(buf, "SelectProperty", config.config.keybinds.select_property, select_property)
 
 				local function export_class()
 					local saved_object_properties = data.saved_object_configs[current_class]
@@ -961,7 +961,7 @@ local function generate_dimensions(name, path, visual_path)
 
 				assign_command(buf, "ExportClass", config.config.keybinds.export_class, export_class)
 
-				local function clear_param()
+				local function clear_property()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					if line <= 4 then
 						return
@@ -985,7 +985,7 @@ local function generate_dimensions(name, path, visual_path)
 					vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 				end
 
-				assign_command(buf, "ClearProperty", config.config.keybinds.clear_param, clear_param)
+				assign_command(buf, "ClearProperty", config.config.keybinds.clear_property, clear_property)
 
 				local function name_config()
 					local saved_object_properties = data.saved_object_configs[current_class]

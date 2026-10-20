@@ -32,9 +32,9 @@ t.actions = {
 	"close_browser_window",
 	"rename_file",
 	"choose_new_dir",
-	"select_param",
+	"select_property",
 	"export_class",
-	"clear_param",
+	"clear_property",
 	"save_class_config",
 	"prev_class_config",
 	"next_class_config",
@@ -44,7 +44,7 @@ t.actions = {
 
 	"close_property",
 	"export_property",
-	"select_param_field",
+	"select_property_field",
 	"next_keypoint",
 	"prev_keypoint",
 
@@ -175,8 +175,8 @@ t.default_keybinds = {
 			actions = {
 				"select_class",
 				"select_dir",
-				"select_param",
-				"select_param_field",
+				"select_property",
+				"select_property_field",
 				"search_enter_list",
 			},
 		},
