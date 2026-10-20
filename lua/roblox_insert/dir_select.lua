@@ -336,7 +336,7 @@ local function generate_dimensions()
 					end
 				end
 
-				assign_command(buf, "CloseDir", config.config.keybinds.close_dir_window, close_dir_window)
+				assign_command(buf, "CloseDirWindow", config.config.keybinds.close_dir_window, close_dir_window)
 
 				local function toggle_file_visibility()
 					display_all = not display_all

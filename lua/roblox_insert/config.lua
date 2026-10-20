@@ -100,16 +100,59 @@ t.command_names = {
 	"EnterList",
 }
 
+local desc = {
+	RbxBrowser = "Opens the browser",
+	SelectDir = "Enters/selects the highlighted directory",
+	EnterParentDir = "Enters the parent directory",
+	CreateDir = "Creates a new directory inside the current directory",
+	DeleteDir = "Recursively deletes the highlighted directory",
+	NameFile = "Asks for the name of the file before switching to Class browser",
+	CloseDirWindow = "Closes the directory browser",
+	ToggleFileVisibility = "Toggles the visibility of non-directory files",
+	EnableFileVisibility = "Enables the visibility of non-directory files",
+	DisableFileVisibility = "Disables the visibility of non-directory files",
+	CloseInput = "Closes the input without saving",
+	StartSearch = "Enters the Search Bar",
+	CloseBrowser = "Closes Class browser",
+	RenameFile = "Changes the output filename",
+	ChooseNewDir = "Changes the output directory",
+	SelectClass = "Selects the highlighted class or toggles the highlighted category",
+	ToggleFavorite = "Toggles favoriting/unfavoriting a class",
+	FavoriteClass = "Adds the highlighted class to favorites",
+	UnfavoriteClass = "Removes the highlighted class from favorites",
+	SelectProperty = "Selects highlighted property",
+	ExportClass = "Exports the current class as a file",
+	ClearProperty = "Clears the saved data from the highlighted property",
+	SaveConfig = "Saves/renames the current class config",
+	DuplicateConfig = "Duplicates the current named config",
+	DeleteConfig = "Deletes current class config",
+	PrevConfig = "Displays/selects the previous class config",
+	NextConfig = "Displays/selects the next class config",
+	EnterList = "Enters into the Class list",
+	CloseProperty = "Exits the property editor without saving changes",
+	SaveProperty = "Validates and saves the edited property",
+	SelectField = "Selects the highlighted field",
+	NextKeypoint = "Displays the next keypoint",
+	PrevKeypoint = "Displays the previous keypoint",
+}
+
 local function assign_command(buf, command_name, keybinds, func)
+	local description = desc[command_name]
+
+	if not description then
+		vim.notify(command_name .. ": missing command desc", vim.log.levels.ERROR)
+		description = command_name
+	end
+
 	vim.api.nvim_buf_create_user_command(buf, command_name, func, {
-		desc = command_name,
+		desc = description,
 	})
 
 	if keybinds then
 		for keybind, _ in pairs(keybinds) do
 			vim.keymap.set("n", keybind, func, {
 				buffer = buf,
-				desc = command_name,
+				desc = description,
 			})
 		end
 	end
@@ -120,7 +163,7 @@ t.assign_command = assign_command
 t.default_keybinds = {
 	groups = {
 		export = {
-			keybind = "<C-e>",
+			keybinds = { "<C-e>" },
 			actions = {
 				"export_class",
 				"export_property",
@@ -128,7 +171,7 @@ t.default_keybinds = {
 		},
 
 		select = {
-			keybind = "<CR>",
+			keybinds = { "<CR>" },
 			actions = {
 				"select_class",
 				"select_dir",
@@ -139,7 +182,7 @@ t.default_keybinds = {
 		},
 
 		close_window = {
-			keybind = "Q",
+			keybinds = { "Q" },
 			actions = {
 				"close_browser_window",
 				"close_input",
@@ -149,7 +192,7 @@ t.default_keybinds = {
 		},
 
 		delete = {
-			keybind = "D",
+			keybinds = { "D" },
 			actions = {
 				"delete_config",
 				"delete_dir",
@@ -157,7 +200,7 @@ t.default_keybinds = {
 		},
 
 		next = {
-			keybind = ">",
+			keybinds = { ">" },
 			actions = {
 				"next_config",
 				"next_keypoint",
@@ -165,7 +208,7 @@ t.default_keybinds = {
 		},
 
 		prev = {
-			keybind = "<",
+			keybinds = { "<" },
 			actions = {
 				"prev_config",
 				"prev_keypoint",
@@ -174,16 +217,16 @@ t.default_keybinds = {
 	},
 
 	actions = {
-		duplicate_config = "P",
-		toggle_favorite_class = "F",
-		start_search = "/",
-		rename_file = "R",
-		choose_new_dir = "d",
-		create_dir = "d",
-		class_enter_list = "<Esc>",
-		name_class_config = "C",
-		toggle_file_visibility = "H",
-		name_file = "%",
+		duplicate_config = { "P" },
+		toggle_favorite_class = { "F" },
+		start_search = { "/" },
+		rename_file = { "R" },
+		choose_new_dir = { "d" },
+		create_dir = { "d" },
+		class_enter_list = { "<Esc>" },
+		name_class_config = { "C" },
+		toggle_file_visibility = { "H" },
+		name_file = { "%" },
 	},
 }
 
@@ -212,19 +255,27 @@ local function convert_keybind_config(opts, k, d)
 		for _, action in ipairs(group.actions) do
 			if not opts.keybinds[action] then
 				opts.keybinds[action] = {}
-				opts.keybinds[action][group.keybind] = true
+				for _, keybind in ipairs(group.keybinds) do
+					opts.keybinds[action][keybind] = true
+				end
 			elseif not d then
-				opts.keybinds[action][group.keybind] = true
+				for _, keybind in ipairs(group.keybinds) do
+					opts.keybinds[action][keybind] = true
+				end
 			end
 		end
 	end
 
-	for action, keybind in pairs(k.actions) do
+	for action, keybinds in pairs(k.actions) do
 		if not opts.keybinds[action] then
 			opts.keybinds[action] = {}
-			opts.keybinds[action][keybind] = true
+			for _, keybind in ipairs(keybinds) do
+				opts.keybinds[action][keybind] = true
+			end
 		elseif not d then
-			opts.keybinds[action][keybind] = true
+			for _, keybind in ipairs(keybinds) do
+				opts.keybinds[action][keybind] = true
+			end
 		end
 	end
 end

@@ -139,7 +139,7 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 			field_ref[line]()
 		end
 
-		assign_command(buf, "SelectParamField", config.config.keybinds.select_param_field, select_param_field)
+		assign_command(buf, "SelectPropertyField", config.config.keybinds.select_param_field, select_param_field)
 	end
 
 	if value_type.lua_type == "enum" then
@@ -618,6 +618,9 @@ local function generate_dimensions(name, path, visual_path)
 			end,
 		},
 
+		-- TODO
+		-- update codebase to match current documentation
+
 		class_edit_box = {
 			width = math.ceil(width / 2) - 1,
 			height = height - 6,
@@ -813,8 +816,8 @@ local function generate_dimensions(name, path, visual_path)
 					end
 				end
 
-				assign_command(buf, "Favorite", config.config.keybinds.favorite_class, favorite_class)
-				assign_command(buf, "Unfavorite", config.config.keybinds.unfavorite_class, unfavorite_class)
+				assign_command(buf, "FavoriteClass", config.config.keybinds.favorite_class, favorite_class)
+				assign_command(buf, "UnfavoriteClass", config.config.keybinds.unfavorite_class, unfavorite_class)
 				assign_command(buf, "ToggleFavorite", config.config.keybinds.toggle_favorite_class, favorite)
 			end,
 		},
@@ -924,7 +927,7 @@ local function generate_dimensions(name, path, visual_path)
 					end
 				end
 
-				assign_command(buf, "SelectParam", config.config.keybinds.select_param, select_param)
+				assign_command(buf, "SelectProperty", config.config.keybinds.select_param, select_param)
 
 				local function export_class()
 					local saved_object_properties = data.saved_object_configs[current_class]
@@ -982,7 +985,7 @@ local function generate_dimensions(name, path, visual_path)
 					vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 				end
 
-				assign_command(buf, "ClearParam", config.config.keybinds.clear_param, clear_param)
+				assign_command(buf, "ClearProperty", config.config.keybinds.clear_param, clear_param)
 
 				local function name_config()
 					local saved_object_properties = data.saved_object_configs[current_class]
