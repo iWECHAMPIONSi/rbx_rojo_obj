@@ -65,7 +65,6 @@ t.command_names = {
 	"DisableFileVisibility",
 
 	"CloseInput",
-	"SaveInput",
 
 	"StartSearch",
 	"CloseBrowser",

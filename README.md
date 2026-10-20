@@ -73,14 +73,33 @@ I didn't implement keybind conflict checking, although at the end there will be 
 
 Buffers:
 There are buffers to be aware of when using commands and keybindings.  
-`Classes`  
-`Class`  
-`Search`  
+`Class List`  
+`Class Display`  
+`Search Bar`  
+`Input`
 `Directory Browser`  
 
-| Action | Buffers | Description | Default Keybind |
-| :----: | :-----: | :---------- | :-------------- |
-| select_dir | `Directory Browser` | Enters/selects the highlighted directory | `"<CR>"` |
-| enter_parent_dir | `Directory Browser` | Enters the parent directory | `"-"` |
-| add_dir | `Directory Browser` | Adds a new directory inside the current directory | `"d"` |
-| delete_dir | `Directory Browser` | Recursively deletes the highlighted directory | `"D"` |
+all actions/commands are in `normal` mode
+
+| Action | Buffers | Description | Keybind | Command |
+| :----: | :-----: | :---------- | :-------------- | :------ |
+| open_brower | `None` | Opens the browser |`N/A`| `:RbxBrowser` |
+| select_dir | `Directory Browser` | Enters/selects the highlighted directory | `"<CR>"` | `:SelectDir` |
+| enter_parent_dir | `Directory Browser` | Enters the parent directory | `"-"` | `:EnterParentDir` |
+| add_dir | `Directory Browser` | Adds a new directory inside the current directory | `"d"` | `:AddDir` |
+| delete_dir | `Directory Browser` | Recursively deletes the highlighted directory | `"D"` | `:DeleteDir` |
+| name_file | `Directory Browser` | Asks for the name of the file before switching to Class browser | `"%"` | `:NameFile` |
+| close_dir_window | `Directory Browser` | Closes the directory browser | `"Q"` | `:CloseDirWindow` |
+| toggle_file_visibility | `Directory Browser` | Toggles the visibility of non-directory files | `"H"` | `:ToggleFileVisibility` |
+| enable_file_visibility | `Directory Browser` | Enables the visibility of non-directory files | `Not Bound` | `:EnableFileVisibility` |
+| disable_file_visibility | `Directory Browser` | Disables the visibility of non-directory files | `Not Bound` | `:DisableFileVisibility` |
+| close_input | `Input` | Closes the input without saving | `"Q"` | `:CloseInput` |
+| start_search | `Class List` | Enters the Search Bar | `"/"` | `:StartSearch` |
+| close_browser_window | `Class List` `Class Display` `Search Bar` | Closes Class browser | `"Q"` | `:CloseBrowser` |
+| rename_file | `Class List` `Class Display` | Renames of the output file | `"R"` | `:RenameFile` |
+| choose_new_dir | `Class List` `Class Display` | Changes the ouptut directory | `"d"` | `:ChooseNewDir` |
+| select_class | `Class List` | Selects the highlighted class | `"<CR>"` | `:SelectClass` |
+| toggle_favorite_class | `Class List` | Toggles favoriting/unfavoriting a class | `"F"` | `:ToggleFavorite` |
+| favorite_class | `Class List` | Favorites a class | `Not Bound` | `:FavoriteClass` |
+| unfavorite_class | `Class List` | Unfavorites a class | `Not Bound` | `:UnfavoriteClass` |
+
