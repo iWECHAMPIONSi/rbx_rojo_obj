@@ -965,6 +965,7 @@ local function generate_dimensions(name, path, visual_path)
 					end
 					local prop = properties_list_ref[line]
 					prop.props[prop.name] = nil
+					data.save_object_configs()
 					local pre = "  "
 					local lstr = pre .. prop.name .. ": "
 					if prop.t == "Enum" then

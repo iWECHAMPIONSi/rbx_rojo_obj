@@ -42,7 +42,7 @@ end
 local function save_data(filename, data)
 	local code = vim.json.encode(data)
 
-	local path = vim.fs.joinpath(get_plugin_root(), "data", filename .. ".json")
+	local path = vim.fs.joinpath(vim.fn.stdpath("state"), filename .. ".json")
 
 	local file = io.open(path, "w")
 
@@ -55,8 +55,8 @@ local function save_data(filename, data)
 end
 
 ---@return table?, string?
-function t.load(filename)
-	local path = vim.fs.joinpath(get_plugin_root(), "data", filename .. ".json")
+function t.load(filename, save_path)
+	local path = vim.fs.joinpath(save_path or get_plugin_root(), "data", filename .. ".json")
 
 	local contents, read_error = read_file(path, filename)
 
@@ -79,7 +79,7 @@ end
 
 local raw, raw_err = t.load("data")
 
-local favorites, favorites_err = t.load("favorites")
+local favorites, favorites_err = t.load("favorites", vim.fn.stdpath("state"))
 
 t.favorites = favorites or {}
 t.favorites_err = favorites_err
@@ -694,7 +694,7 @@ end
 
 t.colors = colors
 
-local saved_configs, _ = t.load("class_configs")
+local saved_configs, _ = t.load("class_configs", vim.fn.stdpath("state"))
 
 t.saved_object_configs = saved_configs or {}
 

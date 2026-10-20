@@ -391,7 +391,7 @@ local function resolve_source_directory(on_resolved)
 	end
 
 	if root_dir then
-		if not string.find(root_dir, vim.fn.get_cwd(), 1, true) then
+		if not string.find(root_dir, vim.fn.getcwd(), 1, true) then
 			root_dir = nil
 			src_name = config.config.src_name
 			dir_ref = vim.deepcopy(dir_ref_start)

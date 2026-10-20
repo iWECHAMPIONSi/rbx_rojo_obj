@@ -573,7 +573,7 @@ roblox_types.NumberRange = {
 		end
 		if min > max then
 			min, max = max, min
-			t.min, t.max = t.max, t.min
+			t.Min, t.Max = t.Max, t.Min
 		end
 		return true, { min, max }, t
 	end,
