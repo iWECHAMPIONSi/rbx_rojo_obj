@@ -118,76 +118,77 @@ end
 
 t.assign_command = assign_command
 
-local defaults = {
-	default_keybinds = {
-		groups = {
-			export = {
-				keybind = "<C-e>",
-				actions = {
-					"export_class",
-					"export_property",
-				},
-			},
-
-			select = {
-				keybind = "<CR>",
-				actions = {
-					"select_class",
-					"select_dir",
-					"select_param",
-					"select_param_field",
-					"search_enter_list",
-				},
-			},
-
-			close_window = {
-				keybind = "Q",
-				actions = {
-					"close_browser_window",
-					"close_input",
-					"close_dir_window",
-					"close_property",
-				},
-			},
-
-			delete = {
-				keybind = "D",
-				actions = {
-					"delete_config",
-					"delete_dir",
-				},
-			},
-
-			next = {
-				keybind = ">",
-				actions = {
-					"next_config",
-					"next_keypoint",
-				},
-			},
-
-			prev = {
-				keybind = "<",
-				actions = {
-					"prev_config",
-					"prev_keypoint",
-				},
+t.default_keybinds = {
+	groups = {
+		export = {
+			keybind = "<C-e>",
+			actions = {
+				"export_class",
+				"export_property",
 			},
 		},
 
-		actions = {
-			duplicate_config = "P",
-			toggle_favorite_class = "F",
-			start_search = "/",
-			rename_file = "R",
-			choose_new_dir = "d",
-			create_dir = "d",
-			class_enter_list = "<Esc>",
-			name_class_config = "C",
-			toggle_file_visibility = "H",
-			name_file = "%",
+		select = {
+			keybind = "<CR>",
+			actions = {
+				"select_class",
+				"select_dir",
+				"select_param",
+				"select_param_field",
+				"search_enter_list",
+			},
+		},
+
+		close_window = {
+			keybind = "Q",
+			actions = {
+				"close_browser_window",
+				"close_input",
+				"close_dir_window",
+				"close_property",
+			},
+		},
+
+		delete = {
+			keybind = "D",
+			actions = {
+				"delete_config",
+				"delete_dir",
+			},
+		},
+
+		next = {
+			keybind = ">",
+			actions = {
+				"next_config",
+				"next_keypoint",
+			},
+		},
+
+		prev = {
+			keybind = "<",
+			actions = {
+				"prev_config",
+				"prev_keypoint",
+			},
 		},
 	},
+
+	actions = {
+		duplicate_config = "P",
+		toggle_favorite_class = "F",
+		start_search = "/",
+		rename_file = "R",
+		choose_new_dir = "d",
+		create_dir = "d",
+		class_enter_list = "<Esc>",
+		name_class_config = "C",
+		toggle_file_visibility = "H",
+		name_file = "%",
+	},
+}
+
+local defaults = {
 	custom_keybinds = {
 		groups = {},
 		actions = {},
@@ -232,7 +233,7 @@ end
 local function assign_keybinds(opts)
 	convert_keybind_config(opts, opts.custom_keybinds)
 	if opts.enable_default_keybinds then
-		convert_keybind_config(opts, opts.default_keybinds, true)
+		convert_keybind_config(opts, t.default_keybinds, true)
 	end
 end
 
