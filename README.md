@@ -72,12 +72,12 @@ If you choose to assign keybinds to an action, the default keybindings will not 
 I didn't implement keybind conflict checking, although at the end there will be a list of all actions and their assosiated buffer(s).
 
 Buffers:
-There are buffers to be aware of when using commands and keybindings.
-`Classes`
-`Class`
-`Search`
+There are buffers to be aware of when using commands and keybindings.  
+`Classes`  
+`Class`  
+`Search`  
 
-`Directory Browser`
+`Directory Browser`  
 
 
 
