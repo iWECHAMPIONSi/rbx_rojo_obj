@@ -1,3 +1,5 @@
+
+
 # rbx_rojo_obj
 This plugin is designed to make creating new objects and scripts as easy as possible
 
@@ -19,6 +21,8 @@ for Lazy just do
 * Optionally edit its properties
 * Press `<C-e>` (Or run `:ExportClass`) while in the Class Display to export the file
 * Profit?
+
+https://github.com/user-attachments/assets/0bf07c23-7b26-44ba-bb66-f2c47d87ae84
 
 ## Configuration
 
