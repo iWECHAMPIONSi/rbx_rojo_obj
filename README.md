@@ -53,9 +53,9 @@ custom_keybinds = {
             keybind = "Q",
             actions = {
                 "close_browser_window",
-"close_input",
-"close_dir_window",
-"close_property",
+                "close_input",
+                "close_dir_window",
+                "close_property",
             },
         },
     },
