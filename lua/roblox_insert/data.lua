@@ -42,7 +42,7 @@ end
 local function save_data(filename, data)
 	local code = vim.json.encode(data)
 	local path = vim.fs.joinpath(vim.fn.stdpath("state"), "rbx_rojo_obj")
-	if not vim.uv.fn_stat(path) then
+	if not vim.uv.fs_stat(path) then
 		vim.fn.mkdir(path, "p")
 	end
 
