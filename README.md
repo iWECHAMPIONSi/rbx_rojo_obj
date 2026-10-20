@@ -78,9 +78,9 @@ There are buffers to be aware of when using commands and keybindings.
 `Search`  
 `Directory Browser`  
 
-
-
-
-
-
-
+| Action | Buffers | Description | Default Keybind |
+| :----: | :-----: | :---------- | :-------------- |
+| select_dir | `Directory Browser` | Enters/selects the highlighted directory | `"<CR>"` |
+| enter_parent_dir | `Directory Browser` | Enters the parent directory | `"-"` |
+| add_dir | `Directory Browser` | Adds a new directory inside the current directory | `"d"` |
+| delete_dir | `Directory Browser` | Recursively deletes the highlighted directory | `"D"` |
