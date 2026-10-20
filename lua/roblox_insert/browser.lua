@@ -714,7 +714,7 @@ local function generate_dimensions(name, path, visual_path)
 
 				local function list_start_search()
 					vim.api.nvim_set_current_win(s_win)
-					vim.cmd.startinsert()
+					vim.cmd("startinsert!")
 				end
 
 				assign_command(buf, "StartSearch", config.config.keybinds.start_search, list_start_search)
