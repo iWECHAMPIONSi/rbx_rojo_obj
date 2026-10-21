@@ -180,25 +180,25 @@ When switching between configs and keypoints, when doing either `:NextConfig` or
 ### This can also be used as a reference for how to make keybinds
 ```lua
 local default_keybinds = { 
-	groups = {
-		export = {
-			keybinds = { "<C-e>" },
-			actions = {
-				"export_class",
-				"export_property",
-			},
-		},
+    groups = {
+        export = {
+            keybinds = { "<C-e>" },
+            actions = {
+                "export_class",
+                "export_property",
+            },
+        },
 
-		select = {
-			keybinds = { "<CR>" },
-			actions = {
-				"select_class",
-				"select_dir",
-				"select_property",
-				"select_property_field",
-				"search_enter_list",
-			},
-		},
+        select = {
+            keybinds = { "<CR>" },
+            actions = {
+                "select_class",
+                "select_dir",
+                "select_property",
+                "select_property_field",
+                "search_enter_list",
+            },
+        },
 
 		close_window = {
 			keybinds = { "Q" },
