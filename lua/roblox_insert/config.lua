@@ -13,6 +13,8 @@ t.actions = {
 	"toggle_file_visibility",
 	"enable_file_visibility",
 	"disable_file_visibility",
+	"rename_file",
+	"rename_dir",
 
 	"close_input",
 	"save_input",
@@ -124,6 +126,7 @@ local desc = {
 	ExportClass = "Exports the current class as a file",
 	ClearProperty = "Clears the saved data from the highlighted property",
 	NameConfig = "Saves/renames the current class config",
+	RenameDir = "Renames the highlighted file or directory",
 	DuplicateConfig = "Duplicates the current named config",
 	DeleteConfig = "Deletes current class config",
 	PrevConfig = "Displays/selects the previous class config",
@@ -214,6 +217,14 @@ t.default_keybinds = {
 				"prev_keypoint",
 			},
 		},
+
+		rename = {
+			keybinds = { "R" },
+			actions = {
+				"rename_file",
+				"rename_dir",
+			},
+		},
 	},
 
 	actions = {
@@ -221,7 +232,6 @@ t.default_keybinds = {
 		duplicate_config = { "P" },
 		toggle_favorite_class = { "F" },
 		start_search = { "/" },
-		rename_file = { "R" },
 		choose_new_dir = { "d" },
 		create_dir = { "d" },
 		class_enter_list = { "<Esc>" },

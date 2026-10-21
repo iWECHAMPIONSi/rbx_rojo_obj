@@ -262,7 +262,7 @@ local function generate_dimensions()
 					if vim.fs.dirname(path) == root_dir then
 						return
 					end
-					path = vim.fn.dirname(path)
+					path = vim.fs.dirname(path)
 					render_new_dir(buf, p_buf, path, display_all)
 				end
 
@@ -308,6 +308,42 @@ local function generate_dimensions()
 				end
 
 				assign_command(buf, "NameFile", config.config.keybinds.name_file, name_file)
+
+				local function rename_dir()
+					local line = vim.api.nvim_win_get_cursor(win)[1]
+					if line <= 3 then
+						return
+					end
+					local selection = dir_ref[line]
+					local function check_name(value)
+						if not value or value == selection.name then
+							return
+						end
+						local function on_success()
+							local result =
+								vim.fn.rename(vim.fs.joinpath(path, selection.name), vim.fs.joinpath(path, value))
+							if result ~= 0 then
+								vim.notify(
+									"Failed to rename: " .. vim.fs.joinpath(path, selection.name),
+									vim.log.levels.ERROR
+								)
+								return
+							end
+							render_new_dir(buf, p_buf, path, display_all)
+						end
+						check_name_collision(path, value, on_success)
+					end
+
+					create_input(
+						"Name",
+						"Rename '" .. selection.name .. "'",
+						selection.name,
+						check_name,
+						"Rename File or Directory"
+					)
+				end
+
+				assign_command(buf, "RenameDir", config.config.keybinds.rename_dir, rename_dir)
 
 				local function delete_dir()
 					local line = vim.api.nvim_win_get_cursor(win)[1]

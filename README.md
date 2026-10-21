@@ -1,5 +1,3 @@
-
-
 # rbx_rojo_obj
 This plugin is designed to make creating new objects and scripts as easy as possible
 
@@ -109,6 +107,7 @@ all actions/commands are in `normal` mode
 | enter_parent_dir | `Directory Browser` | Enters the parent directory | `-` | `:EnterParentDir` |
 | create_dir | `Directory Browser` | Creates a new directory inside the current directory | `d` | `:CreateDir` |
 | delete_dir | `Directory Browser` | Recursively deletes the highlighted directory | `D` | `:DeleteDir` |
+| rename_dir | `Directory Browser` | Renames the highlighted file or directory | `R` | `:RenameDir` |
 | name_file | `Directory Browser` | Asks for the name of the file before switching to Class browser | `%` | `:NameFile` |
 | close_dir_window | `Directory Browser` | Closes the directory browser | `Q` | `:CloseDirWindow` |
 | toggle_file_visibility | `Directory Browser` | Toggles the visibility of non-directory files | `H` | `:ToggleFileVisibility` |
@@ -152,7 +151,6 @@ As of right now the plugin does not allow to create filenames with spaces or ill
 
 ### Directory Browser
 So even if `MyScript.client.luau` exists, any attempt create anything with the name `MyScript`, even if it's not a LocalScript, will be flagged as a name conflict.  
-You cannot edit the names of things in the browser (as of now, might be implemented in the future)  
 You cannot go above the `src` directory (the plugin checks if the parent directory is the root directory, if it is then it no-ops)  
 The Directory Browser will attempt to find your `src` directory given the directory Neovim was opened in. There must be a `default.project.json` for the browser to open (so the browser can verify it's in a Roblox project). If it cannot find `src` (or what your `src` directory is named in your config) it will ask you for the name of the `src` directory. This is a temporary value and will not persist between sessions.
 
@@ -173,6 +171,3 @@ Some properties have default values or clamped values that will automatically be
 
 ### Creating New Configs and Keypoints
 When switching between configs and keypoints, when doing either `:NextConfig` or `:NextKeypoint` on the last config/keypoint respectively, will create a new config/keypoint assuming that the previous config/keypoint has at least one filled property/field. And for configs there also must be no other unnamed configs for that class.
-
-
-
