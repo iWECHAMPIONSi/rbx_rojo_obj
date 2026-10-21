@@ -70,7 +70,10 @@ custom_keybinds = {
 }
 
 keybinds = {
-    export_class = { "<leader>e", "<C-s>" },
+    export_class = {
+        ["<leader>e"] = true,
+        ["<C-s>"] = true
+    },
     toggle_favorite_class = {},
 }
 ```
