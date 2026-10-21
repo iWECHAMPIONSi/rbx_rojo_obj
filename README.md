@@ -57,7 +57,7 @@ There are 2 methods:
 custom_keybinds = {
     groups = {
         my_group = {
-            keybinds = { "<C-e>" },
+            keybinds = { "<C-e>", "<leader>e" },
             actions = {
                 "export_class",
                 "save_property",
@@ -71,8 +71,7 @@ custom_keybinds = {
 
 keybinds = {
     export_class = {
-        ["<leader>e"] = true,
-        ["<C-s>"] = true
+        ["<C-s>"] = true,
     },
     toggle_favorite_class = {},
 }
