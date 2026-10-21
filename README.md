@@ -175,3 +175,4 @@ Some properties have default values or clamped values that will automatically be
 When switching between configs and keypoints, when doing either `:NextConfig` or `:NextKeypoint` on the last config/keypoint respectively, will create a new config/keypoint assuming that the previous config/keypoint has at least one filled property/field. And for configs there also must be no other unnamed configs for that class.
 
 
+
