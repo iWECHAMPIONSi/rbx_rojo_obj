@@ -163,7 +163,7 @@ end
 
 t.assign_command = assign_command
 
-t.default_keybinds = {
+local default_keybinds = {
 	groups = {
 		export = {
 			keybinds = { "<C-e>" },
@@ -261,6 +261,7 @@ local defaults = {
 }
 
 t.config = vim.deepcopy(defaults)
+
 local function convert_keybind_config(opts, k, d)
 	for _, group in pairs(k.groups) do
 		for _, action in ipairs(group.actions) do
@@ -302,7 +303,7 @@ end
 local function assign_keybinds(opts)
 	convert_keybind_config(opts, opts.custom_keybinds)
 	if opts.enable_default_keybinds then
-		convert_keybind_config(opts, t.default_keybinds, true)
+		convert_keybind_config(opts, default_keybinds, true)
 	end
 end
 

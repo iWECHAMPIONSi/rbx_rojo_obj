@@ -174,3 +174,86 @@ Some properties have default values or clamped values that will automatically be
 
 ### Creating New Configs and Keypoints
 When switching between configs and keypoints, when doing either `:NextConfig` or `:NextKeypoint` on the last config/keypoint respectively, will create a new config/keypoint assuming that the previous config/keypoint has at least one filled property/field. And for configs there also must be no other unnamed configs for that class.
+
+
+## Default Keybinds list
+### This can also be used as a reference for how to make keybinds
+```lua
+local default_keybinds = {
+	groups = {
+		export = {
+			keybinds = { "<C-e>" },
+			actions = {
+				"export_class",
+				"export_property",
+			},
+		},
+
+		select = {
+			keybinds = { "<CR>" },
+			actions = {
+				"select_class",
+				"select_dir",
+				"select_property",
+				"select_property_field",
+				"search_enter_list",
+			},
+		},
+
+		close_window = {
+			keybinds = { "Q" },
+			actions = {
+				"close_browser_window",
+				"close_input",
+				"close_dir_window",
+				"close_property",
+			},
+		},
+
+		delete = {
+			keybinds = { "D" },
+			actions = {
+				"delete_config",
+				"delete_dir",
+			},
+		},
+
+		next = {
+			keybinds = { ">" },
+			actions = {
+				"next_config",
+				"next_keypoint",
+			},
+		},
+
+		prev = {
+			keybinds = { "<" },
+			actions = {
+				"prev_config",
+				"prev_keypoint",
+			},
+		},
+
+		rename = {
+			keybinds = { "R" },
+			actions = {
+				"rename_file",
+				"rename_dir",
+			},
+		},
+	},
+
+	actions = {
+		enter_parent_dir = { "-" },
+		duplicate_config = { "P" },
+		toggle_favorite_class = { "F" },
+		start_search = { "/" },
+		choose_new_dir = { "d" },
+		create_dir = { "d" },
+		class_enter_list = { "<Esc>" },
+		name_class_config = { "C" },
+		toggle_file_visibility = { "H" },
+		name_file = { "%" },
+	},
+}
+```
