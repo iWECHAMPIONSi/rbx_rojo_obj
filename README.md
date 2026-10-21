@@ -179,7 +179,7 @@ When switching between configs and keypoints, when doing either `:NextConfig` or
 ## Default Keybinds list
 ### This can also be used as a reference for how to make keybinds
 ```lua
-local default_keybinds = {
+local default_keybinds = { 
 	groups = {
 		export = {
 			keybinds = { "<C-e>" },
