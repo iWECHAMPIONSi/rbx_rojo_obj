@@ -23,7 +23,7 @@ end
 ---@param class string
 ---@param params {string: any}
 ---@return table?, string?
-local function create_file_data(class, params, meta)
+local function create_file_data(class, params, meta, init)
 	local class_table = data.raw.Classes[class]
 	if not class_table then
 		local estimate = find_closest_class(class)
@@ -43,6 +43,9 @@ local function create_file_data(class, params, meta)
 		file.Properties = next(params) and params or vim.empty_dict()
 	else
 		file.properties = next(params) and params or vim.empty_dict()
+		if init and not string.find(class, "Script", 1, true) then
+			file.className = class
+		end
 	end
 	return file
 end
@@ -53,10 +56,12 @@ t.create_file_data = create_file_data
 ---@param class string
 ---@param params {string: any}
 ---@param dir string?
+---@param meta boolean
+---@param init boolean
 ---@return nil
-local function create_file(file_name, class, params, dir, script)
+local function create_file(file_name, class, params, dir, meta, init)
 	dir = dir or vim.fn.expand("%:p:h")
-	local contents = create_file_data(class, params, script)
+	local contents = create_file_data(class, params, meta, init)
 	if not contents then
 		return nil
 	end
@@ -65,30 +70,64 @@ local function create_file(file_name, class, params, dir, script)
 	})
 	local function on_success()
 		local path
-		if not script then
+		if not meta then
 			path = vim.fs.joinpath(dir, file_name .. ".model.json")
 		else
-			path = vim.fs.joinpath(dir, file_name .. ".meta.json")
 			local result
-			local script_name
-			if class == "LocalScript" then
-				script_name = vim.fs.joinpath(dir, file_name .. ".client.luau")
-				result = vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), script_name)
-			elseif class == "ModuleScript" then
-				script_name = vim.fs.joinpath(dir, file_name .. ".luau")
-				result = vim.fn.writefile(
-					vim.split("local module = {}\n\nreturn module\n", "\n", { plain = true }),
-					script_name
-				)
-			elseif class == "Script" then
-				script_name = vim.fs.joinpath(dir, file_name .. ".server.luau")
-				result = vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), script_name)
+			local meta_name
+			if init then
+				vim.fn.mkdir(vim.fs.joinpath(dir, file_name), "p")
+				vim.print(vim.fs.joinpath(dir, file_name))
+				dir = vim.fs.joinpath(dir, file_name)
+				if string.find(class, "Script", 1, true) then
+					path = vim.fs.joinpath(dir, "init.meta.json")
+					if class == "LocalScript" then
+						meta_name = vim.fs.joinpath(dir, "init.client.luau")
+						result =
+							vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), meta_name)
+					elseif class == "ModuleScript" then
+						meta_name = vim.fs.joinpath(dir, "init.luau")
+						result = vim.fn.writefile(
+							vim.split("local module = {}\n\nreturn module\n", "\n", { plain = true }),
+							meta_name
+						)
+					elseif class == "Script" then
+						meta_name = vim.fs.joinpath(dir, "init.server.luau")
+						result =
+							vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), meta_name)
+					end
+					if result ~= 0 then
+						vim.notify("Failed to write file: " .. (meta_name or file_name), vim.log.levels.ERROR)
+						return
+					end
+				else
+					path = vim.fs.joinpath(dir, "init.meta.json")
+				end
+			else
+				if string.find(class, "Script", 1, true) then
+					path = vim.fs.joinpath(dir, file_name .. ".meta.json")
+					if class == "LocalScript" then
+						meta_name = vim.fs.joinpath(dir, file_name .. ".client.luau")
+						result =
+							vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), meta_name)
+					elseif class == "ModuleScript" then
+						meta_name = vim.fs.joinpath(dir, file_name .. ".luau")
+						result = vim.fn.writefile(
+							vim.split("local module = {}\n\nreturn module\n", "\n", { plain = true }),
+							meta_name
+						)
+					elseif class == "Script" then
+						meta_name = vim.fs.joinpath(dir, file_name .. ".server.luau")
+						result =
+							vim.fn.writefile(vim.split('print("Hello World!")\n', "\n", { plain = true }), meta_name)
+					end
+				end
+				if result ~= 0 then
+					vim.notify("Failed to write file: " .. (meta_name or file_name), vim.log.levels.ERROR)
+					return
+				end
 			end
-			if result ~= 0 then
-				vim.notify("Failed to write file: " .. script_name, vim.log.levels.ERROR)
-				return
-			end
-			if not next(params) then
+			if ((not next(params)) and not init) or ((not next(params)) and string.find(class, "Script", 1, true)) then
 				return
 			end
 		end

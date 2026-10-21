@@ -344,7 +344,7 @@ local function disp_class(buf, class, inside_buf)
 	local index = saved_object_properties.index or 1
 	saved_object_properties.index = index
 	local saved_property_tables = saved_object_properties.property_tables
-	local saved_properties = saved_property_tables[index] or { properties = {} }
+	local saved_properties = saved_property_tables[index] or { properties = {}, init_meta = false }
 	saved_property_tables[index] = saved_properties
 	local properties = saved_properties.properties
 
@@ -353,6 +353,7 @@ local function disp_class(buf, class, inside_buf)
 			{ t = "name", name = class },
 			{ t = "config", name = class },
 			{ t = "config", name = class },
+			{ t = "init", name = saved_properties.init_meta, saved_props = saved_properties },
 			{ t = "name", name = class },
 		}
 	end
@@ -361,6 +362,7 @@ local function disp_class(buf, class, inside_buf)
 		class,
 		"Current Config: " .. (saved_properties.name or ""),
 		"Config: " .. index .. "/" .. #saved_property_tables,
+		"Directory: " .. tostring(saved_properties.init_meta),
 		"Properties:",
 	}
 
@@ -901,29 +903,37 @@ local function generate_dimensions(name, path, visual_path)
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					local prop = properties_list_ref[line]
 					if prop.t ~= "name" and prop.t ~= "config" then
-						local function when_done(stay)
-							local pre = prop.props[prop.name] and prop.props[prop.name].json and " *" or "  "
-							local lstr = pre .. prop.name .. ": "
-							if prop.t == "Enum" then
-								lstr = lstr .. "Enum."
-							end
-							lstr = lstr .. prop.t
-							if #prop.tags > 0 then
-								local tag_str = " [Tags: " .. table.concat(prop.tags, ", ") .. "]"
-
-								lstr = lstr .. tag_str
-							end
-							vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-							vim.api.nvim_buf_set_lines(buf, line - 1, line, false, { lstr })
-							vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-							if not stay then
-								vim.api.nvim_set_current_win(win)
-							end
+						if prop.t == "init" then
+							prop.saved_props.init_meta = not prop.saved_props.init_meta
 							if prop.saved_props.name then
 								data.save_object_configs()
 							end
+							disp_class(buf, current_class, true)
+						else
+							local function when_done(stay)
+								local pre = prop.props[prop.name] and prop.props[prop.name].json and " *" or "  "
+								local lstr = pre .. prop.name .. ": "
+								if prop.t == "Enum" then
+									lstr = lstr .. "Enum."
+								end
+								lstr = lstr .. prop.t
+								if #prop.tags > 0 then
+									local tag_str = " [Tags: " .. table.concat(prop.tags, ", ") .. "]"
+
+									lstr = lstr .. tag_str
+								end
+								vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+								vim.api.nvim_buf_set_lines(buf, line - 1, line, false, { lstr })
+								vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+								if not stay then
+									vim.api.nvim_set_current_win(win)
+								end
+								if prop.saved_props.name then
+									data.save_object_configs()
+								end
+							end
+							disp_property(prop.t, prop.props, prop.name, class_edit_box, when_done, prop.enum)
 						end
-						disp_property(prop.t, prop.props, prop.name, class_edit_box, when_done, prop.enum)
 					end
 				end
 
@@ -933,40 +943,49 @@ local function generate_dimensions(name, path, visual_path)
 					local saved_object_properties = data.saved_object_configs[current_class]
 					local index = saved_object_properties.index or 1
 					saved_object_properties.index = index
-					local properties = saved_object_properties.property_tables[index] or { properties = {} }
+					local properties = saved_object_properties.property_tables[index]
+						or {
+							properties = {},
+							init_meta = false,
+						}
 					saved_object_properties.property_tables[index] = properties
 					local json_table = {}
 					for property, i in pairs(properties.properties) do
 						json_table[property] = i.json
 					end
-					create_input("Input", "Return 'yes' to use current config", "yes", function(value)
-						if value ~= "yes" then
-							json_table = vim.deepcopy({})
-						end
-						if properties.name then
-							data.save_object_configs()
-						end
+					create_input(
+						"Input",
+						"Return 'yes' to use current config, return 'dir' to only use Directory value only",
+						"yes",
+						function(value)
+							if value ~= "yes" then
+								json_table = vim.deepcopy({})
+							end
+							if properties.name then
+								data.save_object_configs()
+							end
 
-						if current_class then
-							writer.create_file(
-								name,
-								current_class,
-								json_table,
-								path,
-								string.match(current_class, "Script")
-							)
-						end
-					end, "Do you want to use the current config?")
+							if current_class then
+								local init_meta = false
+								if value == "dir" or value == "yes" then
+									init_meta = properties.init_meta
+								end
+								local meta_json = init_meta or (string.find(current_class, "Script", 1, true) ~= nil)
+								writer.create_file(name, current_class, json_table, path, meta_json, init_meta)
+							end
+						end,
+						"Do you want to use the current config?"
+					)
 				end
 
 				assign_command(buf, "ExportClass", config.config.keybinds.export_class, export_class)
 
 				local function clear_property()
 					local line = vim.api.nvim_win_get_cursor(win)[1]
-					if line <= 4 then
+					local prop = properties_list_ref[line]
+					if prop.t == "name" or prop.t == "config" or prop.t == "init" then
 						return
 					end
-					local prop = properties_list_ref[line]
 					prop.props[prop.name] = nil
 					data.save_object_configs()
 					local pre = "  "
