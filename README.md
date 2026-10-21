@@ -5,7 +5,7 @@ This plugin is designed to make creating new objects and scripts as easy as poss
 for Lazy just do
 ```lua
 {
-    'iWECHAMPIONSi/rbx_rojo_obj',
+    'iWECHAMPIONSi/rbx_rojo_obj.nvim',
     opts = {},
 },
 ```
