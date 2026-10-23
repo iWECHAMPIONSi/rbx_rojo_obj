@@ -91,15 +91,45 @@ end
 
 m.create_window = create_window
 
-local function disp_property(t, properties_table, name, dimensions, when_done, enumeration)
+local function disp_property(
+	t,
+	properties_table,
+	name,
+	dimensions,
+	when_done,
+	enumeration,
+	persistant,
+	disp_win,
+	disp_buf,
+	focus_win
+)
+	if persistant and not disp_win then
+		dimensions.title = "Property Editor"
+		dimensions.focus = false
+		local buf, win = create_window(dimensions)
+		local function close_property()
+			vim.api.nvim_set_current_win(focus_win)
+			vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+			vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "" })
+			vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+			if when_done then
+				when_done()
+			end
+		end
+
+		assign_command(buf, "CloseProperty", config.config.keybinds.close_property, close_property)
+
+		return buf, win
+	elseif persistant then
+		vim.api.nvim_win_set_config(disp_win, {
+			title = t,
+		})
+	end
 	local value_type = roblox_types[t]
 
 	local function disp_table(props, value_ref, field_ref, buf, win, override_table, str)
 		str = str or {}
 		local add_index = #str
-		vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-		vim.api.nvim_buf_set_lines(buf, 0, -1, false, str)
-		vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
 		if override_table or props and props.value then
 			for i, field in ipairs(value_type.fields) do
@@ -191,21 +221,28 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 		local field_ref = {}
 		local value_ref = {}
 		local props = properties_table[name]
-		dimensions.title = t
-		dimensions.focus = true
 
-		local buf, win = create_window(dimensions)
+		local buf, win
+		if not persistant then
+			dimensions.title = t
+			dimensions.focus = true
+			buf, win = create_window(dimensions)
+		else
+			buf, win = disp_buf, disp_win
+		end
 		if props and props.value then
 			value_ref = vim.deepcopy(props.value)
 		end
 		disp_table(props, value_ref, field_ref, buf, win, nil, nil)
 
-		local function close_property()
-			vim.api.nvim_win_close(win, true)
-			when_done()
-		end
+		if not persistant then
+			local function close_property()
+				vim.api.nvim_win_close(win, true)
+				when_done()
+			end
 
-		assign_command(buf, "CloseProperty", config.config.keybinds.close_property, close_property)
+			assign_command(buf, "CloseProperty", config.config.keybinds.close_property, close_property)
+		end
 
 		local function export_property()
 			local valid, value, validated_table = value_type.verification(value_ref)
@@ -239,9 +276,14 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 		local value_ref = props and vim.deepcopy(props.value) or { {} }
 
 		local index = 1
-		dimensions.title = t
-		dimensions.focus = true
-		local buf, win = create_window(dimensions)
+		local buf, win
+		if not persistant then
+			dimensions.title = t
+			dimensions.focus = true
+			buf, win = create_window(dimensions)
+		else
+			buf, win = disp_buf, disp_win
+		end
 		disp_table(
 			nil,
 			value_ref[index],
@@ -292,12 +334,14 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 
 		assign_command(buf, "NextKeypoint", config.config.keybinds.next_keypoint, next_keypoint)
 
-		local function close_property()
-			vim.api.nvim_win_close(win, true)
-			when_done()
-		end
+		if not persistant then
+			local function close_property()
+				vim.api.nvim_win_close(win, true)
+				when_done()
+			end
 
-		assign_command(buf, "CloseProperty", config.config.keybinds.close_property, close_property)
+			assign_command(buf, "CloseProperty", config.config.keybinds.close_property, close_property)
+		end
 
 		local function export_property()
 			local valid, value, validated_table = value_type.verification(value_ref)
@@ -334,7 +378,9 @@ local function disp_property(t, properties_table, name, dimensions, when_done, e
 	end
 end
 
-local function disp_class(buf, class, inside_buf)
+m.disp_property = disp_property
+
+local function disp_class(buf, class, inside_buf, edit_class)
 	local class_def = data.raw.Classes[class]
 	if not class_def then
 		error("unreachble state reached! Class: " .. class)
@@ -361,7 +407,7 @@ local function disp_class(buf, class, inside_buf)
 	local str = {
 		class,
 		"Current Config: " .. (saved_properties.name or ""),
-		"Config: " .. index .. "/" .. #saved_property_tables,
+		"Config: " .. (((not edit_class) and (index .. "/" .. #saved_property_tables)) or "Editing Class"),
 		"Directory: " .. tostring(saved_properties.init_meta),
 		"Properties:",
 	}
@@ -841,60 +887,87 @@ local function generate_dimensions(name, path, visual_path)
 				{ "─", "FloatBorder" },
 				{ "", "FloatBorder" },
 			},
-			keybinds = function(buf, win, class_edit_box, l_win, s_win, p_buf, p_win)
-				local function select_dir()
-					local args = dir_select.generate_dimensions()
-					if not args then
-						return
-					end
-					dir_select.resolve_source_directory(function()
-						dir_select.make_dir_windows(args.path_bar)
-						dir_select.make_dir_windows(args.directory)
-						local function change_path(_, new_path, new_v_path)
-							path = new_path
-							vim.api.nvim_set_option_value("modifiable", true, { buf = p_buf })
-							vim.api.nvim_buf_set_lines(p_buf, 0, -1, false, { new_v_path })
-							vim.api.nvim_set_option_value("modifiable", false, { buf = p_buf })
-							vim.api.nvim_win_close(args.path_bar.win, true)
-							vim.api.nvim_win_close(args.directory.win, true)
-							vim.api.nvim_set_current_win(win)
-						end
-
-						args.directory.keybinds(
-							args.directory.buf,
-							args.directory.win,
-							args.path_bar.buf,
-							args.path_bar.win,
-							change_path,
-							name,
-							win
-						)
-					end)
-				end
-
-				assign_command(buf, "SelectDir", config.config.keybinds.select_dir, select_dir)
-
-				local function rename_file()
-					create_input("Name", "Leave bank to cancel, name cannot already exist", nil, function(value)
-						if not value then
+			keybinds = function(
+				buf,
+				win,
+				class_edit_box,
+				l_win,
+				s_win,
+				p_buf,
+				p_win,
+				edit_mode,
+				e_win,
+				e_buf,
+				focus_win,
+				edit_class,
+				edit_path
+			)
+				local prev_index
+				if not edit_mode then
+					local function select_dir()
+						local args = dir_select.generate_dimensions()
+						if not args then
 							return
 						end
-						dir_select.check_name_collision(path, value, function()
-							name = value
-							vim.api.nvim_win_set_config(p_win, {
-								title = 'Directory for "' .. value .. '"',
-							})
+						dir_select.resolve_source_directory(function()
+							dir_select.make_dir_windows(args.path_bar)
+							dir_select.make_dir_windows(args.directory)
+							local function change_path(_, new_path, new_v_path)
+								path = new_path
+								vim.api.nvim_set_option_value("modifiable", true, { buf = p_buf })
+								vim.api.nvim_buf_set_lines(p_buf, 0, -1, false, { new_v_path })
+								vim.api.nvim_set_option_value("modifiable", false, { buf = p_buf })
+								vim.api.nvim_win_close(args.path_bar.win, true)
+								vim.api.nvim_win_close(args.directory.win, true)
+								vim.api.nvim_set_current_win(win)
+							end
+
+							args.directory.keybinds(
+								args.directory.buf,
+								args.directory.win,
+								args.path_bar.buf,
+								args.path_bar.win,
+								change_path,
+								name,
+								win
+							)
 						end)
-					end, "Change name")
+					end
+
+					assign_command(buf, "SelectDir", config.config.keybinds.select_dir, select_dir)
+
+					local function rename_file()
+						create_input("Name", "Leave bank to cancel, name cannot already exist", nil, function(value)
+							if not value then
+								return
+							end
+							dir_select.check_name_collision(path, value, function()
+								name = value
+								vim.api.nvim_win_set_config(p_win, {
+									title = 'Directory for "' .. value .. '"',
+								})
+							end)
+						end, "Change name")
+					end
+
+					assign_command(buf, "RenameFile", config.config.keybinds.rename_file, rename_file)
+				else
+					current_class = edit_class
+					prev_index = data.saved_object_configs[current_class].index
+					data.saved_object_configs[current_class].index = -1
 				end
 
-				assign_command(buf, "RenameFile", config.config.keybinds.rename_file, rename_file)
-
 				local function close_browser()
+					if edit_class then
+						data.saved_object_configs[current_class].index = prev_index
+					end
 					vim.api.nvim_win_close(win, true)
-					vim.api.nvim_win_close(l_win, true)
+					vim.api.nvim_win_close(l_win or e_win, true)
 					vim.api.nvim_win_close(s_win, true)
 					vim.api.nvim_win_close(p_win, true)
+					if focus_win then
+						vim.api.nvim_set_current_win(focus_win)
+					end
 				end
 
 				assign_command(buf, "CloseBrowser", config.config.keybinds.close_browser_window, close_browser)
@@ -903,12 +976,12 @@ local function generate_dimensions(name, path, visual_path)
 					local line = vim.api.nvim_win_get_cursor(win)[1]
 					local prop = properties_list_ref[line]
 					if prop.t ~= "name" and prop.t ~= "config" then
-						if prop.t == "init" then
+						if (not edit_class) and prop.t == "init" then
 							prop.saved_props.init_meta = not prop.saved_props.init_meta
-							if prop.saved_props.name then
+							if (not edit_class) and prop.saved_props.name then
 								data.save_object_configs()
 							end
-							disp_class(buf, current_class, true)
+							disp_class(buf, current_class)
 						else
 							local function when_done(stay)
 								local pre = prop.props[prop.name] and prop.props[prop.name].json and " *" or "  "
@@ -928,11 +1001,21 @@ local function generate_dimensions(name, path, visual_path)
 								if not stay then
 									vim.api.nvim_set_current_win(win)
 								end
-								if prop.saved_props.name then
+								if (not edit_class) and prop.saved_props.name then
 									data.save_object_configs()
 								end
 							end
-							disp_property(prop.t, prop.props, prop.name, class_edit_box, when_done, prop.enum)
+							disp_property(
+								prop.t,
+								prop.props,
+								prop.name,
+								class_edit_box,
+								when_done,
+								prop.enum,
+								edit_mode,
+								e_win,
+								e_buf
+							)
 						end
 					end
 				end
@@ -953,29 +1036,37 @@ local function generate_dimensions(name, path, visual_path)
 					for property, i in pairs(properties.properties) do
 						json_table[property] = i.json
 					end
-					create_input(
-						"Input",
-						"Return 'yes' to use current config, return 'dir' to only use Directory value only",
-						"yes",
-						function(value)
-							if value ~= "yes" then
-								json_table = vim.deepcopy({})
-							end
-							if properties.name then
-								data.save_object_configs()
-							end
-
-							if current_class then
-								local init_meta = false
-								if value == "dir" or value == "yes" then
-									init_meta = properties.init_meta
+					if edit_class then
+						if current_class then
+							local meta_json = (string.find(current_class, "Script", 1, true) ~= nil)
+							writer.edit_file(current_class, edit_path, json_table, properties.init_meta, meta_json)
+						end
+					else
+						create_input(
+							"Input",
+							"Return 'yes' to use current config, return 'dir' to only use Directory value only",
+							"yes",
+							function(value)
+								if value ~= "yes" then
+									json_table = vim.deepcopy({})
 								end
-								local meta_json = init_meta or (string.find(current_class, "Script", 1, true) ~= nil)
-								writer.create_file(name, current_class, json_table, path, meta_json, init_meta)
-							end
-						end,
-						"Do you want to use the current config?"
-					)
+								if properties.name then
+									data.save_object_configs()
+								end
+
+								if current_class then
+									local init_meta = false
+									if value == "dir" or value == "yes" then
+										init_meta = properties.init_meta
+									end
+									local meta_json = init_meta
+										or (string.find(current_class, "Script", 1, true) ~= nil)
+									writer.create_file(name, current_class, json_table, path, meta_json, init_meta)
+								end
+							end,
+							"Do you want to use the current config?"
+						)
+					end
 				end
 
 				assign_command(buf, "ExportClass", config.config.keybinds.export_class, export_class)
@@ -987,7 +1078,9 @@ local function generate_dimensions(name, path, visual_path)
 						return
 					end
 					prop.props[prop.name] = nil
-					data.save_object_configs()
+					if not edit_class then
+						data.save_object_configs()
+					end
 					local pre = "  "
 					local lstr = pre .. prop.name .. ": "
 					if prop.t == "Enum" then
@@ -1006,92 +1099,108 @@ local function generate_dimensions(name, path, visual_path)
 
 				assign_command(buf, "ClearProperty", config.config.keybinds.clear_property, clear_property)
 
-				local function name_config()
-					local saved_object_properties = data.saved_object_configs[current_class]
-					local index = saved_object_properties.index
-					local properties = saved_object_properties.property_tables[index] or { properties = {} }
-					saved_object_properties.property_tables[index] = properties
-					create_input("Name", "duplicate names are valid, leave blank to cancel", nil, function(value)
-						if not value then
-							return
-						end
-						properties.name = value
-						data.save_object_configs()
-						disp_class(buf, current_class, true)
-					end, "Name of config")
-				end
-
-				assign_command(buf, "NameConfig", config.config.keybinds.name_class_config, name_config)
-
-				local function duplicate_config()
-					local saved_object_properties = data.saved_object_configs[current_class]
-					local index = saved_object_properties.index
-					local properties = saved_object_properties.property_tables[index] or { properties = {} }
-					if not properties.name then
-						vim.notify("Cannot duplicate temporary configs", vim.log.levels.ERROR)
-						return
-					end
-
-					local copied = false
-
-					for i, p in ipairs(saved_object_properties.property_tables) do
-						if not p.name then
-							copied = true
-							create_input("Confirm", "Return 'yes' to replace temporary config", "no", function(value)
-								if value == "yes" then
-									saved_object_properties.property_tables[i] = vim.deepcopy(properties)
-									saved_object_properties.property_tables[i].name = nil
-									saved_object_properties.index = i
-									disp_class(buf, current_class, true)
-								end
-							end, "A temporary config already exists (Config " .. i .. ")")
-						end
-					end
-
-					if not copied then
-						table.insert(saved_object_properties.property_tables, vim.deepcopy(properties))
-						saved_object_properties.property_tables[#saved_object_properties.property_tables].name = nil
-						saved_object_properties.index = #saved_object_properties.property_tables
-						disp_class(buf, current_class, true)
-					end
-				end
-
-				assign_command(buf, "DuplicateConfig", config.config.keybinds.duplicate_config, duplicate_config)
-
-				local function prev_config()
-					local saved_object_properties = data.saved_object_configs[current_class]
-					local index = saved_object_properties.index
-					if index == 1 then
-						return
-					end
-					index = index - 1
-					saved_object_properties.index = index
-
-					disp_class(buf, current_class, true)
-				end
-
-				assign_command(buf, "PrevConfig", config.config.keybinds.prev_config, prev_config)
-
-				local function next_config()
-					local saved_object_properties = data.saved_object_configs[current_class]
-					local index = saved_object_properties.index
-					if not saved_object_properties.property_tables[index].name then
-						return
-					end
-					index = index + 1
-					saved_object_properties.index = index
-
-					disp_class(buf, current_class, true)
-				end
-
-				assign_command(buf, "NextConfig", config.config.keybinds.next_config, next_config)
-
-				local function delete_config()
-					if config.config.confirm_delete then
-						create_input("Confirm", "Return 'yes' to delete current config", "no", function(value)
-							if value ~= "yes" then
+				if not edit_class then
+					local function name_config()
+						local saved_object_properties = data.saved_object_configs[current_class]
+						local index = saved_object_properties.index
+						local properties = saved_object_properties.property_tables[index] or { properties = {} }
+						saved_object_properties.property_tables[index] = properties
+						create_input("Name", "duplicate names are valid, leave blank to cancel", nil, function(value)
+							if not value then
 								return
 							end
+							properties.name = value
+							data.save_object_configs()
+							disp_class(buf, current_class, true)
+						end, "Name of config")
+					end
+
+					assign_command(buf, "NameConfig", config.config.keybinds.name_class_config, name_config)
+
+					local function duplicate_config()
+						local saved_object_properties = data.saved_object_configs[current_class]
+						local index = saved_object_properties.index
+						local properties = saved_object_properties.property_tables[index] or { properties = {} }
+						if not properties.name then
+							vim.notify("Cannot duplicate temporary configs", vim.log.levels.ERROR)
+							return
+						end
+
+						local copied = false
+
+						for i, p in ipairs(saved_object_properties.property_tables) do
+							if not p.name then
+								copied = true
+								create_input(
+									"Confirm",
+									"Return 'yes' to replace temporary config",
+									"no",
+									function(value)
+										if value == "yes" then
+											saved_object_properties.property_tables[i] = vim.deepcopy(properties)
+											saved_object_properties.property_tables[i].name = nil
+											saved_object_properties.index = i
+											disp_class(buf, current_class, true)
+										end
+									end,
+									"A temporary config already exists (Config " .. i .. ")"
+								)
+							end
+						end
+
+						if not copied then
+							table.insert(saved_object_properties.property_tables, vim.deepcopy(properties))
+							saved_object_properties.property_tables[#saved_object_properties.property_tables].name = nil
+							saved_object_properties.index = #saved_object_properties.property_tables
+							disp_class(buf, current_class, true)
+						end
+					end
+
+					assign_command(buf, "DuplicateConfig", config.config.keybinds.duplicate_config, duplicate_config)
+
+					local function prev_config()
+						local saved_object_properties = data.saved_object_configs[current_class]
+						local index = saved_object_properties.index
+						if index == 1 then
+							return
+						end
+						index = index - 1
+						saved_object_properties.index = index
+
+						disp_class(buf, current_class, true)
+					end
+
+					assign_command(buf, "PrevConfig", config.config.keybinds.prev_config, prev_config)
+
+					local function next_config()
+						local saved_object_properties = data.saved_object_configs[current_class]
+						local index = saved_object_properties.index
+						if not saved_object_properties.property_tables[index].name then
+							return
+						end
+						index = index + 1
+						saved_object_properties.index = index
+
+						disp_class(buf, current_class, true)
+					end
+
+					assign_command(buf, "NextConfig", config.config.keybinds.next_config, next_config)
+
+					local function delete_config()
+						if config.config.confirm_delete then
+							create_input("Confirm", "Return 'yes' to delete current config", "no", function(value)
+								if value ~= "yes" then
+									return
+								end
+								local saved_object_properties = data.saved_object_configs[current_class]
+								local index = saved_object_properties.index
+								table.remove(saved_object_properties.property_tables, index)
+								index = math.max(1, math.min(#saved_object_properties.property_tables, index))
+								saved_object_properties.index = index
+								data.save_object_configs()
+								disp_class(buf, current_class, true)
+							end, "Are you sure you want to delete the current config?")
+						else
 							local saved_object_properties = data.saved_object_configs[current_class]
 							local index = saved_object_properties.index
 							table.remove(saved_object_properties.property_tables, index)
@@ -1099,22 +1208,13 @@ local function generate_dimensions(name, path, visual_path)
 							saved_object_properties.index = index
 							data.save_object_configs()
 							disp_class(buf, current_class, true)
-						end, "Are you sure you want to delete the current config?")
-					else
-						local saved_object_properties = data.saved_object_configs[current_class]
-						local index = saved_object_properties.index
-						table.remove(saved_object_properties.property_tables, index)
-						index = math.max(1, math.min(#saved_object_properties.property_tables, index))
-						saved_object_properties.index = index
-						data.save_object_configs()
-						disp_class(buf, current_class, true)
+						end
 					end
+
+					assign_command(buf, "DeleteConfig", config.config.keybinds.delete_config, delete_config)
 				end
-
-				assign_command(buf, "DeleteConfig", config.config.keybinds.delete_config, delete_config)
-
 				local function enter_list()
-					vim.api.nvim_set_current_win(l_win)
+					vim.api.nvim_set_current_win(l_win or e_win)
 				end
 
 				assign_command(buf, "EnterList", config.config.keybinds.class_enter_list, enter_list)

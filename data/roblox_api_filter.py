@@ -1,6 +1,5 @@
 import json
 from copy import deepcopy
-from typing import Any
 
 superclass_dict = {}
 

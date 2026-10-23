@@ -38,7 +38,7 @@ local function create_file_data(class, params, meta, init)
 		return nil
 	end
 	local file = {}
-	if not meta then
+	if not meta and not init then
 		file.ClassName = class
 		file.Properties = next(params) and params or vim.empty_dict()
 	else
@@ -79,8 +79,8 @@ local function create_file(file_name, class, params, dir, meta, init)
 				vim.fn.mkdir(vim.fs.joinpath(dir, file_name), "p")
 				vim.print(vim.fs.joinpath(dir, file_name))
 				dir = vim.fs.joinpath(dir, file_name)
+				path = vim.fs.joinpath(dir, "init.meta.json")
 				if string.find(class, "Script", 1, true) then
-					path = vim.fs.joinpath(dir, "init.meta.json")
 					if class == "LocalScript" then
 						meta_name = vim.fs.joinpath(dir, "init.client.luau")
 						result =
@@ -100,8 +100,6 @@ local function create_file(file_name, class, params, dir, meta, init)
 						vim.notify("Failed to write file: " .. (meta_name or file_name), vim.log.levels.ERROR)
 						return
 					end
-				else
-					path = vim.fs.joinpath(dir, "init.meta.json")
 				end
 			else
 				if string.find(class, "Script", 1, true) then
@@ -142,5 +140,25 @@ local function create_file(file_name, class, params, dir, meta, init)
 end
 
 t.create_file = create_file
+
+local function edit_file(class, path, params, init, script)
+	if vim.uv.fs_stat(path) then
+		local contents = create_file_data(class, params, script, init)
+		if not contents then
+			return nil
+		end
+		local json = vim.json.encode(contents, {
+			indent = "    ",
+		})
+		local result = vim.fn.writefile(vim.split(json, "\n", { plain = true }), path)
+		if result ~= 0 then
+			vim.notify("Failed to write file: " .. path, vim.log.levels.ERROR)
+		end
+	else
+		vim.notify("File does not exist: " .. path, vim.log.levels.ERROR)
+	end
+end
+
+t.edit_file = edit_file
 
 return t

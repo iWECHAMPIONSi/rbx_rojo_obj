@@ -59,9 +59,9 @@ local function save_data(filename, data)
 end
 
 ---@return table?, string?
-function t.load(filename, save_path)
-	local path =
-		vim.fs.joinpath(save_path or get_plugin_root(), save_path and "rbx_rojo_obj" or "data", filename .. ".json")
+function t.load(filename, save_path, absolute_path)
+	local path = absolute_path
+		or vim.fs.joinpath(save_path or get_plugin_root(), save_path and "rbx_rojo_obj" or "data", filename .. ".json")
 
 	local contents, read_error = read_file(path, filename)
 
